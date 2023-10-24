@@ -202,6 +202,8 @@ export default function Registration() {
                 if(response.status===201){
                     console.log('component caling');
                     history("/otpcomponent");
+                }else {
+                    isUserRegistered=true;
                 }
             }).catch((error) => {
                 console.log('', error);

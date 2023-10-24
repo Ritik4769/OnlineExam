@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../Images/InfoBeans Foundation Logo - PNG (1).png';
 import avatar from '../Images/man-with-beard-avatar-character-isolated-icon-free-vector.jpg';
 var examid;
-var EnrollIDs =[]; 
+var EnrollIDs = [];
 export default function AdminModule() {
     const history = useNavigate();
     const [exam, setUser] = useState({
@@ -24,7 +24,9 @@ export default function AdminModule() {
     });
 
     const [uploadQuestion, setUser2] = useState({
-        questionFile: ''
+        questionFile: '',
+        questionFile2: ''
+
     });
 
     const handleInputs = (e) => {
@@ -33,8 +35,8 @@ export default function AdminModule() {
         setUser({ ...exam, [name]: value });
         console.log(name)
         console.log(value)
-
     };
+
     const handleInputs2 = (e) => {
         const name = e.target.name;
         const value = e.target.value;
@@ -44,16 +46,23 @@ export default function AdminModule() {
 
     };
     
-    const handleInputs3 = (e) => {
-        const name = e.target.name;
-        const file = e.target.files[0]; 
-        const fileName = file.name;
-        console.log(fileName);
-        setUser2({ ...uploadQuestion, [name]: fileName});
-        console.log(uploadQuestion)
-        console.log(file)
-
+    const handleInputs3 = (e,) => {
+        if (e.target.type === 'file') {
+            const name = e.target.name;
+            const file = e.target.files[0];
+            setUser2({ ...uploadQuestion, [name]: file });
+            console.log(uploadQuestion);
+            console.log("file name : ", file);
+            console.log("file: ", file);
+        } else {
+            const name = e.target.name;
+            const value = e.target.value;
+            setUser2({ ...uploadQuestion, [name]: value });
+            console.log("field name : ", name);
+            console.log("field value : ", value);
+        }
     };
+
 
     const createExam = async (e) => {
         if (e) {
@@ -72,7 +81,7 @@ export default function AdminModule() {
                 if (response.status === 201) {
                     const responseData = response.data;
                     const newExam = responseData.newExam;
-                    examid=newExam._id;
+                    examid = newExam._id;
                     console.log(examid);
                     console.log(newExam);
                     console.log('component caling');
@@ -122,13 +131,13 @@ export default function AdminModule() {
         if (e) {
             e.preventDefault();
         }
-        console.log("in upload question",uploadQuestion);
+        console.log("in upload question", uploadQuestion);
         const formData = new FormData();
         formData.append('questionFile', uploadQuestion.questionFile);
         console.log(uploadQuestion);
-        const { questionFile} = uploadQuestion;
-        console.log("path  : ",questionFile);
-        console.log("form data :",formData);
+        const { questionFile } = uploadQuestion;
+        console.log("path  : ", questionFile);
+        console.log("form data :", formData);
         //my
         try {
             axios.post('http://localhost:3002/admin/uploadQuestionFile', formData).then((result) => {
@@ -498,14 +507,17 @@ export default function AdminModule() {
                                         <div className="col-md-12 text-center p-5 my-5">
                                             <h3>Upload files here</h3>
                                             <div className=" justify-content-center">
-                                                <form action="" onSubmit={UploadQuestion} >
+                                                <form action="" onSubmit={UploadQuestion} enctype="multipart/form-data" >
                                                     <img src="" alt="fileupload" height="120" /><br />
-                                                    <input className="inp form-control " type="file" name="questionFile" id="fileinput"  onChange={handleInputs3} value={uploadQuestion.questionFile}/>
+                                                    <input className="" type="file" name="questionFile" id="fileinput" onChange={(e) => handleInputs3(e, 'questionFile')} />
+                                                    {/* <input className=" " type="file" name="questionFile2" id="fileinput2" onChange={(e) => handleInputs3(e, 'questionFile2')} /> */}
                                                     <label className="custom-file-label m-4" for="username"
                                                         id="fileNameLabel">
                                                         Upload Question
                                                     </label><br />
-                                                    <input type="submit" onClick={handleInputs3} className="btn w-25 mt-5 bg-light" value="Upload"
+                                                    <input type="submit" className="btn btn-outline-danger w-50 mt-3"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                                                        aria-expanded="true" aria-controls="collapseThree" value="submit"
                                                         style={{ height: "45px", color: "black" }} />
                                                 </form>
                                             </div>
