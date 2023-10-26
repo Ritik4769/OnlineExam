@@ -19,10 +19,10 @@ export default function ModalComponent() {
         }
         
         const { userotp } = userOtp;
-        console.log("YOur Otp is ",userOtp);
+        console.log("Your Otp is ",userOtp);
 
         try {
-            axios.post('http://localhost:3002/user/verifyOtp', userOtp).then((response) => {
+            axios.post('http://localhost:3002/candidate/verifyOtp', userOtp).then((response) => {
                 console.log("result",response);
                 if(response.status===201){
                     console.log('hello user',response);

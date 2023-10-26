@@ -2,6 +2,8 @@
 import { userDocument, exam, shift, QuestionBank } from '../modules/Registration.js';
 import xlsx from 'xlsx';
 let workbook_response;
+// var secret_key = process.env.Admin_key;
+
 // Create a new exam
 const createExam = async (req, res) => {
   console.log("admin controller");
@@ -24,7 +26,12 @@ const createExam = async (req, res) => {
       EnrollidArr[i] = enrollid[i].EnrollID
       console.log("Enroll id : ", EnrollidArr[i]);
     }
-    return res.status(201).json({ newExam: newExam, EnrollIDs: EnrollidArr });
+
+    if(savedExam){
+      return res.status(201).json({ newExam: newExam, EnrollIDs: EnrollidArr });
+    }else{
+      return res.status(202).json({ newExam: "", EnrollIDs: "" });
+    }
 
   } catch (error) {
     res.status(500).json({ error: 'Failed to create the exam.' });
@@ -57,11 +64,13 @@ const createShift = async (req, res) => {
     res.status(500).json({ error: 'Failed to create the shift.' });
   }
 };
+
 var questionFile;
+
 const uploadQuestionFile = async (req, res, next) => {
   console.log("in uploadQuestionFile");
   questionFile = req.files['questionFile'][0].originalname;
-  console.log(questionFile);  
+  console.log(questionFile);
   next();
 }
 const createOrUpdateQuestions = async (subjectID, questions) => {
@@ -101,9 +110,9 @@ const createOrUpdateQuestions = async (subjectID, questions) => {
 };
 
 const readExcelController = async (req, res, next) => {
-  console.log("12:"+questionFile);
+  console.log("12:" + questionFile);
   console.log(1234);
-  const workbook = xlsx.readFile('./uploads/'+questionFile);
+  const workbook = xlsx.readFile('./uploads/' + questionFile);
   const workbook_sheet = workbook.SheetNames;
   const workbook_response = xlsx.utils.sheet_to_json(workbook.Sheets[workbook_sheet[0]]);
   const subjectQuestions = {};

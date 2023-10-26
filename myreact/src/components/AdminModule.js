@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
 import logo from '../Images/InfoBeans Foundation Logo - PNG (1).png';
 import avatar from '../Images/man-with-beard-avatar-character-isolated-icon-free-vector.jpg';
 var examid;
@@ -41,28 +40,18 @@ export default function AdminModule() {
         const name = e.target.name;
         const value = e.target.value;
         setUser1({ ...schedule, [name]: value });
-        console.log(name)
-        console.log(value)
-
+        console.log(name);
+        console.log(value);
     };
-    
+
     const handleInputs3 = (e,) => {
-        if (e.target.type === 'file') {
-            const name = e.target.name;
-            const file = e.target.files[0];
-            setUser2({ ...uploadQuestion, [name]: file });
-            console.log(uploadQuestion);
-            console.log("file name : ", file);
-            console.log("file: ", file);
-        } else {
-            const name = e.target.name;
-            const value = e.target.value;
-            setUser2({ ...uploadQuestion, [name]: value });
-            console.log("field name : ", name);
-            console.log("field value : ", value);
-        }
+        const name = e.target.name;
+        const file = e.target.files[0];
+        setUser2({ ...uploadQuestion, [name]: file });
+        console.log(uploadQuestion);
+        console.log("file name : ", file);
+        console.log("file: ", file);
     };
-
 
     const createExam = async (e) => {
         if (e) {
@@ -87,7 +76,7 @@ export default function AdminModule() {
                     console.log('component caling');
                     EnrollIDs = responseData.EnrollIDs;
                     console.log(EnrollIDs);
-
+                    
                     // history("/otpcomponent");
                 }
             }).catch((error) => {

@@ -1,53 +1,73 @@
-import { rsg, userDocument,exam } from "../modules/Registration.js";
+import { rsg, userDocument, exam } from "../modules/Registration.js";
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
-import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken";
+// var secret_key = process.env.candidate_KEY;
+// import dotenv from 'dotenv';
+
+
 // const maxAge = 3 * 24 * 60 * 60;
 
-import {transporter} from '../modules/emailModule.js';
-var lastEnrollmentID = 'ITEP0903';
-const maxAge = 86400*1000;
+import { transporter } from '../modules/emailModule.js';
+var lastEnrollmentID = 'ITEP0910';
+const maxAge = 86400 * 1000;
 // import bcrypt from "bcrypt";
 import randomstring from 'randomstring';
-var userdata={},otp="";
+var userdata = {}, otp = "";
 
 export const SECRET_KEY = crypto.randomBytes(32).toString('hex');
 class RegistrationController {
 
-    static verifyemail =async(req,res)=>{
-        userdata=req.body;
-        console.log(userdata);
-        otp=randomstring.generate({
-         length:4,
-         charset:'numeric'
-        });
-        var mailoption={
-         from:"dabidipesh7898@gmail.com",
-         to:userdata.email,
-         subject:`Infobeans Foundation ITEP Program`,
-         text:`Hello ${userdata.username} your one time password is ${otp}`
-        };
-        transporter.sendMail(mailoption,(error,info)=>{
-         if(info){
-             console.log('Email sent');
-             return res.status(201).json({message:"Email Sent"});
-         }
-         else{
-             console.log('email not sent');
-             return res.status(404).json({mesaage:"not sent"});
-         }
-        });
-     }
+    static verifyemail = async (req, res) => {
+        console.log(req.body.aadharNo);
+        const olduser = await rsg.findOne({ aadharNo: req.body.aadharNo })
+        // console.log(olduser)
+        // console.log(olduser.attempt);
+        userdata = req.body;
+        // console.log(userdata);
+        if (olduser == null) {
+            otp = randomstring.generate({
+                length: 4,
+                charset: 'numeric'
+            });
+            var mailoption = {
+                from: "dabidipesh7898@gmail.com",
+                to: userdata.email,
+                subject: `Infobeans Foundation ITEP Program`,
+                text: `Hello ${userdata.username} your one time password is ${otp}`
+            };
+            transporter.sendMail(mailoption, (error, info) => {
+                if (info) {
+                    console.log('Email sent');
+                    return res.status(201).json({ message: "Email Sent" });
+                }
+                else {
+                    console.log('email not sent');
+                    return res.status(404).json({ mesaage: "not sent" });
+                }
+            });
+        } else {
+            if (olduser.attempt > 0 && olduser.attempt < 4) {
+                console.log("you have already register please upadte your documents")
+                res.setHeader('Content-Type', 'application/json');
+                return res.status(202).json({ message: 'you have already register please upadte your documents' });
+            } else {
+                console.log("Contact to admin...");
+
+            }
+
+        }
+    }
 
 
-     static verifyOtp=async(req,res)=>{
+    static verifyOtp = async (req, res) => {
         console.log('hello');
-        
-        const userotp=req.body.userotp;
-        if(otp==userotp){
+
+        const userotp = req.body.userotp;
+        if (otp == userotp) {
             console.log('otp verified');
             try {
-                const hashpassword = await bcrypt.hash(userdata.password,10);
+                const hashpassword = await bcrypt.hash(userdata.password, 10);
                 console.log(req.body.userotp);
                 const user = await rsg.create({
                     username: userdata.username,
@@ -55,7 +75,7 @@ class RegistrationController {
                     aadharNo: userdata.aadharNo,
                     dob: userdata.dob,
                     email: userdata.email,
-                    password:hashpassword,
+                    password: hashpassword,
                     attempt: 2
                 });
                 if (user) {
@@ -67,13 +87,13 @@ class RegistrationController {
                 console.log("error" + error);
             }
         }
-        else{
-            return res.status(403).json({message:"Wrong Otp"});
+        else {
+            return res.status(403).json({ message: "Wrong Otp" });
         }
-        
+
     }
     // static createDoc = async (req, res) => {
-        
+
     //     console.log("in controller");
     //     // var dob2= new Date(req.body.dob);
     //     // var formattedDate = dob2.toLocaleDateString();
@@ -83,7 +103,7 @@ class RegistrationController {
     //     try {
     //         console.log(req.body);
     //         console.log(req.body.aadharNo);
-            
+
     //         const olduser = await rsg.findOne({ aadharNo: req.body.aadharNo })
     //         console.log(olduser)
     //         console.log(olduser.attempt);
@@ -120,7 +140,6 @@ class RegistrationController {
     // }
 
     static documentRegistration = async (req, res) => {
-
         console.log("in documentRegistration");
         var aadharFile = req.files['aadharFile'][0].originalname;
         var incomeCertificate = req.files['incomeCertificate'][0].originalname;
@@ -128,20 +147,12 @@ class RegistrationController {
         var marksheet = req.files['marksheet'][0].originalname;
         var latestMarksheet = req.files['latestMarksheet'][0].originalname;
         function generateNextEnrollmentID(lastEnrollmentID) {
-            // Extract the last two digits from the enrollment ID and convert to a number
             const lastTwoDigits = parseInt(lastEnrollmentID.substr(6), 10);
-
-            // Increment the last two digits
             const nextTwoDigits = lastTwoDigits + 1;
-
-            // Format the new enrollment ID with leading zeros if necessary
             const newEnrollmentID = `ITEP09${nextTwoDigits.toString().padStart(2, '0')}`;
-
             return newEnrollmentID;
         }
-
         // Test the function
-
         var nextEnrollmentID = generateNextEnrollmentID(lastEnrollmentID);
         lastEnrollmentID = nextEnrollmentID;
         console.log(nextEnrollmentID); // Output: TEP0902
@@ -149,7 +160,7 @@ class RegistrationController {
         try {
 
             const user = userDocument.create({
-                userID: "04",
+                userID: "06",
                 EnrollID: nextEnrollmentID,
                 income: req.body.income,
                 aadharFile: aadharFile,
@@ -162,7 +173,10 @@ class RegistrationController {
             if (user) {
                 console.log('data save', user);
                 res.setHeader('Content-Type', 'application/json');
-                return res.status(201).json({ message: 'Data saved',EnrollID:[0] });
+                return res.status(201).json({ message: 'Data saved', EnrollID: [0] });
+            }else{
+                return res.status(202).json({ message: 'Error....', EnrollID: [0] });
+
             }
         } catch (error) {
             console.log("error" + error);
@@ -173,42 +187,43 @@ class RegistrationController {
 
     // question file upload
 
-   
 
 
 
 
 
 
-    static loginCheck = async (request, response) => {
-        try {
-            const { email, password } = request.body;
-            const role = "";
-            const user = {};
-            //  var checkuser={};
-            const checkuser = await rsg.findOne({ email: email });
-            console.log("chek   : " + checkuser)
-            if (checkuser.email == email && checkuser.password == password) {
-                user.role = "user";
-                user.email = email;
-                user.password = password;
-                user.aadharFile = checkuser.aadharfile;
-            }
-            console.log("user :" + user)
-            const payload = user;
-            console.log("pppp :" + payload)
-            const expiryTime = {
-                expiresIn: '1d'
-            }
-            const token = jwt.sign(payload, SECRET_KEY, expiryTime);
-            response.cookie('jwt', token, { httpOnly: true, maxAge: maxAge });
-            if (!token) {
-                response.json({ message: "Error Occured while dealing with Token" });
-            }
-            response.redirect('/home1');
-        } catch (err) {
-            console.log("error : " + err);
-        }
+
+    static candidateLogin = async (request, response) => {
+        console.log("in candidate controller");
+        // try {
+        //     const { email, password } = request.body;
+        //     const role = "";
+        //     const user = {};
+        //     //  var checkuser={};
+        //     const checkuser = await rsg.findOne({ email: email });
+        //     console.log("chek   : " + checkuser)
+        //     if (checkuser.email == email && checkuser.password == password) {
+        //         user.role = "user";
+        //         user.email = email;
+        //         user.password = password;
+        //         user.aadharFile = checkuser.aadharfile;
+        //     }
+        //     console.log("user :" + user)
+        //     const payload = user;
+        //     console.log("pppp :" + payload)
+        //     const expiryTime = {
+        //         expiresIn: '1d'
+        //     }
+        //     const token = jwt.sign(payload, SECRET_KEY, expiryTime);
+        //     response.cookie('jwt', token, { httpOnly: true, maxAge: maxAge });
+        //     if (!token) {
+        //         response.json({ message: "Error Occured while dealing with Token" });
+        //     }
+        //     response.redirect('/home1');
+        // } catch (err) {
+        //     console.log("error : " + err);
+        // }
     }
 
     static authenticateJWT = (request, response, next) => {
@@ -247,4 +262,4 @@ class RegistrationController {
 
     }
 }
-export { RegistrationController, jwt };
+export { RegistrationController };

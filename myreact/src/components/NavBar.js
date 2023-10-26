@@ -36,17 +36,20 @@ export default function NavBar() {
                                 </li>
                                 <li className="nav-item text-center">
                                     <Link className="nav-link" to="/admin">
-                                        <a className="text-white" href="/" style={{textDecoration: "none"}}>Admin</a>
+                                        <a className="text-white" href="/" style={{ textDecoration: "none" }}>Admin</a>
                                     </Link>
                                 </li>
                                 <li className="nav-item text-center">
-                                    <a className="nav-link text-white" href="/">Career</a>
-                                </li>
+                                    <Link className="nav-link" to="/login">
+                                        <a className=" text-white" href="/" style={{ textDecoration: "none" }}>Career</a>
+                                    </Link>
+                                    </li>
                             </ul>
                         </div>
                         <div className="col-12 col-lg-2 p-0 mt-1">
                             <Link className="nav-link" to="/registration">
-                                <button className="btn btn-outline-danger w-100" type="submit" id="registerbtn">Register Now</button>
+                                <button className="btn btn-outline-danger w-100
+                                </li>" type="submit" id="registerbtn">Register Now</button>
                             </Link>
                         </div>
                     </div>

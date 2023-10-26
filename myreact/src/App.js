@@ -54,6 +54,7 @@ import OurBatches from './components/OurBatches';
 import OurAchivements from './components/OurAchivements';
 import OurTeam from './components/OurTeam';
 import Registration from './components/registration';
+import Login from './components/Login';
 import ModalComponent from './components/ModalComponent';
 import AdminModule from './components/AdminModule';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'; // Add 'useLocation' here
@@ -87,6 +88,7 @@ function AppContent() {
           </>
         } />
         <Route path="/registration" element={<Registration />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/otpcomponent" element={<ModalComponent />} />
         <Route path="/admin/*" element={<AdminModule />} />
       </Routes>

@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import web from "./routes/web.js";
+import candidate from "./routes/candidate.js";
 import admin from "./routes/adminRoutes.js";
 
 import cors from 'cors';
@@ -15,7 +15,7 @@ app.use(cors());
 app.use(cookieparser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use("/user", web);
+app.use("/candidate", candidate);
 app.use("/admin", admin);
 
 app.use(express.static('public'));

@@ -10,9 +10,10 @@ import img8 from '../Images/document_icon.jpg';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Modal from 'react-modal';
-
+var username = false, checkemail = false, Adhaar = false, phone = false, pass = false;
 export default function Registration() {
-    const [isUserRegistered, setUserRegistered] = useState(false);
+    var [isUserRegistered, setUserRegistered] = useState(false);
+    var [isUserDocuments, setUserDocuments] = useState(false);
     const history = useNavigate();
     const [user, setUser] = useState({
         username: '',
@@ -47,7 +48,6 @@ export default function Registration() {
         setUser({ ...user, [name]: value });
         const validationErrors = validateField(name, value);
         setErrors({ ...errors, [name]: validationErrors });
-        // console.log("name : ",name);
     };
 
     const handleFileChange1 = (e,) => {
@@ -75,6 +75,7 @@ export default function Registration() {
                 if (value.trim() == "") {
                     document.getElementById("username").style.color = "red";
                     document.getElementById("username").innerHTML = "Name Required";
+                    username = false;
                     return false
                 }
                 else {
@@ -82,33 +83,44 @@ export default function Registration() {
                     if (reg.test(value)) {
                         document.getElementById('username').style.color = "green";
                         document.getElementById("username").innerHTML = "Valid name";
+                        document.getElementById("usertext").innerHTML = "";
+
+                        username = true;
                         return true
                     }
                     else {
+                        console.log("usertext")
                         document.getElementById('username').style.color = "red";
-                        document.getElementById("username").innerHTML = "Invalid name";
+                        // document.getElementById("username").innerHTML = "Invalid name";
+                        document.getElementById("usertext").innerHTML = "Invalid name";
+
+                        username = false;
                         return false;
                     }
                 }
                 break;
             case 'phoneNo':
-
                 var mobile = document.getElementById("login_contact");
                 if (value.trim() == "") {
                     document.getElementById("phoneNo").style.color = "red";
                     document.getElementById("phoneNo").innerHTML = "Mobile Number Required";
+                    phone = false;
                     return true;
                 }
                 else {
                     var reg = /^[6789][0-9]{9}$/;
                     if (reg.test(value)) {
                         document.getElementById("phoneNo").style.color = "green";
-                        document.getElementById("phoneNo").innerHTML = "Valid Password";
+                        document.getElementById("phoneNo").innerHTML = "Valid Phone Number";
+                        document.getElementById("phone").innerHTML = "";
+
+                        phone = true;
                         return true;
                     }
                     else {
                         document.getElementById("phoneNo").style.color = "red";
-                        document.getElementById("phoneNo").innerHTML = "Enter 10 Digit MobileNo.";
+                        document.getElementById("phone").innerHTML = "Enter 10 Digit MobileNo.";
+                        phone = false;
                         return false;
                     }
                 }
@@ -118,6 +130,7 @@ export default function Registration() {
                 if (value.trim() == "") {
                     document.getElementById("aadharNo").style.color = "red";
                     document.getElementById("aadharNo").innerHTML = "Mobile Number Required";
+                    Adhaar = false;
                     return true;
                 }
                 else {
@@ -125,11 +138,15 @@ export default function Registration() {
                     if (reg.test(value)) {
                         document.getElementById("aadharNo").style.color = "green";
                         document.getElementById("aadharNo").innerHTML = "Valid Password";
+                        document.getElementById("adharno").innerHTML = "";
+                        Adhaar = true;
                         return true;
                     }
                     else {
                         document.getElementById("aadharNo").style.color = "red";
                         document.getElementById("aadharNo").innerHTML = "Enter 10 Digit MobileNo.";
+                        document.getElementById("adharno").innerHTML = "Enter 12 Digit AadharNumber.";
+                        Adhaar = false;
                         return false;
                     }
                 }
@@ -140,6 +157,7 @@ export default function Registration() {
                 if (value.trim() == "") {
                     document.getElementById("email").style.color = "red";
                     document.getElementById("email").innerHTML = "Email Required";
+                    checkemail = false;
                     return false;
                 }
                 else {
@@ -147,11 +165,13 @@ export default function Registration() {
                     if (reg.test(value)) {
                         document.getElementById("email").style.color = "green";
                         document.getElementById("email").innerHTML = "Valid Email";
+                        checkemail = true;
                         return true;
                     }
                     else {
                         document.getElementById("email").style.color = "red";
                         document.getElementById("email").innerHTML = "Invalid email";
+                        checkemail = false;
                         return false;
                     }
                 }
@@ -161,6 +181,7 @@ export default function Registration() {
                 if (value.trim() == "") {
                     document.getElementById("password").style.color = "red";
                     document.getElementById("password").innerHTML = "Password Required";
+                    pass = false;
                     return false;
                 }
                 else {
@@ -168,11 +189,13 @@ export default function Registration() {
                     if (reg.test(value)) {
                         document.getElementById("password").style.color = "green";
                         document.getElementById("password").innerHTML = "Valid Password";
+                        pass = true;
                         return true;
                     }
                     else {
                         document.getElementById("password").style.color = "red";
                         document.getElementById("password").innerHTML = "Invalid Password";
+                        pass = false;
                         return false;
                     }
                 }
@@ -194,20 +217,26 @@ export default function Registration() {
         console.log(user);
         const { username, phoneNo, aadharNo, dob, email, password } = user;
         console.log(username);
-//my
+        //my
         try {
-            axios.post('http://localhost:3002/user/verifyemail', user).then((response) => {
+            // if((username && checkemail && Adhaar && phone && pass)){
+            axios.post('http://localhost:3002/candidate/verifyemail', user).then((response) => {
 
-                console.log("result",response);
-                if(response.status===201){
+                console.log("result", response);
+                if (response.status === 201) {
                     console.log('component caling');
                     history("/otpcomponent");
-                }else {
-                    isUserRegistered=true;
+                } else {
+                    console.log("now i am in modal ")
+                    setUserRegistered(true);
+                    // history("/modal");
                 }
             }).catch((error) => {
                 console.log('', error);
             })
+            // }else{
+            //     console.log("something went wrong.... ");
+            // }
             // axios.post('http://localhost:3002/user/register', user).then((result) => {
             //     console.log(result);
             // }).catch((error) => {
@@ -248,8 +277,13 @@ export default function Registration() {
         console.log("form data : ", formData);
 
         try {
-            axios.post('http://localhost:3002/user/documentRegistration', formData).then((result) => {
+            axios.post('http://localhost:3002/candidate/documentRegistration', formData).then((result) => {
                 console.log(result);
+                if (result.status === 201) {
+                    setUserDocuments(true);
+                } else {
+                    console.log("Something went wrong....");
+                }
             }).catch((error) => {
                 console.log('', error);
             })
@@ -282,21 +316,37 @@ export default function Registration() {
                             <div className="accordion-body">
                                 <form method='post' onSubmit={PostData}>
                                     <div className="row">
-                                        <div className="mt-4 col-sm-12 col-md-12 col-lg-6 d-flex justify-content-center">
-                                            <img src={img2} className="mt-4" height="20vh" alt="user_icon" />
-                                            <input type="text" onChange={handleInputs} className=" p-3" name="username" id="username" value={user.name} placeholder="Enter name" />
+                                        <div className="mt-4 col-sm-12 col-md-12 col-lg-6 ">
+                                            <div className='d-flex justify-content-center'>
+                                                <img src={img2} className="mt-4" height="20vh" alt="user_icon" />
+                                                <input type="text" onChange={handleInputs} className=" p-3" name="username" id="username" value={user.name} placeholder="Enter name" />
+                                            </div>
+                                            <div className='d-flex justify-content-center'>
+                                                <span id="usertext" style={{ marginTop: "10px" }} ></span>
+                                            </div>
                                         </div>
-                                        <div className="mt-4 col-sm-12 col-md-12 col-lg-6 d-flex justify-content-center">
-                                            <img src={img3} className="mt-4" height="20vh" alt="user_icon" />
-                                            <input type="number" className=" p-3" name="phoneNo" id="phoneNo" onChange={handleInputs} value={user.name}
-                                                placeholder="Enter Mobile Number" />
+
+                                        <div className="mt-4 col-sm-12 col-md-12 col-lg-6 ">
+                                            <div className='d-flex justify-content-center'>
+                                                <img src={img3} className="mt-4" height="20vh" alt="user_icon" />
+                                                <input type="number" className=" p-3" name="phoneNo" id="phoneNo" onChange={handleInputs} value={user.name}
+                                                    placeholder="Enter Mobile Number" />
+                                            </div>
+                                            <div className='d-flex justify-content-center'>
+                                                <span id='phone'></span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <div className="mt-4 col-lg-6 d-flex justify-content-center">
-                                            <img src={img4} className="mt-4" height="20vh" alt="user_icon" />
-                                            <input type="text" className=" p-3" name="aadharNo" id="aadharNo" onChange={handleInputs} value={user.aadharNo}
-                                                placeholder="Enter Adhaar Number" />
+                                        <div className="mt-4 col-lg-6 ">
+                                            <div className='d-flex justify-content-center'>
+                                                <img src={img4} className="mt-4" height="20vh" alt="user_icon" />
+                                                <input type="text" className=" p-3" name="aadharNo" id="aadharNo" onChange={handleInputs} value={user.aadharNo}
+                                                    placeholder="Enter Adhaar Number" /></div>
+                                            <div className='d-flex justify-content-center'>
+                                                <span id='adharno'></span>
+                                            </div>
+
                                         </div>
                                         <div className="mt-4 col-lg-6 d-flex justify-content-center">
                                             <img src={img5} className="mt-4" height="20vh" alt="user_icon" />
@@ -309,6 +359,7 @@ export default function Registration() {
                                             <img src={img6} className="mt-4" height="20vh" alt="user_icon" />
                                             <input type="text" className=" p-3" name="email" id="email" onChange={handleInputs} value={user.email} placeholder="Enter your email"
                                             />
+
                                         </div>
                                         <div className="mt-4 col-lg-6 d-flex justify-content-center">
                                             <img src={img7} className="mt-4" height="20vh"
@@ -451,21 +502,70 @@ export default function Registration() {
                     </div>
                 </div>
             </div>
-        </div>
-    );
-    return (
-        <div className="container my-5" style={{ padding: "1% 10% 0% 10%" }}>
-            {/* Your form and other elements... */}
+            <div className="container my-5" style={{ padding: "1% 1% 0% 1%" }}>
+                {/* Your form and other elements... */}
+                <Modal
+                    isOpen={isUserRegistered}
+                    contentLabel="User Already Registered Modal"
+                // You can customize modal styles and content here
+                >
+                    {/* <button type="button" classname="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        Launch static backdrop modal
+                        </button> */}
+                    <center><div classname="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style={{ boxShadow: "2px 2px 2px 2px green", width: "50%" }}  >
+                        <div classname="modal-dialog modal-dialog-centered " >
+                            <div classname="modal-content">
+                                <div classname="modal-header">
+                                    <h5 classname="modal-title" id="staticBackdropLabel">Modal title</h5>
+                                    <button type="button" classname="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div classname="modal-body" >
+                                    you have already register please upadte your documents
+                                </div>
+                                <div classname="modal-footer">
+                                    <button onClick={() => setUserRegistered(false)}>Close Modal</button>
+                                    <button type="button" classname="btn btn-primary">Understood</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </center>
+                    {/* <h2>User Already Registered</h2>
+                        <p>You can display a message or any content you want here.</p>
+                        <button onClick={() => setUserRegistered(false)}>Close Modal</button> */}
+                </Modal>
+            </div>
 
-            <Modal
-                isOpen={isUserRegistered}
-                contentLabel="User Already Registered Modal"
-            // You can customize modal styles and content here
-            >
-                <h2>User Already Registered</h2>
-                <p>You can display a message or any content you want here.</p>
-                <button onClick={() => setUserRegistered(false)}>Close Modal</button>
-            </Modal>
+            <div className="container my-5" style={{ padding: "1% 1% 0% 1%" }}>
+                {/* Your form and other elements... */}
+                <Modal
+                    isOpen={isUserDocuments}
+                    contentLabel="User Already Registered Modal"
+                // You can customize modal styles and content here
+                >
+                    <center><div classname="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style={{ boxShadow: "2px 2px 2px 2px green", width: "50%" }}  >
+                        <div classname="modal-dialog modal-dialog-centered " >
+                            <div classname="modal-content">
+                                <div classname="modal-header">
+                                    <h5 classname="modal-title" id="staticBackdropLabel">Modal title</h5>
+                                    <button type="button" classname="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div classname="modal-body" >
+                                    Documents Uploaded Successfully......
+                                </div>
+                                <div classname="modal-footer">
+                                    <button onClick={() => isUserDocuments(false)}>Close Modal</button>
+                                    <button type="button" classname="btn btn-primary">Understood</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </center>
+                </Modal>
+            </div>
         </div>
     );
+
+
+
 }
