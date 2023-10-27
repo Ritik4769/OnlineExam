@@ -176,8 +176,10 @@ export default function AdminModule() {
                 </nav>
 
                 <div className="row w-100  m-0  p-0  " style={{ height: "min-content" }}>
+                   
+                   
                     <div className="col-2 p-0" id="nav-pills-disapear"   >
-                        <div style={{ height: "100vh" }} className=" bg-dark nav flex-column justify-content-around nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <div style={{ height: "100vh" }} className=" bg-danger nav flex-column justify-content-around nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <div className="" >
                                 <div className=" w-100 p-4 m-0 d-flex justify-content-center " >
                                     <img className="img fa-circle w-50  " src={avatar} alt="" />
@@ -195,57 +197,107 @@ export default function AdminModule() {
                             <button className="section-tab  nav-link  text-light" id="v-pills-studentrecord-tab" data-bs-toggle="pill" data-bs-target="#v-pills-studentrecord" role="tab" aria-controls="v-pills-studentrecord" aria-selected="false">Student Record</button>
                         </div>
                     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     <div className="col-12 col-lg-10 p-0 ">
                         <div className="tab-content p-0" id="v-pills-tabContent">
                             <div className="tab-pane fade show active bg-danger m-0" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-                                Home Big
+                            <nav class="navbar navbar-expand-lg navbar-light bg-light disaaper-nav">
+                              <div class="container-fluid">
+                                 <div class="d-flex align-items-center ">
+                      <a class="navbar-brand" href="#"><img width="100px"
+                          src={logo} alt="" /></a>
+                      <h2 class="h2 ms-2"><i class="bi bi-house"></i>&nbsp;Home</h2>
+                    </div>
+                    <div class="d-flex align-items-center  me-2 ">
+                      <button type="submit" class="btn btn-outline-danger btn-sm m-2">Log out</button>
+                      <button type="button" class="btn btn-outline-danger position-relative btn-sm">
+                        <i class="bi bi-bell-fill"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                          5
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </nav>
+                           
+                           
+                           
+                           
+                           
+                           
+                           
                             </div>
                             {/* <!-- ---------------------Regestrations Section--------------------------------- --> */}
                             <div className="tab-pane fade pt-2" id="v-pills-registrations" role="tabpanel" aria-labelledby="v-pills-registrations-tab">
-                                <nav className="navbar navbar-expand-lg navbar-light bg-light" >
-                                    <div className="container-fluid">
-                                        <div className="d-flex align-items-center " >
-                                            <a className="navbar-brand" href="#"><img width="100px" src={logo} alt="" /></a>
-                                            <h2 className="h2 ms-2"> <i className="fa-regular fa-address-card"></i> Total Registrations Big</h2>
-                                        </div>
-                                    </div>
-                                </nav>
+                            <nav class="navbar navbar-expand-lg navbar-light bg-light disaaper-nav">
+                  <div class="container-fluid">
+                    <div class="d-flex align-items-center ">
+                      <a class="navbar-brand" href="#"><img width="100px"
+                          src={logo} alt="" /></a>
+                      <h2 class="h2 ms-2"> <i class="fa-regular fa-address-card"></i> Total Registrations</h2>
+                    </div>
+                    <div class="d-flex align-items-center  me-2 ">
+                      <button type="submit" class="btn btn-outline-danger btn-sm m-2">Log out</button>
+                      <button type="button" class="btn btn-outline-danger position-relative btn-sm">
+                        <i class="bi bi-bell-fill"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                          5
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </nav>
                                 {/* <!-- --------------------------Filter Section--------------------------- --> */}
-                                <div className="row w-100 m-0 ">
-                                    <div className="col-12  col-md-3 p-2" >
-                                        <select className="form-control" >
-                                            <option value="null">Select Gender</option>
-                                            <option value="null">Male</option>
-                                            <option value="null">Female</option>
-                                            <option value="null">All</option>
-                                        </select>
-                                    </div>
-                                    <div className="col-12  col-md-3 p-2" >
-                                        <select className="form-control" >
-                                            <option value="null">Select by Sections</option>
-                                            <option value="null">View All</option>
-                                            <option value="null">Section  1</option>
-                                            <option value="null">Section 2</option>
-                                            <option value="null">Section 3</option>
-                                            <option value="null">Section 1 & 2</option>
-                                            <option value="null">Section 2 & 3</option>
-                                            <option value="null">Section 3 & 1</option>
-                                        </select>
-                                    </div>
-                                    <div className="col-12  col-md-6 p-2" >
-                                        <div className="row">
-                                            <div className="col-4  d-flex justify-content-end" >
-                                                <button className="btn btn-success " type="button">To Excel &nbsp; <i className="fa-solid fa-table"></i></button>
-                                            </div>
-                                            <div className="col-8" >
-                                                <div className="btn-group w-100" role="group" aria-label="Basic example">
-                                                    <input className="form-control" placeholder="Search Here" type="text" name="" value="" />
-                                                    <button type="button" className="btn btn-primary">Search</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <div class="row w-100 m-0 ">
+                  <div class="col-12  col-md-3 p-2">
+                    <select class="form-control-sm w-100">
+                      <option value="null">Select Gender</option>
+                      <option value="null">Male</option>
+                      <option value="null">Female</option>
+                      <option value="null">All</option>
+                    </select>
+                  </div>
+                  <div class="col-12  col-md-3 p-2">
+                    <select class="form-control-sm w-100">
+                      <option value="null">Select by Sections</option>
+                      <option value="null">View All</option>
+                      <option value="null">Section 1</option>
+                      <option value="null">Section 2</option>
+                      <option value="null">Section 3</option>
+                      <option value="null">Section 1 & 2</option>
+                      <option value="null">Section 2 & 3</option>
+                      <option value="null">Section 3 & 1</option>
+                    </select>
+                  </div>
+                  <div class="col-12  col-md-6 p-2 order-first order-md-last">
+                    <div class="row">
+                      <div class="col-4  d-flex justify-content-end">
+                        <button class="btn btn-outline-success btn-sm w-100 " type="button">To Excel &nbsp; <i
+                            class="fa-solid fa-table"></i></button>
+                      </div>
+                      <div class="col-8 d-flex justify-content-end ">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                          <input class="form-control-sm" placeholder="Search Here" type="text" name="" value=""/>
+                          <button type="button" class="btn btn-outline-primary btn-sm"><i
+                              class="bi bi-search"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                                 {/* <!-- --------------------------Filter SectionEnds --------------------------- --> */}
                                 <div className="w-100 dashBorad-table-div ps-2 pe-2">
                                     <table className="table table-danger table-hover table-responsive-md">
@@ -468,7 +520,200 @@ export default function AdminModule() {
                             </div>
                             {/* <!-----------------------Regestrations Section Ends--------------------------------- --> */}
                             {/* <!-- </div> --> */}
-                            <div className="tab-pane fade" id="v-pills-totalplacements" role="tabpanel" aria-labelledby="v-pills-totalplacements-tab">Total Placements ssss</div>
+                            <div className="tab-pane fade" id="v-pills-totalplacements" role="tabpanel" aria-labelledby="v-pills-totalplacements-tab">
+                            <nav class="navbar navbar-expand-lg navbar-light bg-light disaaper-nav">
+                              <div class="container-fluid">
+                                 <div class="d-flex align-items-center ">
+                                    <a class="navbar-brand" href="#"><img width="100px" src={logo} alt="" /></a>
+                                      <h2 class="h2 ms-2"> <i class="fa-regular fa-address-card"></i> Total Placements</h2>
+                                 </div>
+                             <div class="d-flex align-items-center  me-2 ">
+                                 <button type="submit" class="btn btn-outline-danger btn-sm m-2">Log out</button>
+                                 <button type="button" class="btn btn-outline-danger position-relative btn-sm">
+                                 <i class="bi bi-bell-fill"></i>
+                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">5</span>
+                                 </button>
+                            </div>
+                            </div>
+                            </nav>
+
+                            <div class="row w-100 m-0 p-3 dashBorad-table-div ">
+                                <div class="col-12 col-md-2 mb-1">
+                             <select class="form-control-sm w-100">
+                               <option value="null">Select Gender</option>
+                               <option value="null">Male</option>
+                               <option value="null">Female</option>
+                               <option value="null">All</option>
+                             </select>
+                           </div>
+                           
+                           <div class="col-12 col-md-2 mb-1">
+                             <select class="form-control-sm w-100">
+                               <option value="null">Select Batch</option>
+                               <option value="null">Batch 1</option>
+                               <option value="null">Batch 2</option>
+                               <option value="null">Batch 3</option>
+                               <option value="null">All Bathes</option>
+                             </select>
+                           </div>
+                           <div class="col-12 col-md-2 mb-1">
+                             <select class="form-control-sm w-100">
+                               <option value="null">Company 1</option>
+                               <option value="null">Select Company</option>
+                               <option value="null">Company 2</option>
+                               <option value="null">Company 3</option>
+                               <option value="null">Company 4</option>
+                            </select>
+                          </div>
+                          
+                        <div class="col-12 col-md-2 mb-1">
+                        <button class="btn btn-outline-success btn-sm w-100 " type="button">To Excel &nbsp; <i
+                          class="fa-solid fa-table"></i></button>
+                        </div>
+                            <div class="col-12 col-md-4 order-first order-md-last d-flex justify-content-between  mb-1 ">
+                               <div class="btn-group" role="group" aria-label="Basic example">
+                                 <input class="form-control-sm" placeholder="Search Here" type="text" name="" value=""/>
+                                 <button type="button" class="btn btn-outline-primary btn-sm"><i class="bi bi-search"></i></button>
+                               </div>
+                               <button type="button" class="btn btn-outline-primary btn-sm"><i class="bi bi-plus-lg"></i></button>
+                             </div>
+                            </div>
+                            <div class="row w-100 m-0 p-2 dashBorad-table-div ">
+                  <div class="col-6 col-sm-4 col-md-3">
+                    <div class="card w-100  m-1">
+                      <div class="w-100 d-flex justify-content-center">
+                        <img src={avatar} class="card-img-top w-50" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Vikas Joshi</h5>
+                        <p class="text-muted">Btach 5</p>
+                        <p class="card-text text-muted  text-sm-start"><i class="bi bi-buildings"></i> Company</p>
+                        <a href="#" class="btn btn-outline-primary btn-sm"><i
+                            class="bi bi-send-fill"></i>&nbsp;Message</a>
+                        <a href="#" class="btn btn-outline-warning btn-sm "><i class="bi bi-envelope"></i>&nbsp;Mail</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-6 col-sm-4 col-md-3 ">
+                    <div class="card w-100  m-1">
+                      <div class="w-100 d-flex justify-content-center">
+                        <img src={avatar} class="card-img-top w-50" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Vikas Joshi</h5>
+                        <p class="text-muted">Btach 5</p>
+                        <p class="card-text text-muted  text-sm-start"><i class="bi bi-buildings"></i> Company</p>
+
+                        <a href="#" class="btn btn-outline-primary btn-sm"><i
+                            class="bi bi-send-fill"></i>&nbsp;Message</a>
+                        <a href="#" class="btn btn-outline-warning btn-sm"><i class="bi bi-envelope"></i>&nbsp;Mail</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-6 col-sm-4 col-md-3">
+                    <div class="card w-100  m-1">
+                      <div class="w-100 d-flex justify-content-center">
+                        <img src={avatar} class="card-img-top w-50" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Vikas Joshi</h5>
+                        <p class="text-muted">Btach 5</p>
+                        <p class="card-text text-muted  text-sm-start"><i class="bi bi-buildings"></i> Company</p>
+
+                        <a href="#" class="btn btn-outline-primary btn-sm"><i
+                            class="bi bi-send-fill"></i>&nbsp;Message</a>
+                        <a href="#" class="btn btn-outline-warning btn-sm"><i class="bi bi-envelope"></i>&nbsp;Mail</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-6 col-sm-4 col-md-3">
+                    <div class="card w-100  m-1">
+                      <div class="w-100 d-flex justify-content-center">
+                        <img src={avatar} class="card-img-top w-50" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Vikas Joshi</h5>
+                        <p class="text-muted">Btach 5</p>
+                        <p class="card-text text-muted  text-sm-start"><i class="bi bi-buildings"></i> Company</p>
+
+                        <a href="#" class="btn btn-outline-primary btn-sm"><i
+                            class="bi bi-send-fill"></i>&nbsp;Message</a>
+                        <a href="#" class="btn btn-outline-warning btn-sm"><i class="bi bi-envelope"></i>&nbsp;Mail</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-6 col-sm-4 col-md-3">
+                    <div class="card w-100  m-1">
+                      <div class="w-100 d-flex justify-content-center">
+                        <img src={avatar} class="card-img-top w-50" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Vikas Joshi</h5>
+                        <p class="text-muted">Btach 5</p>
+                        <p class="card-text text-muted  text-sm-start"><i class="bi bi-buildings"></i> Company</p>
+
+                        <a href="#" class="btn btn-outline-primary btn-sm"><i
+                            class="bi bi-send-fill"></i>&nbsp;Message</a>
+                        <a href="#" class="btn btn-outline-warning btn-sm "><i class="bi bi-envelope"></i>&nbsp;Mail</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-6 col-sm-4 col-md-3">
+                    <div class="card w-100  m-1">
+                      <div class="w-100 d-flex justify-content-center">
+                        <img src={avatar} class="card-img-top w-50" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Vikas Joshi</h5>
+                        <p class="text-muted">Btach 5</p>
+                        <p class="card-text text-muted  text-sm-start"><i class="bi bi-buildings"></i> Company</p>
+
+                        <a href="#" class="btn btn-outline-primary btn-sm"><i
+                            class="bi bi-send-fill"></i>&nbsp;Message</a>
+                        <a href="#" class="btn btn-outline-warning btn-sm "><i class="bi bi-envelope"></i>&nbsp;Mail</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-6 col-sm-4 col-md-3">
+                    <div class="card w-100  m-1">
+                      <div class="w-100 d-flex justify-content-center">
+                        <img src={avatar} class="card-img-top w-50" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Vikas Joshi</h5>
+                        <p class="text-muted">Btach 5</p>
+                        <p class="card-text text-muted  text-sm-start"><i class="bi bi-buildings"></i> Company</p>
+
+                        <a href="#" class="btn btn-outline-primary btn-sm"><i
+                            class="bi bi-send-fill"></i>&nbsp;Message</a>
+                        <a href="#" class="btn btn-outline-warning btn-sm "><i class="bi bi-envelope"></i>&nbsp;Mail</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-6 col-sm-4 col-md-3">
+                    <div class="card w-100 m-1">
+                      <div class="w-100 d-flex justify-content-center">
+                        <img src={avatar} class="card-img-top w-50" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Vikas Joshi</h5>
+                        <p class="text-muted">Btach 5</p>
+                        <p class="card-text text-muted  text-sm-start"><i class="bi bi-buildings"></i> Company</p>
+                         <a href="#" class="btn btn-outline-primary btn-sm"><i class="bi bi-send-fill"></i>&nbsp;Message</a>
+                        <a href="#" class="btn btn-outline-warning btn-sm"><i class="bi bi-envelope"></i>&nbsp;Mail</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                                                    
+                    </div>
 
 
 

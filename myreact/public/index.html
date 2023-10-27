@@ -50,5 +50,162 @@
   <div id="navbar"></div>
 
 </body>
+<script>
+
+
+  setTimeout(() => {
+    var path = document.querySelector('path');
+    var pathLength = path.getTotalLength();
+
+    path.style.strokeDasharray = pathLength + ' ' + pathLength;
+
+    path.style.strokeDashoffset = pathLength;
+
+    window.addEventListener('scroll', () => {
+      var scrollPercentage = (document.documentElement.scrollTop + document.body.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight);
+      console.log("Guuu");
+     setTimeout(()=>{
+       var drawLength = (pathLength * scrollPercentage);
+       path.style.strokeDashoffset = pathLength - drawLength;
+      },300)
+
+    })
+
+
+
+
+
+
+
+
+    new Typed(".en-auto", {
+      strings: ["Vovels", "Tense", ""],
+      typeSpeed: 80,
+      backSpeed: 80,
+      loop: true
+    })
+
+    new Typed(".confident-auto", {
+      strings: ["Confidence", "Empathy", "Respect", "feedback"],
+      typeSpeed: 80,
+      backSpeed: 80,
+      loop: true
+    })
+
+
+
+
+    new Typed(".team-auto", {
+      strings: ["Problem Solving", "Innovation", "Personal Growth", "Productivity"],
+      typeSpeed: 80,
+      backSpeed: 80,
+      loop: true
+    })
+
+
+
+    new Typed(".leader-auto", {
+      strings: ["Inspires Hard Work", "Increases Efficiency", "Motivates Team"],
+      typeSpeed: 80,
+      backSpeed: 80,
+      loop: true
+    })
+
+
+
+
+
+
+    new Typed(".html-auto", {
+      strings: ["Forms", "Tables", "Div", "Media", "Semantic Tags"],
+      typeSpeed: 80,
+      backSpeed: 80,
+      loop: true
+    })
+    new Typed(".css-auto", {
+      strings: ["CSS Selectors", "Box Model", "Flexbox", "Grid", "Media Queries"],
+      typeSpeed: 80,
+      backSpeed: 80,
+      loop: true
+    })
+    new Typed(".js-auto", {
+      strings: ["Asynchronous", "Box Model", "Promises", "Async/Await", "Call Backs"],
+      typeSpeed: 80,
+      backSpeed: 80,
+      loop: true
+    })
+
+    new Typed(".mongo-auto", {
+      strings: ["DataBase", "Collections", "Documents", "Fields", "Query"],
+      typeSpeed: 80,
+      backSpeed: 80,
+      loop: true
+    })
+
+
+
+
+
+
+
+
+
+    const parentElement = document.getElementById('degree-icon-parent');
+    const childElement = document.getElementById('degree-icon');
+
+    parentElement.addEventListener('mouseover', function () {
+      childElement.classList.add('fa-bounce');
+    });
+
+    parentElement.addEventListener('mouseout', function () {
+      childElement.classList.remove('fa-bounce');
+    });
+
+
+    const parentElement1 = document.getElementById('company-icon-parent');
+    const childElement1 = document.getElementById('company-icon');
+
+    parentElement1.addEventListener('mouseover', function () {
+      childElement1.classList.add('fa-beat');
+
+    });
+
+    parentElement1.addEventListener('mouseout', function () {
+      childElement1.classList.remove('fa-beat');
+    });
+
+
+
+  }, 1000)
+
+
+
+
+
+
+
+
+
+
+
+  // =======================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
 
 </html>

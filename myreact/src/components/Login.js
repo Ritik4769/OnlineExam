@@ -24,7 +24,6 @@ export default function Login() {
         const { EnrollID, Password } = login;
         console.log(EnrollID);
         console.log(Password);
-        //my
         try {
             axios.post('http://localhost:3002/candidate/login', login).then((response) => {
 

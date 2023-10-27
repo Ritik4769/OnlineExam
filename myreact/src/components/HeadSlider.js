@@ -21,29 +21,31 @@ export default function HeadSlide() {
                     alt="..."/>
             </div>
             <div className="carousel-item">
-                <img src={imge2} className="d-block w-100"
+                <img src={imge1} className="d-block w-100"
                     alt="..."/>
             </div>
             <div className="carousel-item">
-                <img src={imge3} className="d-block w-100" alt="..."/>
+                <img src={imge1} className="d-block w-100" alt="..."/>
             </div>
         </div>
        
-       <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-            <div className=' bg-danger p-1 pre-nxt-btn d-flex aling-items-center justify-content-center  '>
+       <button className="carousel-control-prev  d-flex aling-items-center justify-content-start " type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <div className=' bg-danger m-4 p-1 pre-nxt-btn d-flex aling-items-center justify-content-center  '>
                 <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span className="visually-hidden">Previous</span>
             </div>
         </button>
        
-        <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-        <div className=' bg-danger p-1 pre-nxt-btn d-flex aling-items-center justify-content-center  '>
+        <button className="carousel-control-next d-flex aling-items-center justify-content-end" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+        <div className=' bg-danger m-4 p-1 pre-nxt-btn d-flex aling-items-center justify-content-center  '>
                
             <span className="carousel-control-next-icon" aria-hidden="true"></span>
             <span className="visually-hidden">Next</span>
        </div>
         </button>
     </div>
+
+
 </div>
  
   );

@@ -17,7 +17,7 @@ export default function OurBatches() {
                             alt="..."/>
                         <div className="hover-box">
                             <h3 className="text-white" >ITEP-Batch 5</h3>
-                            <p className="text-white" >SGSITS College Indore</p>
+                            <p className="text-white text-center " >SGSITS College Indore</p>
                         </div>
                     </div>
                 </div>
@@ -27,7 +27,17 @@ export default function OurBatches() {
                             alt="..."/>
                             <div className="hover-box">
                                 <h3 className=" h3 text-white" >ITEP-Batch 5</h3>
-                                <p className="  text-white" >SGSITS College Indore</p>
+                                <p className="text-white text-center " >SGSITS College Indore</p>
+                            </div>
+                    </div>
+                </div>
+                <div className="carousel-item ">
+                    <div className="image-container">
+                        <img src={img2} className="d-block w-100"
+                            alt="..."/>
+                            <div className="hover-box">
+                                <h3 className=" h3 text-white" >ITEP-Batch 5</h3>
+                                <p className="text-white text-center " >SGSITS College Indore</p>
                             </div>
                     </div>
                 </div>
@@ -37,19 +47,18 @@ export default function OurBatches() {
 
             
 
-                <button className=" carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+                <button className=" carousel-control-prev d-flex aling-items-center justify-content-start" type="button" data-bs-target="#carouselExampleControls"
                 data-bs-slide="prev">
-                    <div className=' bg-danger p-1 pre-nxt-btn  d-flex aling-items-center justify-content-center'>
+                    <div className=' bg-danger p-1 m-4 pre-nxt-btn  d-flex aling-items-center justify-content-center'>
                      <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                       <span className="visually-hidden">Previous</span>
                     </div>
                 </button>
                     
             
-                <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
-                data-bs-slide="next">
+                <button className="carousel-control-next  d-flex aling-items-center justify-content-end " type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
 
-                 <div className=' bg-danger p-1 pre-nxt-btn d-flex aling-items-center justify-content-center  '>
+                 <div className=' bg-danger m-4 p-1 pre-nxt-btn d-flex aling-items-center justify-content-center  '>
                 <span className="carousel-control-next-icon" aria-hidden="true"></span>
                 <span className="visually-hidden">Next</span>
                 </div>
@@ -63,6 +72,7 @@ export default function OurBatches() {
         </div>
     </div>
 </div>
+
 
 
 
