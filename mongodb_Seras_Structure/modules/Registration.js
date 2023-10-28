@@ -38,7 +38,7 @@ const rsg = new mongoose.model('Registration2', userSchema);
 const userDocumentSchema = new mongoose.Schema({
     userID: {
         type: String,
-        required: true,
+        required: true
     },
     EnrollID: {
         type: String,
@@ -121,10 +121,17 @@ const shiftSchema = new mongoose.Schema({
         ref: 'Exam', // Reference to the parent exam
         required: true,
     },
-    enrolledCandidates: {
-        type: Array,
-        ref: 'Registration2' // Reference to candidate enrollment IDs
+    enrolledCandidates: [{
+        EnrollID: {
+            type: String,
+            ref: 'Registration2' // Reference to candidate enrollment IDs
+        },
+        Attendace:{
+         type: String,
+        default:"Absent"
+        }
     }
+    ]
 });
 const shift = mongoose.model('Shift', shiftSchema);
 
@@ -140,7 +147,7 @@ const uploadQuestionFile = new mongoose.Schema({
 });
 const QuestionBank = mongoose.model("QuestionBank", uploadQuestionFile);
 
-export { rsg, userDocument, exam, shift, QuestionBank};
+export { rsg, userDocument, exam, shift, QuestionBank };
 
 
 

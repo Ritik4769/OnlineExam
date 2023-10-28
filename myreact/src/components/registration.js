@@ -12,6 +12,11 @@ import axios from 'axios';
 import Modal from 'react-modal';
 var username = false, checkemail = false, Adhaar = false, phone = false, pass = false;
 export default function Registration() {
+
+    const [registrationStatus, setRegistrationStatus] = useState(false);
+    // const [isModalOpen, setIsModalOpen] = useState(false);
+
+
     var [isUserRegistered, setUserRegistered] = useState(false);
     var [isUserDocuments, setUserDocuments] = useState(false);
     const history = useNavigate();
@@ -219,43 +224,25 @@ export default function Registration() {
         console.log(username);
         //my
         try {
-            // if((username && checkemail && Adhaar && phone && pass)){
-            axios.post('http://localhost:3002/candidate/verifyemail', user).then((response) => {
+            if ((username && checkemail && Adhaar && phone && pass)) {
+                axios.post('http://localhost:3002/candidate/verifyemail', user).then((response) => {
 
-                console.log("result", response);
-                if (response.status === 201) {
-                    console.log('component caling');
-                    history("/otpcomponent");
-                } else {
-                    console.log("now i am in modal ")
-                    setUserRegistered(true);
-                    // history("/modal");
-                }
-            }).catch((error) => {
-                console.log('', error);
-            })
-            // }else{
-            //     console.log("something went wrong.... ");
-            // }
-            // axios.post('http://localhost:3002/user/register', user).then((result) => {
-            //     console.log(result);
-            // }).catch((error) => {
-            //     console.log('', error);
-            // })
-            // const response = await axios.post('http://localhost:3002/user/register', user);
-            // console.log(response);
-
-            // if (response.status === 201) {
-            // console.log("in if ");
-
-            //     // User is successfully registered
-            //     setUserRegistered(false); // Set this to false
-            // } else {
-            // console.log("in else ");
-
-            //     // User is already registered
-            //     setUserRegistered(true); // Set this to true
-            // }
+                    console.log("result", response);
+                    if (response.status === 201) {
+                        console.log('component caling');
+                        history("/otpcomponent");
+                    } else {
+                        console.log("now i am in modal ")
+                        // already register 
+                        setUserRegistered(true);
+                    }
+                }).catch((error) => {
+                    console.log('', error);
+                })
+            } else {
+                console.log("something went wrong.... ");
+                setRegistrationStatus(true);
+            }
         } catch (error) {
             console.log('Error:', error);
             window.alert('Failed to register');
@@ -275,7 +262,6 @@ export default function Registration() {
         }
         console.log("user 1 : ", user1);
         console.log("form data : ", formData);
-
         try {
             axios.post('http://localhost:3002/candidate/documentRegistration', formData).then((result) => {
                 console.log(result);
@@ -502,6 +488,9 @@ export default function Registration() {
                     </div>
                 </div>
             </div>
+
+            {/* ========================== modal-1 for Already register... */}
+
             <div className="container my-5" style={{ padding: "1% 1% 0% 1%" }}>
                 {/* Your form and other elements... */}
                 <Modal
@@ -536,6 +525,7 @@ export default function Registration() {
                 </Modal>
             </div>
 
+            {/* ========================== modal-2 for documents succussfuly... */}
             <div className="container my-5" style={{ padding: "1% 1% 0% 1%" }}>
                 {/* Your form and other elements... */}
                 <Modal
@@ -554,7 +544,37 @@ export default function Registration() {
                                     Documents Uploaded Successfully......
                                 </div>
                                 <div classname="modal-footer">
-                                    <button onClick={() => isUserDocuments(false)}>Close Modal</button>
+                                    <button onClick={() => setUserDocuments(false)}>Close Modal</button>
+                                    <button type="button" classname="btn btn-primary">Understood</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </center>
+                </Modal>
+            </div>
+
+            {/* ========================== modal-3 */}
+
+            <div className="container my-5" style={{ padding: "1% 1% 0% 1%" }}>
+                {/* Your form and other elements... */}
+                <Modal
+                    isOpen={registrationStatus}
+                    contentLabel="User validation Modal"
+                // You can customize modal styles and content here
+                >
+                    <center><div classname="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style={{ boxShadow: "2px 2px 2px 2px green", width: "50%" }}  >
+                        <div classname="modal-dialog modal-dialog-centered " >
+                            <div classname="modal-content">
+                                <div classname="modal-header">
+                                    <h5 classname="modal-title" id="staticBackdropLabel">Modal title</h5>
+                                    <button type="button" classname="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div classname="modal-body" >
+                                    Something went wrong...... <br></br>Check the fields
+                                </div>
+                                <div classname="modal-footer">
+                                    <button onClick={() => setRegistrationStatus(false)}>Close Modal</button>
                                     <button type="button" classname="btn btn-primary">Understood</button>
                                 </div>
                             </div>

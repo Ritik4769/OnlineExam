@@ -100,7 +100,7 @@ export default function AdminModule() {
         console.log(examid);
         //my
         try {
-            axios.post(`http://localhost:3002/admin/shifts/${examid}/${EnrollIDs}`, schedule).then((response) => {
+            axios.post(`http://localhost:3002/admin/shifts/${examid}`, schedule).then((response) => {
 
                 console.log("result", response);
                 if (response.status === 201) {

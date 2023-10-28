@@ -11,7 +11,7 @@ router.post('/exams', createExam);
 router.post('/uploadQuestionFile',upload2,uploadQuestionFile,readExcelController,getQuestionController);
 // router.post('/exams/:examId/shifts', createShift);
 // router.post('/shifts:examid', createShift);
-router.post('/shifts/:examid/:EnrollIDs', createShift);
+router.post('/shifts/:examid', createShift);
 
 // router.post('/exams/:examId/shifts', createShift);
 

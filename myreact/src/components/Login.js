@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Modal from 'react-modal';
+
 export default function Login() {
+    const [registrationStatus, setRegistrationStatus] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+    var [isUserLogin, setUserLogin] = useState(false);
     const [login, logUser] = useState({
         EnrollID: '',
         Password: ''
@@ -30,9 +37,21 @@ export default function Login() {
 
                 console.log("result", response);
                 if (response.status === 201) {
-                    
-                    
-                    // history("/otpcomponent");
+                    console.log('login complete.........');
+                    setRegistrationStatus('success');
+                    // setUserLogin(true);
+
+                    setIsModalOpen(true);                    // history("/otpcomponent");
+                }else if(response.status === 202){
+                    console.log('Something went wrong');
+
+                    setRegistrationStatus('Enrollid not match');
+                    setIsModalOpen(true);     
+                }else if(response.status === 203){
+                    console.log('Something went wrong');
+
+                    setRegistrationStatus('password not match');
+                    setIsModalOpen(true);     
                 }
             }).catch((error) => {
                 console.log('', error);
@@ -66,6 +85,37 @@ export default function Login() {
 
             </div>
         </form>
+
+
+        <div>
+            {/* Your registration form and other elements */}
+           
+            <Modal
+                isOpen={isModalOpen}
+                contentLabel="Registration Modal"
+                // onRequestClose={closeModal}
+            >
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title">Login Status</h5>
+                        <button type="button" className="btn-close"  aria-label="Close"></button>
+                    </div>
+                    <div className="modal-body">
+                        {registrationStatus === 'success' ? (
+                            <p>Login successful....</p>
+                        ) : registrationStatus === 'error' ? (
+                            <p>Something went wrong......</p>
+                        ) :registrationStatus === 'Enrollid not match' ? (
+                             <p>EnrollID not match</p>
+                        ): registrationStatus === 'password not match' ? (
+                                <p>password not match</p>): null}
+                    </div>
+                    <div className="modal-footer">
+                        <button onClick={() => setIsModalOpen(false)}>Close</button>
+                    </div>
+                </div>
+            </Modal>
+        </div>
         </div>
         </>
     );
