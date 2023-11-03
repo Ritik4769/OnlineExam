@@ -4,7 +4,6 @@ const connectDB = mongoose.connect('mongodb+srv://ritikbhondve:ifHf7ggNcoSuv6fT@
     useUnifiedTopology: true
   }
 );
-
 connectDB
   .then(() => {
     console.log('Connected successfully to MongoDB Atlas');
@@ -12,5 +11,4 @@ connectDB
   .catch((err) => {
     console.error('Error connecting to MongoDB Atlas:', err);
   });
-
 export default connectDB;

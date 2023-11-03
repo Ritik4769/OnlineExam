@@ -1,12 +1,14 @@
 import express from "express";
 import { RegistrationController } from "../controller/RegistrationController.js";
-import { SECRET_KEY } from '../controller/RegistrationController.js'
+import { getQuestionController } from "../controller/adminController.js";
+// import { SECRET_KEY } from '../controller/RegistrationController.js'
 const router = express.Router();
 import {upload} from '../middleware/upload.js'
 router.post('/verifyemail', RegistrationController.verifyemail);
 router.post('/verifyOtp', RegistrationController.verifyOtp);
 router.post('/documentRegistration',upload, RegistrationController.documentRegistration)
 router.post('/login', RegistrationController.candidateLogin);
+router.post('/ExamPortal',getQuestionController);
 
 // router.get('/', (req, res) => {
 //     res.render('home', { email: "", aadharFile: "" });

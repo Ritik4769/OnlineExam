@@ -1,4 +1,4 @@
-import { rsg, userDocument, exam ,shift } from "../modules/Registration.js";
+import { rsg, userDocument, exam, shift } from "../modules/Registration.js";
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
@@ -10,7 +10,7 @@ console.log("candi:", Candidate_key);
 // const maxAge = 3 * 24 * 60 * 60;
 
 import { transporter } from '../modules/emailModule.js';
-var lastEnrollmentID = 'ITEP0913';
+var lastEnrollmentID = 'ITEP0915';
 const maxAge = 86400 * 1000;
 // import bcrypt from "bcrypt";
 import randomstring from 'randomstring';
@@ -52,7 +52,7 @@ class RegistrationController {
                 console.log("getaadhar : ", getaadhar);
                 console.log("you have already register please upadte your documents")
                 res.setHeader('Content-Type', 'application/json');
-                return res.status(202).json({ message: 'you have already register please upadte your documents' });
+                return res.status(202).json({ message: 'you have already register please upadte your documents', aadharNo: getaadhar });
             } else {
                 console.log("Contact to admin...");
             }
@@ -92,7 +92,7 @@ class RegistrationController {
         }
 
     }
-    
+
     // question file upload
 
     static documentRegistration = async (req, res) => {
@@ -202,9 +202,8 @@ class RegistrationController {
             const user = {};
             //  var checkuser={};
             const checkuser = await userDocument.findOne({ EnrollID: EnrollID });
-             if(checkuser==null) {
+            if (checkuser == null) {
                 return response.status(202).json({ message: 'EnrollID is wrong ' });
-                
             }
             const checkuser1 = await rsg.findOne({ _id: checkuser.userID });
             console.log(" checkuser : ", checkuser.EnrollID);
@@ -214,22 +213,29 @@ class RegistrationController {
             console.log(pass)
             if ((checkuser.EnrollID == EnrollID) && (pass)) {
                 checkuser1.attempt = checkuser1.attempt + 1;
-                const shiftdata =await shift.find();
-                console.log("shift data : ",shiftdata); 
-
-                // console.log("shift data : ",shiftdata[1].enrolledCandidates[0].EnrollID); 
-                //  shiftdata[1].enrolledCandidates[0].Attendace="present";
-                //  shiftdata[].save();
-                // checkuser1.save();
+                await checkuser1.save();
+                const shifts = await shift.find();
+                // console.log("shift data : ",shiftdata); 
+                for (var shiftData of shifts) {
+                    for (const candidate of shiftData.enrolledCandidates) {
+                        if (candidate.EnrollID === EnrollID) {
+                            response.cookie('EnrollID', EnrollID, { maxAge: 86400 * 1000 });
+                            console.log(123);
+                            candidate.Attendance = "Present";
+                            await shiftData.save();
+                            break;
+                        }
+                    }
+                }
                 return response.status(201).json({ message: 'Login succussfully...' });
             }
-            else if(!checkuser.EnrollID == EnrollID) {
+            else if (!checkuser.EnrollID == EnrollID) {
                 return response.status(202).json({ message: 'EnrollID is wrong ' });
-                
-            } else if(!pass) {
+
+            } else if (!pass) {
                 return response.status(203).json({ message: 'password is wrong ' });
-                
-            }else{
+
+            } else {
                 console.log("somthing went wrong.....");
                 // return response.status(202).json({ message: 'Something went wrong...' });
 

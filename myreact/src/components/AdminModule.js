@@ -571,7 +571,7 @@ export default function AdminModule() {
                                                         id="shiftstarttime" placeholder="Enter shiftTimeTo" /><br />
                                                     {/* <input className="m-3 text-center form-control" type="number" name="shiftendtime"
                                                         id="shiftendtime" placeholder="Enter Shift End Time" /><br /> */}
-                                                    <input className="m-4 mt-5 text-center form-control" type="submit" value="Login" />
+                                                    <input className="m-4 mt-5 text-center form-control" type="submit" value="Crate Shift " />
                                                 </form>
                                             </div>
                                         </div>

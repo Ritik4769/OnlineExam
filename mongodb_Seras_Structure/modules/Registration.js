@@ -126,7 +126,7 @@ const shiftSchema = new mongoose.Schema({
             type: String,
             ref: 'Registration2' // Reference to candidate enrollment IDs
         },
-        Attendace:{
+        Attendance:{
          type: String,
         default:"Absent"
         }

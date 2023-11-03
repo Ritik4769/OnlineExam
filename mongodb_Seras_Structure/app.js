@@ -12,13 +12,13 @@ const PORT = 3002;
 console.log(connectDB)
 app.set("views", "views");
 app.set("view engine", "ejs");
-app.use(cookieparser());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use(cookieparser());
 app.use('/uploads', express.static('uploads'));
-app.use("/candidate", candidate); 
+app.use("/candidate", candidate);
 app.use("/admin", admin);
 // app.use('./public/images', express.static('uploads'));
 app.listen(PORT, () => {

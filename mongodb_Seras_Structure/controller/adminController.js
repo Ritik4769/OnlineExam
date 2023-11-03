@@ -18,9 +18,9 @@ const createExam = async (req, res) => {
       examVenue
     });
     const savedExam = await newExam.save();
-   
+
     const enrollid = await userDocument.find();
-    
+
     if (savedExam) {
       return res.status(201).json({ newExam: newExam });
     } else {
@@ -32,134 +32,6 @@ const createExam = async (req, res) => {
   }
 };
 
-// const createShift = async (req, res) => {
-//   try {
-//     console.log("admin shifts");
-
-//     const examid = req.params.examid;
-//     const EnrollIDs = req.params.EnrollIDs;
-//     console.log(examid);
-//     const enrollIdsArray = EnrollIDs.split(',');
-//     console.log(enrollIdsArray);
-//     const enrolledCandidates = enrollIdsArray;
-//     const { shiftNumber, maxCandidates, shiftTimeFrom, shiftTimeTo } = req.body;
-//     const newShift = new shift({
-//       shiftNumber,
-//       maxCandidates,
-//       shiftTimeFrom,
-//       shiftTimeTo,
-//       exam: examid, // Reference to the parent exam
-//       enrolledCandidates// Array of candidate enrollment IDs
-//     });
-//     const savedShift = await newShift.save();
-//     res.status(201).json(savedShift);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Failed to create the shift.' });
-//   }
-// };
-
-// vikash 
-// const createShift = async (req, res) => {
-
-
-//   console.log("creatshift inside");
-//   try {
-//     const { shiftNumber, shiftTimeFrom, shiftTimeTo } = req.body;
-//     let { maxCandidates } = req.body;
-//     const examid = req.params.examid;
-//     let lastCandidateValue; // Declare the variable outside the function
-//     if (shiftNumber > 1) {
-//       const shift1 = shiftNumber - 1;
-//       await shift.findOne({
-//         shiftNumber: shift1,
-//         exam: examid,
-//         enrolledCandidates:{ $exists: true, $not: { $size: 0 } } // Ensure the array is not empty
-//       })
-//         .exec()
-//         .then(result => {
-//           if (result) {
-//             const enrolledCandidates = result.enrolledCandidates;
-//             console.log("in result : ",enrolledCandidates);
-//             if (enrolledCandidates.length > 0) {
-//               const lastCandidate = enrolledCandidates[enrolledCandidates.length - 1];
-//               lastCandidateValue = lastCandidate;
-//               console.log('Last enrolled candidate:', lastCandidate);
-//             } else {
-//               console.log('No candidates in the array.');
-//             }
-//           } else {
-//             console.log('No matching document found.');
-//           }
-//         })
-//         .catch(err => {
-//           console.error('Error:', err);
-//         });
-
-//       const enrollid = await userDocument.find({ EnrollID: { $gt: lastCandidateValue } });
-//       console.log("enroll id : ", enrollid);
-//       if (maxCandidates > enrollid.length) {
-//         maxCandidates = enrollid.length;
-//       }
-//       var EnrollidArr = [];
-
-//       for (var i = 0; i < maxCandidates; i++) {
-//         obj.EnrollID = enrollid[i].EnrollID;
-//         EnrollidArr[i] = obj
-//         console.log("Enroll id : ", EnrollidArr[i]);
-//       }
-//       const enrolledCandidates = EnrollidArr;
-//       const newShift = new shift({
-//         shiftNumber,
-//         maxCandidates,
-//         shiftTimeFrom,
-//         shiftTimeTo,
-//         exam: examid, // Reference to the parent exam
-//         enrolledCandidates// Array of candidate enrollment IDs
-//       });
-//       const savedShift = await newShift.save();
-//       res.status(201).json(savedShift);
-//     }
-//     else {
-//       const enrollid = await userDocument.find();
-//       console.log("enroll id : ", enrollid);
-//       if (maxCandidates > enrollid.length) {
-//         maxCandidates = enrollid.length;
-//       }
-//       var EnrollidArr = [];
-
-//       for (var i = 0; i < maxCandidates; i++) {
-//         var obj = {};
-//         obj.EnrollID = enrollid[i].EnrollID;
-//         console.log("obj : ", obj);
-//         EnrollidArr[i] = obj;
-
-//         console.log("in loop")
-//         console.log("Enroll id : ", EnrollidArr[i]);
-//       }
-
-//       const enrolledCandidates = EnrollidArr;
-//       console.log("enrolledCandidates : ", enrolledCandidates)
-//       const newShift = new shift({
-//         shiftNumber,
-//         maxCandidates,
-//         shiftTimeFrom,
-//         shiftTimeTo,
-//         exam: examid, // Reference to the parent exam
-//         enrolledCandidates// Array of candidate enrollment IDs
-//       });
-//       const savedShift = await newShift.save();
-//       console.log(savedShift);
-//       res.status(201).json(savedShift);
-//     }
-
-//   } catch (error) {
-//     // console.error(error);
-//     console.log(error);
-//     res.status(500).json({ error: 'Failed to create the shift.' });
-//   }
-// };
-
 const createShift = async (req, res) => {
 
 
@@ -169,7 +41,6 @@ const createShift = async (req, res) => {
     let { maxCandidates } = req.body;
     const examid = req.params.examid;
 
-
     let lastCandidateValue; // Declare the variable outside the function
     if (shiftNumber > 1) {
       const shift1 = shiftNumber - 1;
@@ -178,26 +49,26 @@ const createShift = async (req, res) => {
         exam: examid,
         enrolledCandidates: { $elemMatch: { EnrollID: { $exists: true } }, $not: { $size: 0 } }
       })
-      .exec()
-      .then(result => {
-        if (result) {
-          const enrolledCandidates = result.enrolledCandidates;
-          if (enrolledCandidates.length > 0) {
-            const lastCandidate = enrolledCandidates[enrolledCandidates.length - 1];
-            lastCandidateValue = lastCandidate.EnrollID;
-      
-            console.log('Last enrolled candidate:', lastCandidateValue);
+        .exec()
+        .then(result => {
+          if (result) {
+            const enrolledCandidates = result.enrolledCandidates;
+            if (enrolledCandidates.length > 0) {
+              const lastCandidate = enrolledCandidates[enrolledCandidates.length - 1];
+              lastCandidateValue = lastCandidate.EnrollID;
+
+              console.log('Last enrolled candidate:', lastCandidateValue);
+            } else {
+              console.log('No candidates in the array.');
+            }
           } else {
-            console.log('No candidates in the array.');
+            console.log('No matching document found.');
           }
-        } else {
-          console.log('No matching document found.');
-        }
-      })
-      .catch(err => {
-        console.error('Error:', err);
-      });
-      
+        })
+        .catch(err => {
+          console.error('Error:', err);
+        });
+
 
       const enrollid = await userDocument.find({ EnrollID: { $gt: lastCandidateValue } });
       console.log("enroll id : ", enrollid);
@@ -209,7 +80,7 @@ const createShift = async (req, res) => {
       for (var i = 0; i < maxCandidates; i++) {
         var obj = {};
         obj.EnrollID = enrollid[i].EnrollID;
-        EnrollidArr[i] =obj
+        EnrollidArr[i] = obj
         console.log("Enroll id : ", EnrollidArr[i]);
       }
       const enrolledCandidates = EnrollidArr;
@@ -231,10 +102,10 @@ const createShift = async (req, res) => {
         maxCandidates = enrollid.length;
       }
       var EnrollidArr = [];
-    
+
       for (var i = 0; i < maxCandidates; i++) {
         var obj = {};
-         obj.EnrollID = enrollid[i].EnrollID;
+        obj.EnrollID = enrollid[i].EnrollID;
         EnrollidArr[i] = obj;
 
         console.log("in loop")
@@ -360,48 +231,47 @@ const readExcelController = async (req, res, next) => {
 
   next();
 }
+
 const getQuestionController = async (req, res) => {
-  // try {
-  //     const subjectID = req.query.subjectID;
-  //     const numQuestions = parseInt(req.query.numQuestions) || 1;
+  try {
+    var enrollID = req.body.EnrollId;
+    console.log("enriobjn : ", enrollID)
+    // console.log("enriobjn : ",e)
+    const subjectIDs = ["ENG01", "HIN02", "MAT03", "REAS04", "COM05", "GK06"];
+    const numQuestionsPerSubject = 5; // The number of questions you want from each subject
+    const selectedQuestionsBySubject = [];
 
-  //     if (!subjectID) {
-  //         return res.status(400).json({ message: 'SubjectID is required.' });
-  //     }
+    for (const subjectID of subjectIDs) {
+      const questions = await QuestionBank.findOne({ SubjectID: subjectID });
 
-  //     const questions = await questionbank.fin   dOne({ SubjectID: subjectID });
+      if (questions && questions.questions) {
+        const subjectQuestions = questions.questions;
 
-  //     if (!questions) {
-  //         return res.status(404).json({ message: 'No questions available for the specified subject.' });
-  //     }
+        // Using Fisher-Yates algorithm for Random Questions
+        for (let i = subjectQuestions.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [subjectQuestions[i], subjectQuestions[j]] = [subjectQuestions[j], subjectQuestions[i]];
+        }
 
-  //     if (numQuestions > questions.length) {
-  //         return res.status(400).json({ message: 'Requested number of questions exceeds the available questions.' });
-  //     }
+        const selectedQuestionsFromSubject = subjectQuestions.slice(0, numQuestionsPerSubject);
 
-  //     const uniqueQuestionsSet = new Set();
+        selectedQuestionsBySubject.push({ subjectID, questions: selectedQuestionsFromSubject });
+      }
+    }
 
-  //     // Fisher-Yates algorithm //
-  //     for (let i = questions.questions.length - 1; i > 0; i--) {
-  //         const j = Math.floor(Math.random() * (i + 1));
-  //         [questions.questions[i], questions.questions[j]] = [questions.questions[j], questions.questions[i]];
-  //     }
+    console.log(selectedQuestionsBySubject);
+    var obj = {
+      EnrollID: enrollID,
+      paper: selectedQuestionsBySubject
+    }
 
-  //     for (const question of questions.questions) {
-  //         uniqueQuestionsSet.add(JSON.stringify(question));
-  //     }
-
-  //     const uniqueQuestions = Array.from(uniqueQuestionsSet).map(questionString => JSON.parse(questionString));
-
-  //     console.log(uniqueQuestions);
-
-  //     const selectedQuestions = uniqueQuestions.slice(0, Math.min(numQuestions, uniqueQuestions.length));
-
-  //     res.status(200).json(selectedQuestions);
-  // } catch (err) {
-  //     console.log('Something went wrong:', err);
-  //     res.status(500).json({ message: 'Internal server error' });
-  // }
+    console.log(obj);
+    return res.status(201).json({ QuestionPaperObject: obj });
+    // res.status(201).json(selectedQuestionsBySubject);
+  } catch (err) {
+    console.log('Something went wrong:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 }
 
 export { createExam, createShift, uploadQuestionFile, readExcelController, getQuestionController };
