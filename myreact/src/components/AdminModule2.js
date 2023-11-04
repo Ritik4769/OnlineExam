@@ -7,7 +7,7 @@ export default function AdminModule() {
 
     return (
         <section>
-            <div className="w-100 " >
+            <div className="w-100">
                 <div className="offcanvas offcanvas-start" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
                     <div className="offcanvas-header">
                         <h5 id="offcanvasRightLabel">InfoBeans Foundation</h5>
@@ -66,42 +66,44 @@ export default function AdminModule() {
                     </div>
                 </nav>
 
-                <div className="row w-100  m-0  p-0  " style={{height: "min-content"}}>
-                    <div className="col-2 p-0" id="nav-pills-disapear">
-                        <div style={{height:"100vh"}} className=" inbeansred nav flex-column justify-content-around nav-pills"
+                <div className="row w-100 m-0 p-0" style={{ height: "min-content" }}>
+                    <div className="col-lg-2 p-0" id="nav-pills-disapear">
+                        <div style={{ height: "100vh", position: "sticky", top: "0" }} className=" inbeansred nav flex-column justify-content-center nav-pills bg-danger"
                             id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <div className="">
+                            <div style={{ height: "30vh" }} className="">
                                 <div className=" w-100 p-4 m-0 d-flex justify-content-center ">
-                                    <img className="img fa-circle w-50  "
-                                        src={avatar} alt="" />
+                                    <img className="img fa-circle w-25" src={avatar} alt="" />
                                 </div>
                                 <center className="text-light small text-break  ">Ayush Rajput</center>
                                 <center className="text-light small text-break  ">ayush.rajput@infobeansfoundation.com</center>
                             </div>
-                            <button className="section-tab nav-link active" id="v-pills-home-tab" data-bs-toggle="pill"
-                                data-bs-target="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true"><i
-                                    className="bi bi-house"></i>&nbsp;Home</button>
-                            <button className="section-tab nav-link  " id="v-pills-profile-tab" data-bs-toggle="pill"
-                                data-bs-target="#v-pills-registrations" role="tab" aria-controls="v-pills-registrations"
-                                aria-selected="false"><i className="bi bi-file-earmark-person-fill"></i>&nbsp;Registrations</button>
-                            <button className="section-tab nav-link  " id="v-pills-totalplacements-tab" data-bs-toggle="pill"
-                                data-bs-target="#v-pills-totalplacements" role="tab" aria-controls="v-pills-totalplacements"
-                                aria-selected="false"><i className="bi bi-mortarboard"></i>&nbsp;Placements</button>
-                            <button className="section-tab nav-link  " id="v-pills-addquestions-tab" data-bs-toggle="pill"
-                                data-bs-target="#v-pills-addquestions" role="tab" aria-controls="v-pills-addquestions"
-                                aria-selected="false"><i className="bi bi-patch-question-fill"></i>&nbsp;Questions</button>
-                            <button className="section-tab nav-link  " id="v-pills-viewresult-tab" data-bs-toggle="pill"
-                                data-bs-target="#v-pills-viewresult" role="tab" aria-controls="v-pills-viewresult"
-                                aria-selected="false"><i className="bi bi-clipboard2-data-fill"></i>&nbsp;Result</button>
-                            <button className="section-tab nav-link  " id="v-pills-sendmessage-tab" data-bs-toggle="pill"
-                                data-bs-target="#v-pills-sendmessage" role="tab" aria-controls="v-pills-sendmessage"
-                                aria-selected="false"><i className="bi bi-send-fill"></i>&nbsp;Megssage</button>
-                            <button className="section-tab nav-link  " id="v-pills-scheduleexam-tab" data-bs-toggle="pill"
-                                data-bs-target="#v-pills-scheduleexam" role="tab" aria-controls="v-pills-scheduleexam"
-                                aria-selected="false"><i className="bi bi-calendar-event-fill"></i>&nbsp;Exam</button>
-                            <button className="section-tab nav-link  " id="v-pills-studentrecord-tab" data-bs-toggle="pill"
-                                data-bs-target="#v-pills-studentrecord" role="tab" aria-controls="v-pills-studentrecord"
-                                aria-selected="false"><i className="bi bi-people-fill"></i>&nbsp;Students</button>
+
+                            <div style={{ height: "70vh" }} id='scrollDivs'>
+                                <button className="section-tab nav-link active" id="v-pills-home-tab" data-bs-toggle="pill"
+                                    data-bs-target="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true"><i
+                                        className="bi bi-house"></i>&nbsp;Home</button>
+                                <button className="section-tab nav-link  " id="v-pills-profile-tab" data-bs-toggle="pill"
+                                    data-bs-target="#v-pills-registrations" role="tab" aria-controls="v-pills-registrations"
+                                    aria-selected="false"><i className="bi bi-file-earmark-person-fill"></i>&nbsp;Registrations</button>
+                                <button className="section-tab nav-link  " id="v-pills-totalplacements-tab" data-bs-toggle="pill"
+                                    data-bs-target="#v-pills-totalplacements" role="tab" aria-controls="v-pills-totalplacements"
+                                    aria-selected="false"><i className="bi bi-mortarboard"></i>&nbsp;Placements</button>
+                                <button className="section-tab nav-link  " id="v-pills-addquestions-tab" data-bs-toggle="pill"
+                                    data-bs-target="#v-pills-addquestions" role="tab" aria-controls="v-pills-addquestions"
+                                    aria-selected="false"><i className="bi bi-patch-question-fill"></i>&nbsp;Questions</button>
+                                <button className="section-tab nav-link  " id="v-pills-viewresult-tab" data-bs-toggle="pill"
+                                    data-bs-target="#v-pills-viewresult" role="tab" aria-controls="v-pills-viewresult"
+                                    aria-selected="false"><i className="bi bi-clipboard2-data-fill"></i>&nbsp;Result</button>
+                                <button className="section-tab nav-link  " id="v-pills-sendmessage-tab" data-bs-toggle="pill"
+                                    data-bs-target="#v-pills-sendmessage" role="tab" aria-controls="v-pills-sendmessage"
+                                    aria-selected="false"><i className="bi bi-send-fill"></i>&nbsp;Megssage</button>
+                                <button className="section-tab nav-link  " id="v-pills-scheduleexam-tab" data-bs-toggle="pill"
+                                    data-bs-target="#v-pills-scheduleexam" role="tab" aria-controls="v-pills-scheduleexam"
+                                    aria-selected="false"><i className="bi bi-calendar-event-fill"></i>&nbsp;Exam</button>
+                                <button className="section-tab nav-link  " id="v-pills-studentrecord-tab" data-bs-toggle="pill"
+                                    data-bs-target="#v-pills-studentrecord" role="tab" aria-controls="v-pills-studentrecord"
+                                    aria-selected="false"><i className="bi bi-people-fill"></i>&nbsp;Students</button>
+                            </div>
                         </div>
                     </div>
                     <div className="col-12 col-lg-10 p-0 ">
@@ -175,7 +177,7 @@ export default function AdminModule() {
                                         </select>
                                     </div>
                                     <div className="col-12  col-md-6 p-2 order-first order-md-last">
-                                        <div className="row">
+                                        <div className="row rowId">
                                             <div className="col-4  d-flex justify-content-end">
                                                 <button className="btn btn-outline-success btn-sm w-100 " type="button">To Excel &nbsp; <i
                                                     className="fa-solid fa-table"></i></button>
@@ -498,7 +500,7 @@ export default function AdminModule() {
                                             <input className="form-control-sm" placeholder="Search Here" type="text" name="" value="" />
                                             <button type="button" className="btn btn-outline-primary btn-sm"><i className="bi bi-search"></i></button>
                                         </div>
-                                        <button type="button" className="btn btn-outline-primary btn-sm"><i className="bi bi-plus-lg"></i></button>
+                                        <button type="button" className="btn  btn-outline-primary btn-sm"><i className="bi bi-plus-lg"></i></button>
                                     </div>
                                 </div>
                                 {/* <!-- ======================================= --> */}
@@ -514,9 +516,8 @@ export default function AdminModule() {
                                                 <h5 className="card-title">Vikas Joshi</h5>
                                                 <p className="text-muted">Btach 5</p>
                                                 <p className="card-text text-muted  text-sm-start"><i className="bi bi-buildings"></i> Company</p>
-                                                <a href="#" className="btn btn-outline-primary btn-sm"><i
-                                                    className="bi bi-send-fill"></i>&nbsp;Message</a>
-                                                <a href="#" className="btn btn-outline-warning btn-sm "><i className="bi bi-envelope"></i>&nbsp;Mail</a>
+                                                <a href="#" className="btn btn-outline-primary btn-sm me-1 mb-1"><i className="bi bi-send-fill"></i>&nbsp;Message</a>
+                                                <a href="#" className="btn btn-outline-warning btn-sm me-1 mb-1 "><i className="bi bi-envelope"></i>&nbsp;Mail</a>
                                             </div>
                                         </div>
                                     </div>
@@ -530,10 +531,8 @@ export default function AdminModule() {
                                                 <h5 className="card-title">Vikas Joshi</h5>
                                                 <p className="text-muted">Btach 5</p>
                                                 <p className="card-text text-muted  text-sm-start"><i className="bi bi-buildings"></i> Company</p>
-
-                                                <a href="#" className="btn btn-outline-primary btn-sm"><i
-                                                    className="bi bi-send-fill"></i>&nbsp;Message</a>
-                                                <a href="#" className="btn btn-outline-warning btn-sm"><i className="bi bi-envelope"></i>&nbsp;Mail</a>
+                                                <a href="#" className="btn btn-outline-primary btn-sm me-1 mb-1"><i className="bi bi-send-fill"></i>&nbsp;Message</a>
+                                                <a href="#" className="btn btn-outline-warning btn-sm me-1 mb-1"><i className="bi bi-envelope"></i>&nbsp;Mail</a>
                                             </div>
                                         </div>
                                     </div>
@@ -547,10 +546,8 @@ export default function AdminModule() {
                                                 <h5 className="card-title">Vikas Joshi</h5>
                                                 <p className="text-muted">Btach 5</p>
                                                 <p className="card-text text-muted  text-sm-start"><i className="bi bi-buildings"></i> Company</p>
-
-                                                <a href="#" className="btn btn-outline-primary btn-sm"><i
-                                                    className="bi bi-send-fill"></i>&nbsp;Message</a>
-                                                <a href="#" className="btn btn-outline-warning btn-sm"><i className="bi bi-envelope"></i>&nbsp;Mail</a>
+                                                <a href="#" className="btn btn-outline-primary btn-sm me-1 mb-1"><i className="bi bi-send-fill"></i>&nbsp;Message</a>
+                                                <a href="#" className="btn btn-outline-warning btn-sm me-1 mb-1"><i className="bi bi-envelope"></i>&nbsp;Mail</a>
                                             </div>
                                         </div>
                                     </div>
@@ -564,10 +561,8 @@ export default function AdminModule() {
                                                 <h5 className="card-title">Vikas Joshi</h5>
                                                 <p className="text-muted">Btach 5</p>
                                                 <p className="card-text text-muted  text-sm-start"><i className="bi bi-buildings"></i> Company</p>
-
-                                                <a href="#" className="btn btn-outline-primary btn-sm"><i
-                                                    className="bi bi-send-fill"></i>&nbsp;Message</a>
-                                                <a href="#" className="btn btn-outline-warning btn-sm"><i className="bi bi-envelope"></i>&nbsp;Mail</a>
+                                                <a href="#" className="btn btn-outline-primary btn-sm me-1 mb-1"><i className="bi bi-send-fill"></i>&nbsp;Message</a>
+                                                <a href="#" className="btn btn-outline-warning btn-sm me-1 mb-1"><i className="bi bi-envelope"></i>&nbsp;Mail</a>
                                             </div>
                                         </div>
                                     </div>
@@ -581,10 +576,8 @@ export default function AdminModule() {
                                                 <h5 className="card-title">Vikas Joshi</h5>
                                                 <p className="text-muted">Btach 5</p>
                                                 <p className="card-text text-muted  text-sm-start"><i className="bi bi-buildings"></i> Company</p>
-
-                                                <a href="#" className="btn btn-outline-primary btn-sm"><i
-                                                    className="bi bi-send-fill"></i>&nbsp;Message</a>
-                                                <a href="#" className="btn btn-outline-warning btn-sm "><i className="bi bi-envelope"></i>&nbsp;Mail</a>
+                                                <a href="#" className="btn btn-outline-primary btn-sm me-1 mb-1"><i className="bi bi-send-fill"></i>&nbsp;Message</a>
+                                                <a href="#" className="btn btn-outline-warning btn-sm me-1 mb-1 "><i className="bi bi-envelope"></i>&nbsp;Mail</a>
                                             </div>
                                         </div>
                                     </div>
@@ -598,10 +591,8 @@ export default function AdminModule() {
                                                 <h5 className="card-title">Vikas Joshi</h5>
                                                 <p className="text-muted">Btach 5</p>
                                                 <p className="card-text text-muted  text-sm-start"><i className="bi bi-buildings"></i> Company</p>
-
-                                                <a href="#" className="btn btn-outline-primary btn-sm"><i
-                                                    className="bi bi-send-fill"></i>&nbsp;Message</a>
-                                                <a href="#" className="btn btn-outline-warning btn-sm "><i className="bi bi-envelope"></i>&nbsp;Mail</a>
+                                                <a href="#" className="btn btn-outline-primary btn-sm me-1 mb-1"><i className="bi bi-send-fill"></i>&nbsp;Message</a>
+                                                <a href="#" className="btn btn-outline-warning btn-sm me-1 mb-1 "><i className="bi bi-envelope"></i>&nbsp;Mail</a>
                                             </div>
                                         </div>
                                     </div>
@@ -615,10 +606,8 @@ export default function AdminModule() {
                                                 <h5 className="card-title">Vikas Joshi</h5>
                                                 <p className="text-muted">Btach 5</p>
                                                 <p className="card-text text-muted  text-sm-start"><i className="bi bi-buildings"></i> Company</p>
-
-                                                <a href="#" className="btn btn-outline-primary btn-sm"><i
-                                                    className="bi bi-send-fill"></i>&nbsp;Message</a>
-                                                <a href="#" className="btn btn-outline-warning btn-sm "><i className="bi bi-envelope"></i>&nbsp;Mail</a>
+                                                <a href="#" className="btn btn-outline-primary btn-sm me-1 mb-1"><i className="bi bi-send-fill"></i>&nbsp;Message</a>
+                                                <a href="#" className="btn btn-outline-warning btn-sm  me-1 mb-1"><i className="bi bi-envelope"></i>&nbsp;Mail</a>
                                             </div>
                                         </div>
                                     </div>
@@ -632,10 +621,8 @@ export default function AdminModule() {
                                                 <h5 className="card-title">Vikas Joshi</h5>
                                                 <p className="text-muted">Btach 5</p>
                                                 <p className="card-text text-muted  text-sm-start"><i className="bi bi-buildings"></i> Company</p>
-
-                                                <a href="#" className="btn btn-outline-primary btn-sm"><i
-                                                    className="bi bi-send-fill"></i>&nbsp;Message</a>
-                                                <a href="#" className="btn btn-outline-warning btn-sm"><i className="bi bi-envelope"></i>&nbsp;Mail</a>
+                                                <a href="#" className="btn btn-outline-primary btn-sm me-1 mb-1"><i className="bi bi-send-fill"></i>&nbsp;Message</a>
+                                                <a href="#" className="btn btn-outline-warning btn-sm me-1 mb-1"><i className="bi bi-envelope"></i>&nbsp;Mail</a>
                                             </div>
                                         </div>
                                     </div>
@@ -1201,13 +1188,13 @@ export default function AdminModule() {
                                 <div className="row  w-100 m-0">
                                     <div className="col-12 col-md-6">
                                         <div className="mt-5 mb-3 w-100"
-                                            style={{borderRadius: "40px", overflow: "hidden", border: "1px solid black", width: "55%", boxShadow: "1px 1px 4px"}}>
+                                            style={{ borderRadius: "40px", overflow: "hidden", border: "1px solid black", width: "55%", boxShadow: "1px 1px 4px" }}>
                                             <div className="text-center"
                                                 style={{ height: "5vw", borderRadius: "50px 50px 0px 50px", backgroundColor: "red" }}>
                                                 <div style={{ fontSize: "2rem", color: "white" }}>Exam Schedule Form
                                                 </div>
                                             </div>
-                                            <div className="d-block p-4" style={{textAlign: "center"}}>
+                                            <div className="d-block p-4" style={{ textAlign: "center" }}>
                                                 <form action="">
                                                     <input className="m-3 text-center form-control" type="text" name="examtitle" id="examtitle"
                                                         placeholder="Enter Exam Title" /><br />
@@ -1227,13 +1214,13 @@ export default function AdminModule() {
 
                                     <div className="col-12 col-md-6 ">
                                         <div className="mt-5 mb-3 w-100"
-                                            style={{borderRadius: "40px", overflow: "hidden", border:" 1px solid black", width: "55%", boxShadow:" 1px 1px 4px"}}>
+                                            style={{ borderRadius: "40px", overflow: "hidden", border: " 1px solid black", width: "55%", boxShadow: " 1px 1px 4px" }}>
                                             <div className="text-center"
-                                                style={{height: "5vw", borderRadius: "50px 50px 0px 50px", backgroundColor: "red"}}>
-                                                <div style={{fontSize: "2rem", color: "white"}}>Shift Schedule Form
+                                                style={{ height: "5vw", borderRadius: "50px 50px 0px 50px", backgroundColor: "red" }}>
+                                                <div style={{ fontSize: "2rem", color: "white" }}>Shift Schedule Form
                                                 </div>
                                             </div>
-                                            <div className="d-block p-4" style={{textAlign: "center"}}>
+                                            <div className="d-block p-4" style={{ textAlign: "center" }}>
                                                 <form action="">
                                                     <input className="m-3 text-center form-control" type="number" name="shiftid" id="shiftid"
                                                         placeholder="Enter Shift id" /><br />

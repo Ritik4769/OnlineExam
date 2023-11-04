@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import NavBar from './components/NavBar';
 import Footer from './components/footer';
 import HeadSlide from './components/HeadSlider';
@@ -13,7 +12,7 @@ import Registration from './components/registration';
 import Login from './components/Login';
 import Instructionpage from './components/Instructionpage';
 import ModalComponent from './components/ModalComponent';
-import AdminModule from './components/AdminModule';
+import AdminModule from './components/AdminModule2';
 import ExamPortal from './components/ExamPortal5';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'; // Add 'useLocation' here
 import './App.css';
@@ -27,7 +26,7 @@ function App() {
 
 function AppContent() {
   const location = useLocation();
-  const isAdminRoute = location.pathname.includes('/ExamPortal');
+  const isAdminRoute = location.pathname.includes('/admin');  
 
   return (
     <>
