@@ -4,10 +4,10 @@
   font-family: 'Poppins', sans-serif;
 }
 
-i {
+/* i {
   font-size: 30px;
 
-}
+} */
 
 li {
   font-size: 20px;
@@ -412,13 +412,14 @@ footer {
 /* =============================================================== */
 /* ========================== Registration ======================= */
 
+/* 
 input:focus {
   outline: none;
 }
 
 input {
   font-size: 1rem;
-}
+} */
 
 .accordion-button:focus {
   box-shadow: none;
@@ -429,7 +430,7 @@ input {
   color: red;
   font-weight: 600;
 }
-
+/* 
 input[type=text],
 input[type=password],
 input[type=date],
@@ -438,7 +439,7 @@ input[type=number] {
   width: 50%;
   border: 0px solid black;
   border-bottom: 2px solid red;
-}
+} */
 
 .custom-file-input {
   position: absolute;

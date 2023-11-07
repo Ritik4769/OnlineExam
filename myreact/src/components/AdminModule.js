@@ -76,7 +76,7 @@ export default function AdminModule() {
                     console.log('component caling');
                     EnrollIDs = responseData.EnrollIDs;
                     console.log(EnrollIDs);
-                    
+
                     // history("/otpcomponent");
                 }
             }).catch((error) => {
@@ -139,6 +139,11 @@ export default function AdminModule() {
             window.alert('Failed to register');
         }
     };
+
+    const [users, setUser3] = useState([]);
+    useEffect(() => {
+        axios.get("http://localhost:3002/admin/viewRegistrationCandidate").then((users) => setUser3(users.data)).catch(err => console.log('error ', err));
+    })
 
 
     return (
@@ -262,9 +267,20 @@ export default function AdminModule() {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            {
+                                                users.map(user => {
+                                                    return <tr>
+                                                        <td>{user.username}</td>
+                                                        <td>{user.phoneNo}</td>
+                                                        <td>{user.aadharNo}</td>
+                                                        <td>{user.email}</td>
+                                                        <td>{user.attempt}</td>
+                                                    </tr>
+                                                })
+                                            }
+                                            {/* <tr>
                                                 <td>1</td>
-                                                <td>John Doe</td>
+                                                <td></td>
                                                 <td>johndoe@example.com</td>
                                                 <td>(123) 456-7890</td>
                                                 <td>New York</td>
@@ -461,7 +477,7 @@ export default function AdminModule() {
                                                 <td>Ph.D.</td>
                                                 <td>32</td>
                                                 <td><button className="btn btn-outline-danger" type="submit"><small>Remove</small></button></td>
-                                            </tr>
+                                            </tr> */}
                                         </tbody>
                                     </table>
                                 </div>
@@ -637,7 +653,7 @@ export default function AdminModule() {
                                         <tbody>
                                             <tr>
                                                 <td>1</td>
-                                                <td>John Doe</td>
+                                                <td>dheera</td>
                                                 <td>johndoe@example.com</td>
                                                 <td>(123) 456-7890</td>
                                                 <td>New York</td>
@@ -827,7 +843,7 @@ export default function AdminModule() {
                                             </tr>
                                             <tr>
                                                 <td>20</td>
-                                                <td>Daniel King</td>
+                                                <td></td>
                                                 <td>danielk@example.com</td>
                                                 <td>(456) 789-3456</td>
                                                 <td>Houston</td>

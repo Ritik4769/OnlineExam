@@ -1,5 +1,5 @@
 // controllers/examController.js
-import { userDocument, exam, shift, QuestionBank } from '../modules/Registration.js';
+import { rsg, userDocument, exam, shift, QuestionBank } from '../modules/Registration.js';
 import xlsx from 'xlsx';
 let workbook_response;
 var secret_key = process.env.Admin_key;
@@ -274,4 +274,39 @@ const getQuestionController = async (req, res) => {
   }
 }
 
-export { createExam, createShift, uploadQuestionFile, readExcelController, getQuestionController };
+const viewRegistrationCandidate = async (req, res) => {
+  try {
+    var candidateData = await rsg.find();
+    res.json(candidateData);
+  } catch (err) {
+    console.log('Something went wrong:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+const viewRegistrationCandidateDocument = async (req , res)=>{
+  try {
+  var userId = req.params.userId;
+  // console.log("userId : " , userId);
+    var candidateDocument = await userDocument.findOne({userID : userId});
+    res.json(candidateDocument);
+
+    // console.log("Candidate data : " , candidateDocument);
+  } catch (err) {
+    console.log('Something went wrong:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+const allowUser = async (req, res) => {
+  var Id = req.params.userId;
+  console.log("Id : ", Id);
+  try {
+    var result = await rsg.updateOne({ _id: Id },{$set: {examAllow: true}});
+    console.log("Admin Allow User Update Successfully");
+  } catch (error) {
+    console.log("Error while Allow user for 4th attempt : " , error);
+  }
+}
+
+export { createExam, createShift, uploadQuestionFile, readExcelController, getQuestionController, viewRegistrationCandidate , viewRegistrationCandidateDocument , allowUser };

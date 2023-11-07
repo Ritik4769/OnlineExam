@@ -1,9 +1,43 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import logo from '../Images/InfoBeans Foundation Logo - PNG (1).png';
 import avatar from '../Images/man-with-beard-avatar-character-isolated-icon-free-vector.jpg';
+import Modal from 'react-modal';
 export default function AdminModule() {
+    const [users, setUser] = useState([]);
+    const [userDocument, setUser1] = useState([]);
+
+    useEffect(() => {
+        axios.get("http://localhost:3002/admin/viewRegistrationCandidate")
+            .then((users) => {
+                setUser(users.data)
+            })
+            .catch(err => console.log('error ', err));
+    })
+
+    const handleButtonValue = (e, userId) => {
+        console.log("Email : ", userId);
+        axios.post(`http://localhost:3002/admin/allowUser/${userId}`).then((response) => {
+            console.log("result", response);
+        }).catch((error) => {
+            console.log('', error);
+        })
+    }
+
+    var isUserDocumentsModal = false
+    const setUserDocuments = (userId, modalStatus) => {
+        console.log("Emailll : ", userId);
+        isUserDocumentsModal = true;
+        axios.post(`http://localhost:3002/admin/viewRegistrationCandidateDocument/${userId}`).then((response) => {
+            // console.log("resultxdfcgvbhjn", response);
+            setUser1(response.data);
+
+        }).catch((error) => {
+            console.log('', error);
+        })
+
+    }
 
     return (
         <section>
@@ -197,239 +231,98 @@ export default function AdminModule() {
                                     <table className="table table-bordered table-hover table-responsive-md ">
                                         <thead className="sticky-top">
                                             <tr className="bg-danger text-white">
-                                                <th>ID</th>
                                                 <th>Name</th>
-                                                <th>Email</th>
                                                 <th>Phone Number</th>
-                                                <th>City</th>
-                                                <th>Degree</th>
-                                                <th>Age</th>
-                                                <th>Remove</th>
+                                                <th>adhaarNo</th>
+                                                <th>Email</th>
+                                                <th>Date Of Birth</th>
+                                                <th>Attempt</th>
+                                                <th>Allow 4<sup>th</sup></th>
+                                                <th>Documents</th>
+                                                {/* <th>Age</th>
+                                                <th>Remove</th> */}
                                             </tr>
                                         </thead>
                                         <tbody className="overflow-hidden">
-                                            <tr>
-                                                <td>1</td>
-                                                <td>John Doe</td>
-                                                <td>johndoe@example.com</td>
-                                                <td>(123) 456-7890</td>
-                                                <td>New York</td>
-                                                <td>Bachelor's</td>
-                                                <td>20</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>John Cena</td>
-                                                <td>johncena@example.com</td>
-                                                <td>(123) 456-7890</td>
-                                                <td>New York</td>
-                                                <td>Bachelor's</td>
-                                                <td>22</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>Bob Johnson</td>
-                                                <td>bobj@example.com</td>
-                                                <td>(789) 123-4567</td>
-                                                <td>Chicago</td>
-                                                <td>Bachelor's</td>
-                                                <td>22</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>Alice Wilson</td>
-                                                <td>alicew@example.com</td>
-                                                <td>(234) 567-8901</td>
-                                                <td>Houston</td>
-                                                <td>Ph.D.</td>
-                                                <td>28</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>David Brown</td>
-                                                <td>davidb@example.com</td>
-                                                <td>(567) 890-1234</td>
-                                                <td>Miami</td>
-                                                <td>Bachelor's</td>
-                                                <td>21</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>6</td>
-                                                <td>Susan Lee</td>
-                                                <td>susanl@example.com</td>
-                                                <td>(890) 123-4567</td>
-                                                <td>San Francisco</td>
-                                                <td>Master's</td>
-                                                <td>27</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>7</td>
-                                                <td>Michael Taylor</td>
-                                                <td>michaelt@example.com</td>
-                                                <td>(123) 456-7890</td>
-                                                <td>Seattle</td>
-                                                <td>Bachelor's</td>
-                                                <td>23</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>8</td>
-                                                <td>Linda Clark</td>
-                                                <td>lindac@example.com</td>
-                                                <td>(456) 789-1234</td>
-                                                <td>Boston</td>
-                                                <td>Master's</td>
-                                                <td>26</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>9</td>
-                                                <td>William Adams</td>
-                                                <td>williama@example.com</td>
-                                                <td>(789) 123-4567</td>
-                                                <td>Dallas</td>
-                                                <td>Bachelor's</td>
-                                                <td>24</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>10</td>
-                                                <td>Karen Hall</td>
-                                                <td>karenh@example.com</td>
-                                                <td>(234) 567-8901</td>
-                                                <td>Philadelphia</td>
-                                                <td>Ph.D.</td>
-                                                <td>29</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>11</td>
-                                                <td>Mary Adams</td>
-                                                <td>marya@example.com</td>
-                                                <td>(567) 890-2345</td>
-                                                <td>San Diego</td>
-                                                <td>Bachelor's</td>
-                                                <td>22</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>12</td>
-                                                <td>James Brown</td>
-                                                <td>jamesb@example.com</td>
-                                                <td>(890) 123-5678</td>
-                                                <td>Denver</td>
-                                                <td>Master's</td>
-                                                <td>27</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>13</td>
-                                                <td>Laura Carter</td>
-                                                <td>laurac@example.com</td>
-                                                <td>(123) 456-6789</td>
-                                                <td>Phoenix</td>
-                                                <td>Bachelor's</td>
-                                                <td>24</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>14</td>
-                                                <td>Richard Davis</td>
-                                                <td>richardd@example.com</td>
-                                                <td>(456) 789-2345</td>
-                                                <td>Atlanta</td>
-                                                <td>Ph.D.</td>
-                                                <td>31</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>15</td>
-                                                <td>Sarah Evans</td>
-                                                <td>sarahe@example.com</td>
-                                                <td>(789) 123-5678</td>
-                                                <td>Miami</td>
-                                                <td>Master's</td>
-                                                <td>28</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>16</td>
-                                                <td>Thomas Foster</td>
-                                                <td>thomasf@example.com</td>
-                                                <td>(234) 567-7890</td>
-                                                <td>Chicago</td>
-                                                <td>Bachelor's</td>
-                                                <td>25</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>17</td>
-                                                <td>Emily Green</td>
-                                                <td>emilyg@example.com</td>
-                                                <td>(567) 890-3456</td>
-                                                <td>Los Angeles</td>
-                                                <td>Ph.D.</td>
-                                                <td>30</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>18</td>
-                                                <td>Robert Harris</td>
-                                                <td>roberth@example.com</td>
-                                                <td>(890) 123-6789</td>
-                                                <td>New York</td>
-                                                <td>Master's</td>
-                                                <td>29</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>19</td>
-                                                <td>Jennifer Jackson</td>
-                                                <td>jenniferj@example.com</td>
-                                                <td>(123) 456-7890</td>
-                                                <td>San Francisco</td>
-                                                <td>Bachelor's</td>
-                                                <td>26</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>20</td>
-                                                <td>Daniel King</td>
-                                                <td>danielk@example.com</td>
-                                                <td>(456) 789-3456</td>
-                                                <td>Houston</td>
-                                                <td>Ph.D.</td>
-                                                <td>32</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
+                                            {
+                                                users.map(user => {
+                                                    return <tr>
+                                                        <td>{user.username}</td>
+                                                        <td>{user.phoneNo}</td>
+                                                        <td>{user.aadharNo}</td>
+                                                        <td>{user.email}</td>
+                                                        <td>{user.dob}</td>
+                                                        <td>{user.attempt}</td>
+                                                        <td>
+                                                            {(user.attempt >= 3) ? (user.examAllow == false) ? (
+                                                                <button className="btn btn-outline-danger btn-sm" id={`${user._id}`} type="submit" onClick={(e) => handleButtonValue(e, user._id)}><small>Allow</small></button>
+                                                            ) : (<button className="btn btn-outline-primary btn-sm" disabled id={`${user._id}`} type="submit"><small>Eligible</small></button>) : (<button className="btn btn-outline-primary btn-sm" disabled id={`${user._id}`} type="submit"><small>Eligible</small></button>)}
+                                                        </td>
+                                                        <td>
+                                                            <button className="btn btn-outline-danger btn-sm" type="submit" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => setUserDocuments(user._id, true)}><small>See Document</small></button>
+                                                        </td>
+                                                    </tr>
+                                                })
+                                            }
                                         </tbody>
                                     </table>
+                                </div>
+                            </div>
+                            {/* ---------------Modal Start */}
+
+                            {/* ---------------Modal End */}
+
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">See Documents</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {
+                                                // userDocument.map(userDocs => {
+                                                <tr>
+                                                    <div>
+                                                        <h4>Father's Income</h4>
+                                                        <h4>{userDocument.income}</h4>
+                                                    </div>
+                                                    <div className='row mt-5'>
+                                                        <div className='col-lg-6'>
+                                                            <h4>Adhaar Card Photo</h4>
+                                                            <img width={"100%"} height={"300vw"} src={"http://localhost:3002/" + userDocument.aadharFile}></img>
+                                                        </div>
+                                                        <div className='col-lg-6'>
+                                                            <h4>Income Certificate Image</h4>
+                                                            <img width={"100%"} height={"300vw"} src={"http://localhost:3002/" + userDocument.incomeCertificate}></img>
+                                                        </div>
+                                                    </div>
+                                                    <div className='row mt-5'>
+                                                        <div className='col-lg-6'>
+                                                            <h4>Father Adhaar Card Image</h4>
+                                                            <img width={"100%"} height={"300vw"} src={"http://localhost:3002/" + userDocument.fatherAadharcard}></img>
+                                                        </div>
+                                                        <div className='col-lg-6'>
+                                                            <h4>Marksheet Image</h4>
+                                                            <img width={"100%"} height={"300vw"} src={"http://localhost:3002/" + userDocument.marksheet}></img>
+                                                        </div>
+                                                    </div>
+                                                    <div className='row mt-5'>
+                                                        <div className='col-lg-6'>
+                                                            <h4>Latest year Marksheet Image</h4>
+                                                            <img width={"100%"} height={"300vw"} src={"http://localhost:3002/" + userDocument.latestMarksheet}></img>
+                                                        </div>
+                                                    </div>
+                                                </tr>
+                                                // }
+                                                // )
+                                            }
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             {/* <!-----------------------Regestrations Section Ends--------------------------------- --> */}

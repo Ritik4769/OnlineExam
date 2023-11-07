@@ -29,6 +29,11 @@ const userSchema = new mongoose.Schema({
     attempt: {
         type: Number,
         require: true
+    },
+    examAllow :{
+        type : Boolean,
+        require : true,
+        default : true
     }
 })
 const rsg = new mongoose.model('Registration2', userSchema);
