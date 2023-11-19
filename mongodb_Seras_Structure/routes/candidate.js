@@ -6,7 +6,7 @@ const router = express.Router();
 import {upload} from '../middleware/upload.js'
 router.post('/verifyemail', RegistrationController.verifyemail);
 router.post('/verifyOtp', RegistrationController.verifyOtp);
-router.post('/documentRegistration',upload, RegistrationController.documentRegistration)
+router.post('/documentRegistration/:userID',upload, RegistrationController.documentRegistration)
 router.post('/login', RegistrationController.candidateLogin);
 router.post('/ExamPortal',getQuestionController);
 

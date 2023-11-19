@@ -1,52 +1,40 @@
 import React, { useState } from "react";
 import logo from "../Images/InfoBeans Foundation Logo - PNG (1).png";
 import { useLocation } from "react-router-dom";
-
+var subjectCode;
 export default function ExamPortal() {
     const location = useLocation();
     const { QuestionPaperObject } = location.state || {};
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [currentSubject, setCurrentSubject] = useState("ENG01");
     const [selectedAnswers, setSelectedAnswers] = useState({});
-
-    const subjects = ["ENG01", "HIN02", "MAT03", "COM05", "GK06", "REA04"];
-
+    const subjects = ["ENG01", "HIN02", "MAT03", "REA04", "COM05", "GK06"];
     const handleSubjectChange = (subject, index) => {
-         
+        // console.log("subject : ", subject);
+        // console.log(index)
+        console.log("currentSubject : ", setCurrentSubject);
+        subjectCode = currentSubject;
+        console.log("subjectCode : ", subjectCode);
         setCurrentSubject(subject);
         setCurrentQuestionIndex(index);
     };
 
-    // Function to handle selecting an answer
     const handleSelectAnswer = (questionIndex, answer) => {
+        console.log("question index : ", answer)
         setSelectedAnswers({
             ...selectedAnswers,
             [questionIndex]: answer,
         });
+        console.log("setSelectedAnswers : ", selectedAnswers)
     };
 
-    // Function to handle navigating to the next question
-    const handleNextQuestion = () => {
-        console.log(currentQuestionIndex);
-        console.log("setCurrentQuestionIndex : " ,setCurrentQuestionIndex(4) );
-        console.log(" QuestionPaperObject.paper.length - 1" ,  QuestionPaperObject.paper.length - 1);
-        if (currentQuestionIndex < QuestionPaperObject.paper.length - 1) {
-            // setCurrentQuestionIndex(currentQuestionIndex + 1);
-        }
-    };
-
-    // Function to handle navigating to the previous question
-    const handlePreviousQuestion = () => {
-        console.log(currentQuestionIndex);
-        console.log(" QuestionPaperObject.paper.length - 1" ,  QuestionPaperObject.paper.length - 1);
-
-        if (currentQuestionIndex > 0) {
-            setCurrentQuestionIndex(currentQuestionIndex - 1);
-        }
-    };
+    // console.log("selectedAnswers : ",selectedAnswers)
 
     // Get the current question and its selected answer
-    const currentQuestion = QuestionPaperObject.paper[currentQuestionIndex];
+    // const currentQuestion2 = QuestionPaperObject.paper[currentQuestionIndex];
+    const currentQuestion = QuestionPaperObject.paper[currentQuestionIndex].questions;
+    console.log("current : ", currentQuestion);
+    // console.log("current : ",currentQuestion2);
     const selectedAnswer = selectedAnswers[currentQuestionIndex] || "";
 
     return (
@@ -87,76 +75,78 @@ export default function ExamPortal() {
                     <div className=" tab-pane fade show active" id="v-pills-english" role="tabpanel"
                         aria-labelledby="v-pills-home-tab">
                         <div className="container p-0">
-                            <div className="row">
-                                <div className="col-12 ">
-                                    <div className="card">
-                                        <div className="card-header">
-                                            <h3 className="card-title">{`Question ${currentQuestionIndex + 1}`}</h3>
-                                        </div>
-                                        <div className="card-body p-5" id="background-img">
-                                            <h4 className="card-text">{`Q${currentQuestionIndex + 1}. ${currentQuestion.questions[0].Question}`}</h4>
-                                            <div className="form-check mt-4 ms-5">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="radio"
-                                                    name="mcqOptions"
-                                                    id="option1"
-                                                    value="option1"
-                                                    checked={selectedAnswer === "option1"} // Check if this option is selected
-                                                    onChange={() => handleSelectAnswer(currentQuestionIndex, "option1")}
-                                                />
-                                                <label className="form-check-label" htmlFor="option1">{`A) ${currentQuestion.questions[0].OptionA}`}</label>
+                            <div className="row Questionsscroll" style={{ height: "480px" }}>
+                                {currentQuestion.map((question, index) => (
+                                    <div className="col-12  my-2 Questionsscroll" key={index}>
+                                        <div className="card">
+                                            <div className="card-header">
+                                                <h3 className="card-title">{`Question ${currentQuestionIndex + index + 1}`}</h3>
                                             </div>
-                                            <div className="form-check mt-4 ms-5">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="radio"
-                                                    name="mcqOptions"
-                                                    id="option2"
-                                                    value="option2"
-                                                    checked={selectedAnswer === "option2"}
-                                                    onChange={() => handleSelectAnswer(currentQuestionIndex, "option2")}
-                                                />
-                                                <label className="form-check-label" htmlFor="option2">{`B) ${currentQuestion.questions[0].OptionB}`}</label>
+                                            <div className="card-body p-5" id="background-img">
+                                                <h4 className="card-text">{`Q${currentQuestionIndex + index + 1}. ${question.Question}`}</h4>
+                                                <div className="form-check mt-4 ms-5">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="radio"
+                                                        name={`mcqOptions-${index}`}
+                                                        id={`option1-${index}`}
+                                                        value="option1"
+                                                        checked={selectedAnswers[currentQuestionIndex + index] === "option1"}
+                                                        onChange={() => handleSelectAnswer(currentQuestionIndex + index, question.OptionA)}
+                                                    />
+                                                    <label className="form-check-label" htmlFor={`option1-${index}`}>{`A) ${question.OptionA}`}</label>
+                                                </div>
+                                                <div className="form-check mt-4 ms-5">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="radio"
+                                                        name={`mcqOptions-${index}`}
+                                                        id={`option2-${index}`}
+                                                        value={question.OptionA}
+                                                        checked={selectedAnswers[currentQuestionIndex + index] === "option2"}
+                                                        onChange={() => handleSelectAnswer(currentQuestionIndex + index, question.OptionB)}
+                                                    />
+                                                    <label className="form-check-label" htmlFor={`option2-${index}`}>{`B) ${question.OptionB}`}</label>
+                                                </div>
+                                                <div className="form-check mt-4 ms-5">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="radio"
+                                                        name={`mcqOptions-${index}`}
+                                                        id={`option3-${index}`}
+                                                        value="option3"
+                                                        checked={selectedAnswers[currentQuestionIndex + index] === "option3"}
+                                                        onChange={() => handleSelectAnswer(currentQuestionIndex + index, question.OptionC)}
+                                                    />
+                                                    <label className="form-check-label" htmlFor={`option3-${index}`}>{`C) ${question.OptionC}`}</label>
+                                                </div>
+                                                <div className="form-check mt-4 ms-5">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="radio"
+                                                        name={`mcqOptions-${index}`}
+                                                        id={`option4-${index}`}
+                                                        value="option4"
+                                                        checked={selectedAnswers[currentQuestionIndex + index] === "option4"}
+                                                        onChange={() => handleSelectAnswer(currentQuestionIndex + index, question.OptionD)}
+                                                    />
+                                                    <label className="form-check-label" htmlFor={`option4-${index}`}>{`D) ${question.OptionD}`}</label>
+                                                </div>
                                             </div>
-                                            <div className="form-check mt-4 ms-5">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="radio"
-                                                    name="mcqOptions"
-                                                    id="option3"
-                                                    value="option3"
-                                                    checked={selectedAnswer === "option3"}
-                                                    onChange={() => handleSelectAnswer(currentQuestionIndex, "option3")}
-                                                />
-                                                <label className="form-check-label" htmlFor="option3">{`C) ${currentQuestion.questions[0].OptionC}`}</label>
-                                            </div>
-                                            <div className="form-check mt-4 ms-5">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="radio"
-                                                    name="mcqOptions"
-                                                    id="option4"
-                                                    value="option4"
-                                                    checked={selectedAnswer === "option4"}
-                                                    onChange={() => handleSelectAnswer(currentQuestionIndex, "option4")}
-                                                />
-                                                <label className="form-check-label" htmlFor="option4">{`D) ${currentQuestion.questions[0].OptionD}`}</label>
-                                            </div>
-                                        </div>
-                                        <div className="card-footer p-3 ">
-                                            <div className="d-flex justify-content-around w-100">
-                                                <button className="btn btn-outline-danger" type="button" onClick={handlePreviousQuestion}>
-                                                    <i className="bi bi-arrow-left-circle-fill"></i>Previous
-                                                </button>
-                                                <button className="btn btn-outline-warning" type="button">Mark for review</button>
-                                                <button className="btn btn-outline-primary" type="button" onClick={handleNextQuestion}>
-                                                    Next<i className="bi bi-arrow-right-circle-fill"></i>
-                                                </button>
+                                            <div className="card-footer p-3">
+                                                <div className="d-flex justify-content-around w-100">
+                                                    {/* <button className="btn btn-outline-danger" type="button" onClick={handlePreviousQuestion}>
+                                                        <i className="bi bi-arrow-left-circle-fill"></i>Previous
+                                                    </button> */}
+                                                    <button className="btn btn-outline-warning" type="button">Mark for review</button>
+                                                    {/* <button className="btn btn-outline-primary" type="button" onClick={handleNextQuestion}>
+                                                        Next<i className="bi bi-arrow-right-circle-fill"></i>
+                                                    </button> */}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                ))}
                             </div>
                         </div>
                     </div>

@@ -1,9 +1,230 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { createExam, createSchedule } from "./adminModule/admindashAxios"
+import Cookies from 'js-cookie';
+
 import logo from '../Images/InfoBeans Foundation Logo - PNG (1).png';
 import avatar from '../Images/man-with-beard-avatar-character-isolated-icon-free-vector.jpg';
+var examid;
+var EnrollIDs = [];
+
+var examobj = {}, sheduleObj = {}
 export default function AdminModule() {
+    const [users, setUser3] = useState([]);
+    const [userDocument, setUser4] = useState([]);
+    const [placementData, setplacementrocord] = useState([]);
+
+    useEffect(() => {
+        axios.get("http://localhost:3002/admin/viewRegistrationCandidate")
+            .then((users) => {
+                setUser3(users.data)
+            })
+            .catch(err => console.log('error ', err));
+    });
+
+    useEffect(() => {
+        axios.get("http://localhost:3002/admin/viewPlacementRecord")
+            .then((placedusers) => {
+                setplacementrocord(placedusers.data)
+            })
+            .catch(err => console.log('error ', err));
+    });
+
+    const history = useNavigate();
+    const [exam, setUser] = useState({
+        examTitle: '',
+        examDate: '',
+        examDuration: ''
+    });
+
+    const [schedule, setUser1] = useState({
+        shiftNumber: '',
+        maxCandidates: '',
+        shiftTimeFrom: '',
+        shiftTimeTo: '',
+        examVenue: ''
+    });
+
+    const [uploadQuestion, setUser2] = useState({
+        questionFile: '',
+        questionFile2: ''
+
+    });
+
+    const [placedStudentRecord, setPlacedStudent] = useState({
+        studentName: '',
+        studentNumber: '',
+        studentEmail: '',
+        studentCompanyName: '',
+        studentImage: ''
+    });
+
+
+
+    const handleInputs = (e) => {
+        console.log(e);
+        const name = e.target.name;
+        const value = e.target.value;
+        examobj = { ...exam, [name]: value }
+        setUser({ ...exam, [name]: value });
+    };
+
+    function cllCreateexam(e) { createExam(e, examobj) }
+
+    const handleInputs2 = (e) => {
+        console.log("hello");
+        const name = e.target.name;
+        const value = e.target.value;
+        sheduleObj = { ...schedule, [name]: value }
+        setUser1({ ...schedule, [name]: value });
+    };
+    function callShedule(e) {
+        createSchedule(e, sheduleObj)
+    }
+
+    const handleInputs3 = (e) => {
+        const name = e.target.name;
+        const file = e.target.files[0];
+        setUser2({ ...uploadQuestion, [name]: file });
+        console.log(uploadQuestion);
+    };
+
+    const UploadQuestion = async (e) => {
+        if (e) {
+            e.preventDefault();
+        }
+        console.log("in upload question", uploadQuestion);
+        const formData = new FormData();
+        formData.append('questionFile', uploadQuestion.questionFile);
+        console.log(uploadQuestion);
+        const { questionFile } = uploadQuestion;
+        console.log("path  : ", questionFile);
+        console.log("form data :", formData);
+        //my
+        try {
+            axios.post('http://localhost:3002/admin/uploadQuestionFile', formData).then((result) => {
+                console.log(result);
+            }).catch((error) => {
+                console.log('', error);
+            })
+        } catch (error) {
+            console.log('Error:', error);
+            window.alert('Failed to register');
+        }
+    };
+
+    function AdminLogout() {
+        Cookies.remove('adEmail');
+        history('/admin')
+    }
+
+
+    const handleButtonValue = (e, userId) => {
+        console.log("Email : ", userId);
+        axios.post(`http://localhost:3002/admin/allowUser/${userId}`).then((response) => {
+            console.log("result", response);
+        }).catch((error) => {
+            console.log('', error);
+        })
+    };
+
+    const setUserDocuments = (userId, modalStatus) => {
+        console.log("Emailll : ", userId);
+        // isUserDocumentsModal = true;
+        axios.post(`http://localhost:3002/admin/viewRegistrationCandidateDocument/${userId}`).then((response) => {
+            setUser4(response.data);
+        }).catch((error) => {
+            console.log('', error);
+        })
+    }
+    const handleFileChange1 = (e,) => {
+        if (e.target.type === 'file') {
+            const name = e.target.name;
+            const file = e.target.files[0];
+            setPlacedStudent({ ...placedStudentRecord, [name]: file });
+            console.log(placedStudentRecord)
+            console.log("file name : ", file);
+            console.log("file: ", file);
+        } else {
+            const name = e.target.name;
+            const value = e.target.value;
+            setPlacedStudent({ ...placedStudentRecord, [name]: value });
+            console.log("field name : ", name);
+            console.log("field value : ", value);
+        }
+    };
+
+    const PostData1 = async (e) => {
+        if (e) {
+            e.preventDefault();
+        }
+        console.log("in post");
+        const formData = new FormData();
+        for (const key in placedStudentRecord) {
+            if (placedStudentRecord[key]) {
+                formData.append(key, placedStudentRecord[key]);
+            }
+        }
+        console.log("user 1 : ", placedStudentRecord);
+        console.log("form data : ", formData);
+        // var userID = Cookie.get("userID");
+        // console.log(userID);
+        try {
+            axios.post(`http://localhost:3002/admin/addPlacementRecord`, formData).then((result) => {
+                console.log(result);
+                if (result.status === 201) {
+                    setUserDocuments(true);
+                } else {
+                    console.log("Something went wrong....");
+                }
+            }).catch((error) => {
+                console.log('', error);
+            })
+        } catch (error) {
+            console.log('Error:', error);
+            window.alert('Failed to register');
+        }
+    };
+
+    // const addplacementrecord = (e) => {
+    //     if (e) {
+    //         e.preventDefault();
+    //     }
+    //     const formData = new FormData();
+    //     for (const key in placedStudentRecord) {
+    //         if (placedStudentRecord[key]) {
+    //             formData.append(key, placedStudentRecord[key]);
+    //         }
+    //     }
+    //     console.log("in add[placementRoecord Function");
+    //     console.log(placedStudentRecord);
+    //     console.log(placedStudentRecord);
+
+    //     axios.post(`http://localhost:3002/admin/addPlacementRecord`, formData).then((response) => {
+    //         console.log("data send successfully");
+    //     }).catch((error) => {
+    //         console.log('', error);
+    //     })
+    //     e.target.reset();
+    // }
+
+    // const placedStudent = (e) => {
+    //     if (e.target.type === 'file') {
+    //         const name = e.target.name;
+    //         const file = e.target.files[0].name;
+    //         setPlacedStudent({ ...placedStudentRecord, [name]: file });
+    //         console.log("file name : ", file);
+    //         console.log("file: ", file);
+    //     } else {
+    //         const name = e.target.name;
+    //         const value = e.target.value;
+    //         setPlacedStudent({ ...placedStudentRecord, [name]: value });
+    //         console.log("field name : ", name);
+    //         console.log("field value : ", value);
+    //     }
+    // }
+
 
     return (
         <section>
@@ -119,7 +340,7 @@ export default function AdminModule() {
                                             <h2 className="h2 ms-2"><i className="bi bi-house"></i>&nbsp;Home</h2>
                                         </div>
                                         <div className="d-flex align-items-center  me-2 ">
-                                            <button type="submit" className="btn btn-outline-danger btn-sm m-2">Log out</button>
+                                            <button type="submit" onClick={AdminLogout} className="btn btn-outline-danger btn-sm m-2">Log out</button>
                                             <button type="button" className="btn btn-outline-danger position-relative btn-sm">
                                                 <i className="bi bi-bell-fill"></i>
                                                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -131,7 +352,6 @@ export default function AdminModule() {
                                 </nav>
                             </div>
                             {/* <!-- ----------------------------------Home Section Ends-----------------------------------> */}
-
 
                             {/* <!-- ---------------------Regestrations Section--------------------------------- --> */}
                             <div className="tab-pane fade pt-2" id="v-pills-registrations" role="tabpanel"
@@ -208,230 +428,85 @@ export default function AdminModule() {
                                             </tr>
                                         </thead>
                                         <tbody className="overflow-hidden">
-                                            <tr>
-                                                <td>1</td>
-                                                <td>John Doe</td>
-                                                <td>johndoe@example.com</td>
-                                                <td>(123) 456-7890</td>
-                                                <td>New York</td>
-                                                <td>Bachelor's</td>
-                                                <td>20</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>John Cena</td>
-                                                <td>johncena@example.com</td>
-                                                <td>(123) 456-7890</td>
-                                                <td>New York</td>
-                                                <td>Bachelor's</td>
-                                                <td>22</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>Bob Johnson</td>
-                                                <td>bobj@example.com</td>
-                                                <td>(789) 123-4567</td>
-                                                <td>Chicago</td>
-                                                <td>Bachelor's</td>
-                                                <td>22</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>Alice Wilson</td>
-                                                <td>alicew@example.com</td>
-                                                <td>(234) 567-8901</td>
-                                                <td>Houston</td>
-                                                <td>Ph.D.</td>
-                                                <td>28</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>David Brown</td>
-                                                <td>davidb@example.com</td>
-                                                <td>(567) 890-1234</td>
-                                                <td>Miami</td>
-                                                <td>Bachelor's</td>
-                                                <td>21</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>6</td>
-                                                <td>Susan Lee</td>
-                                                <td>susanl@example.com</td>
-                                                <td>(890) 123-4567</td>
-                                                <td>San Francisco</td>
-                                                <td>Master's</td>
-                                                <td>27</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>7</td>
-                                                <td>Michael Taylor</td>
-                                                <td>michaelt@example.com</td>
-                                                <td>(123) 456-7890</td>
-                                                <td>Seattle</td>
-                                                <td>Bachelor's</td>
-                                                <td>23</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>8</td>
-                                                <td>Linda Clark</td>
-                                                <td>lindac@example.com</td>
-                                                <td>(456) 789-1234</td>
-                                                <td>Boston</td>
-                                                <td>Master's</td>
-                                                <td>26</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>9</td>
-                                                <td>William Adams</td>
-                                                <td>williama@example.com</td>
-                                                <td>(789) 123-4567</td>
-                                                <td>Dallas</td>
-                                                <td>Bachelor's</td>
-                                                <td>24</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>10</td>
-                                                <td>Karen Hall</td>
-                                                <td>karenh@example.com</td>
-                                                <td>(234) 567-8901</td>
-                                                <td>Philadelphia</td>
-                                                <td>Ph.D.</td>
-                                                <td>29</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>11</td>
-                                                <td>Mary Adams</td>
-                                                <td>marya@example.com</td>
-                                                <td>(567) 890-2345</td>
-                                                <td>San Diego</td>
-                                                <td>Bachelor's</td>
-                                                <td>22</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>12</td>
-                                                <td>James Brown</td>
-                                                <td>jamesb@example.com</td>
-                                                <td>(890) 123-5678</td>
-                                                <td>Denver</td>
-                                                <td>Master's</td>
-                                                <td>27</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>13</td>
-                                                <td>Laura Carter</td>
-                                                <td>laurac@example.com</td>
-                                                <td>(123) 456-6789</td>
-                                                <td>Phoenix</td>
-                                                <td>Bachelor's</td>
-                                                <td>24</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>14</td>
-                                                <td>Richard Davis</td>
-                                                <td>richardd@example.com</td>
-                                                <td>(456) 789-2345</td>
-                                                <td>Atlanta</td>
-                                                <td>Ph.D.</td>
-                                                <td>31</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>15</td>
-                                                <td>Sarah Evans</td>
-                                                <td>sarahe@example.com</td>
-                                                <td>(789) 123-5678</td>
-                                                <td>Miami</td>
-                                                <td>Master's</td>
-                                                <td>28</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>16</td>
-                                                <td>Thomas Foster</td>
-                                                <td>thomasf@example.com</td>
-                                                <td>(234) 567-7890</td>
-                                                <td>Chicago</td>
-                                                <td>Bachelor's</td>
-                                                <td>25</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>17</td>
-                                                <td>Emily Green</td>
-                                                <td>emilyg@example.com</td>
-                                                <td>(567) 890-3456</td>
-                                                <td>Los Angeles</td>
-                                                <td>Ph.D.</td>
-                                                <td>30</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>18</td>
-                                                <td>Robert Harris</td>
-                                                <td>roberth@example.com</td>
-                                                <td>(890) 123-6789</td>
-                                                <td>New York</td>
-                                                <td>Master's</td>
-                                                <td>29</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>19</td>
-                                                <td>Jennifer Jackson</td>
-                                                <td>jenniferj@example.com</td>
-                                                <td>(123) 456-7890</td>
-                                                <td>San Francisco</td>
-                                                <td>Bachelor's</td>
-                                                <td>26</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>20</td>
-                                                <td>Daniel King</td>
-                                                <td>danielk@example.com</td>
-                                                <td>(456) 789-3456</td>
-                                                <td>Houston</td>
-                                                <td>Ph.D.</td>
-                                                <td>32</td>
-                                                <td><button className="btn btn-outline-danger btn-sm" type="submit"><small>Remove</small></button>
-                                                </td>
-                                            </tr>
+                                            {
+                                                users.map(user => {
+                                                    return <tr>
+                                                        <td>{user.username}</td>
+                                                        <td>{user.phoneNo}</td>
+                                                        <td>{user.aadharNo}</td>
+                                                        <td>{user.email}</td>
+                                                        <td>{user.dob}</td>
+                                                        <td>{user.attempt}</td>
+                                                        <td>
+                                                            {(user.attempt >= 3) ? (user.examAllow == false) ? (
+                                                                <button className="btn btn-outline-danger btn-sm" id={`${user._id}`} type="submit" onClick={(e) => handleButtonValue(e, user._id)}><small>Allow</small></button>
+                                                            ) : (<button className="btn btn-outline-primary btn-sm" disabled id={`${user._id}`} type="submit"><small>Eligible</small></button>) : (<button className="btn btn-outline-primary btn-sm" disabled id={`${user._id}`} type="submit"><small>Eligible</small></button>)}
+                                                        </td>
+                                                        <td>
+                                                            <button className="btn btn-outline-danger btn-sm" type="submit" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => setUserDocuments(user._id, true)}><small>See Document</small></button>
+                                                        </td>
+                                                    </tr>
+                                                })
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
+                            {/* ---------------Modal Start */}
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">See Documents</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {
+                                                // userDocument.map(userDocs => {
+                                                <tr>
+                                                    <div>
+                                                        <h4>Father's Income</h4>
+                                                        <h4>{userDocument.income}</h4>
+                                                    </div>
+                                                    <div className='row mt-5'>
+                                                        <div className='col-lg-6'>
+                                                            <h4>Adhaar Card Photo</h4>
+                                                            <img width={"100%"} height={"300vw"} src={"http://localhost:3002/" + userDocument.aadharFile}></img>
+                                                        </div>
+                                                        <div className='col-lg-6'>
+                                                            <h4>Income Certificate Image</h4>
+                                                            <img width={"100%"} height={"300vw"} src={"http://localhost:3002/" + userDocument.incomeCertificate}></img>
+                                                        </div>
+                                                    </div>
+                                                    <div className='row mt-5'>
+                                                        <div className='col-lg-6'>
+                                                            <h4>Father Adhaar Card Image</h4>
+                                                            <img width={"100%"} height={"300vw"} src={"http://localhost:3002/" + userDocument.fatherAadharcard}></img>
+                                                        </div>
+                                                        <div className='col-lg-6'>
+                                                            <h4>Marksheet Image</h4>
+                                                            <img width={"100%"} height={"300vw"} src={"http://localhost:3002/" + userDocument.marksheet}></img>
+                                                        </div>
+                                                    </div>
+                                                    <div className='row mt-5'>
+                                                        <div className='col-lg-6'>
+                                                            <h4>Latest year Marksheet Image</h4>
+                                                            <img width={"100%"} height={"300vw"} src={"http://localhost:3002/" + userDocument.latestMarksheet}></img>
+                                                        </div>
+                                                    </div>
+                                                </tr>
+                                                // }
+                                                // )
+                                            }
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {/* ---------------Modal End */}
                             {/* <!-----------------------Regestrations Section Ends--------------------------------- --> */}
 
 
@@ -500,134 +575,78 @@ export default function AdminModule() {
                                             <input className="form-control-sm" placeholder="Search Here" type="text" name="" value="" />
                                             <button type="button" className="btn btn-outline-primary btn-sm"><i className="bi bi-search"></i></button>
                                         </div>
-                                        <button type="button" className="btn  btn-outline-primary btn-sm"><i className="bi bi-plus-lg"></i></button>
+                                        <button type="button" className="btn  btn-outline-primary " data-bs-toggle="modal" data-bs-target="#addplacementrecordmodal"><i className="bi bi-plus"></i></button>
                                     </div>
                                 </div>
                                 {/* <!-- ======================================= --> */}
 
                                 <div className="row w-100 m-0 p-2 dashBorad-table-div ">
-                                    <div className="col-6 col-sm-4 col-md-3">
-                                        <div className="card w-100  m-1">
-                                            <div className="w-100 d-flex justify-content-center">
-                                                <img src={avatar}
-                                                    className="card-img-top w-50" alt="..." />
+                                    {
+                                        // <div className="col-6 col-sm-4 col-md-3">
+                                        //     <div className="card w-100  m-1">
+                                        //         <div className="w-100 d-flex justify-content-center">
+                                        //             <img src={avatar}
+                                        //                 className="card-img-top w-50" alt="..." />
+                                        //         </div>
+                                        //         <div className="card-body">
+                                        //             <h5 className="card-title">Vikas Joshi</h5>
+                                        //             <p className="text-muted">Btach 5</p>
+                                        //             <p className="card-text text-muted  text-sm-start"><i className="bi bi-buildings"></i> Company</p>
+                                        //             <a href="#" className="btn btn-outline-primary btn-sm me-1 mb-1"><i className="bi bi-send-fill"></i>&nbsp;Message</a>
+                                        //             <a href="#" className="btn btn-outline-warning btn-sm me-1 mb-1 "><i className="bi bi-envelope"></i>&nbsp;Mail</a>
+                                        //         </div>
+                                        //     </div>
+                                        // </div>
+                                        placementData.map(user => {
+                                            return <div className="col-6 col-sm-4 col-md-3">
+                                                <div className="card w-100  m-1">
+                                                    <div className="w-100 d-flex justify-content-center">
+                                                        <img src={avatar}
+                                                            className="card-img-top w-50" alt="..." />
+                                                        {/* <img src={"http://localhost:3002/" + user.studentimage}
+                                                            className="card-img-top w-50" alt="..." /> */}
+                                                    </div>
+                                                    <div className="card-body">
+                                                        <h5 className="card-title">{user.studentname}</h5>
+                                                        <p className="text-muted">Btach 5</p>
+                                                        <p className="text-muted">{user.studentnumber}</p>
+                                                        <p className="text-muted">{user.studentemail}</p>
+                                                        <p className="card-text text-muted  text-sm-start"><i className="bi bi-buildings"></i>{user.studentcompanyname} </p>
+                                                        <a href="#" className="btn btn-outline-primary btn-sm me-1 mb-1"><i className="bi bi-send-fill"></i>&nbsp;Message</a>
+                                                        <a href="#" className="btn btn-outline-warning btn-sm me-1 mb-1 "><i className="bi bi-envelope"></i>&nbsp;Mail</a>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="card-body">
-                                                <h5 className="card-title">Vikas Joshi</h5>
-                                                <p className="text-muted">Btach 5</p>
-                                                <p className="card-text text-muted  text-sm-start"><i className="bi bi-buildings"></i> Company</p>
-                                                <a href="#" className="btn btn-outline-primary btn-sm me-1 mb-1"><i className="bi bi-send-fill"></i>&nbsp;Message</a>
-                                                <a href="#" className="btn btn-outline-warning btn-sm me-1 mb-1 "><i className="bi bi-envelope"></i>&nbsp;Mail</a>
-                                            </div>
+                                        })
+                                    }
+                                </div>
+                            </div>
+                            {/* -----------------------ADD PLACEMENT RECORD MODAL START--------------------------- */}
+                            <div class="modal fade" id="addplacementrecordmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                    </div>
-
-                                    <div className="col-6 col-sm-4 col-md-3 ">
-                                        <div className="card w-100  m-1">
-                                            <div className="w-100 d-flex justify-content-center">
-                                                <img src={avatar} className="card-img-top w-50" alt="..." />
-                                            </div>
-                                            <div className="card-body">
-                                                <h5 className="card-title">Vikas Joshi</h5>
-                                                <p className="text-muted">Btach 5</p>
-                                                <p className="card-text text-muted  text-sm-start"><i className="bi bi-buildings"></i> Company</p>
-                                                <a href="#" className="btn btn-outline-primary btn-sm me-1 mb-1"><i className="bi bi-send-fill"></i>&nbsp;Message</a>
-                                                <a href="#" className="btn btn-outline-warning btn-sm me-1 mb-1"><i className="bi bi-envelope"></i>&nbsp;Mail</a>
-                                            </div>
+                                        <div class="modal-body">
+                                            <form onSubmit={PostData1} enctype="multipart/form-data">
+                                                <input type='text' name='studentName' style={{ margin: "5px" }} placeholder='Enter name' onChange={(e) => handleFileChange1(e, 'studentName')} /><br />
+                                                <input type='text' name='studentEmail' style={{ margin: "5px" }} placeholder='Enter Email' onChange={(e) => handleFileChange1(e, 'studentEmail')} /><br />
+                                                <input type='number' name='studentNumber' style={{ margin: "5px" }} placeholder='Enter contact Number' onChange={(e) => handleFileChange1(e, 'studentNumber')} /><br />
+                                                <input type='text' name='studentCompanyName' style={{ margin: "5px" }} placeholder='Enter Company Name' onChange={(e) => handleFileChange1(e, 'studentCompanyName')} /><br />
+                                                <input type='file' name='studentImage' style={{ margin: "5px" }} placeholder='Enter Photo' onChange={(e) => handleFileChange1(e, 'studentImage')} /><br />
+                                                <input type='submit' className='btn btn-outline-primary' style={{ margin: "7px" }} value="Add Student" /><br />
+                                            </form>
                                         </div>
-                                    </div>
-
-                                    <div className="col-6 col-sm-4 col-md-3">
-                                        <div className="card w-100  m-1">
-                                            <div className="w-100 d-flex justify-content-center">
-                                                <img src={avatar} className="card-img-top w-50" alt="..." />
-                                            </div>
-                                            <div className="card-body">
-                                                <h5 className="card-title">Vikas Joshi</h5>
-                                                <p className="text-muted">Btach 5</p>
-                                                <p className="card-text text-muted  text-sm-start"><i className="bi bi-buildings"></i> Company</p>
-                                                <a href="#" className="btn btn-outline-primary btn-sm me-1 mb-1"><i className="bi bi-send-fill"></i>&nbsp;Message</a>
-                                                <a href="#" className="btn btn-outline-warning btn-sm me-1 mb-1"><i className="bi bi-envelope"></i>&nbsp;Mail</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-6 col-sm-4 col-md-3">
-                                        <div className="card w-100  m-1">
-                                            <div className="w-100 d-flex justify-content-center">
-                                                <img src={avatar} className="card-img-top w-50" alt="..." />
-                                            </div>
-                                            <div className="card-body">
-                                                <h5 className="card-title">Vikas Joshi</h5>
-                                                <p className="text-muted">Btach 5</p>
-                                                <p className="card-text text-muted  text-sm-start"><i className="bi bi-buildings"></i> Company</p>
-                                                <a href="#" className="btn btn-outline-primary btn-sm me-1 mb-1"><i className="bi bi-send-fill"></i>&nbsp;Message</a>
-                                                <a href="#" className="btn btn-outline-warning btn-sm me-1 mb-1"><i className="bi bi-envelope"></i>&nbsp;Mail</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-6 col-sm-4 col-md-3">
-                                        <div className="card w-100  m-1">
-                                            <div className="w-100 d-flex justify-content-center">
-                                                <img src={avatar} className="card-img-top w-50" alt="..." />
-                                            </div>
-                                            <div className="card-body">
-                                                <h5 className="card-title">Vikas Joshi</h5>
-                                                <p className="text-muted">Btach 5</p>
-                                                <p className="card-text text-muted  text-sm-start"><i className="bi bi-buildings"></i> Company</p>
-                                                <a href="#" className="btn btn-outline-primary btn-sm me-1 mb-1"><i className="bi bi-send-fill"></i>&nbsp;Message</a>
-                                                <a href="#" className="btn btn-outline-warning btn-sm me-1 mb-1 "><i className="bi bi-envelope"></i>&nbsp;Mail</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-6 col-sm-4 col-md-3">
-                                        <div className="card w-100  m-1">
-                                            <div className="w-100 d-flex justify-content-center">
-                                                <img src={avatar} className="card-img-top w-50" alt="..." />
-                                            </div>
-                                            <div className="card-body">
-                                                <h5 className="card-title">Vikas Joshi</h5>
-                                                <p className="text-muted">Btach 5</p>
-                                                <p className="card-text text-muted  text-sm-start"><i className="bi bi-buildings"></i> Company</p>
-                                                <a href="#" className="btn btn-outline-primary btn-sm me-1 mb-1"><i className="bi bi-send-fill"></i>&nbsp;Message</a>
-                                                <a href="#" className="btn btn-outline-warning btn-sm me-1 mb-1 "><i className="bi bi-envelope"></i>&nbsp;Mail</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-6 col-sm-4 col-md-3">
-                                        <div className="card w-100  m-1">
-                                            <div className="w-100 d-flex justify-content-center">
-                                                <img src={avatar} className="card-img-top w-50" alt="..." />
-                                            </div>
-                                            <div className="card-body">
-                                                <h5 className="card-title">Vikas Joshi</h5>
-                                                <p className="text-muted">Btach 5</p>
-                                                <p className="card-text text-muted  text-sm-start"><i className="bi bi-buildings"></i> Company</p>
-                                                <a href="#" className="btn btn-outline-primary btn-sm me-1 mb-1"><i className="bi bi-send-fill"></i>&nbsp;Message</a>
-                                                <a href="#" className="btn btn-outline-warning btn-sm  me-1 mb-1"><i className="bi bi-envelope"></i>&nbsp;Mail</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-6 col-sm-4 col-md-3">
-                                        <div className="card w-100 m-1">
-                                            <div className="w-100 d-flex justify-content-center">
-                                                <img src={avatar} className="card-img-top w-50" alt="..." />
-                                            </div>
-                                            <div className="card-body">
-                                                <h5 className="card-title">Vikas Joshi</h5>
-                                                <p className="text-muted">Btach 5</p>
-                                                <p className="card-text text-muted  text-sm-start"><i className="bi bi-buildings"></i> Company</p>
-                                                <a href="#" className="btn btn-outline-primary btn-sm me-1 mb-1"><i className="bi bi-send-fill"></i>&nbsp;Message</a>
-                                                <a href="#" className="btn btn-outline-warning btn-sm me-1 mb-1"><i className="bi bi-envelope"></i>&nbsp;Mail</a>
-                                            </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            {/* -----------------------ADD PLACEMENT RECORD MODAL END----------------------------- */}
+
                             {/* <!-- ------------------------------------Total Plaements Ends-----------------------------------------------> */}
 
                             {/* <!-- ---------------------------------_Add Questions-------------------------- --> */}
@@ -652,16 +671,27 @@ export default function AdminModule() {
                                     </div>
                                 </nav>
 
-                                <div className="w-100 d-flex align-items-center justify-content-center" id="Upload-questions-m">
-                                    <form className="w-100 d-flex align-items-center justify-content-center flex-column ">
-                                        <div className="w-75 " id="Upload-questions">
-                                            <input type="file" name="" value="" />
-                                            <h1 className="h1 text-center text-white"><i className="bi bi-cloud-upload"></i></h1>
-                                            <h3 className="h3 text-center text-white"><br /> Drag & drop your excel file. </h3>
+                                <div className="w-100 d-flex align-items-center justify-content-center" >
+                                    <div className="row justify-content-center mt-5" style={{ border: "none", borderRadius: "20px", backgroundColor: "red", width: "70%" }}>
+                                        <div className="col-md-12 text-center p-5 my-5">
+                                            <h3>Upload files here</h3>
+                                            <div className=" justify-content-center">
+                                                <form action="" onSubmit={UploadQuestion} enctype="multipart/form-data" >
+                                                    <img src="" alt="fileupload" height="120" /><br />
+                                                    <input className="" type="file" name="questionFile" id="fileinput" onChange={(e) => handleInputs3(e, 'questionFile')} />
+                                                    {/* <input className=" " type="file" name="questionFile2" id="fileinput2" onChange={(e) => handleInputs3(e, 'questionFile2')} /> */}
+                                                    <label className="custom-file-label m-4" for="username"
+                                                        id="fileNameLabel">
+                                                        Upload Question
+                                                    </label><br />
+                                                    <input type="submit" className="btn btn-outline-danger w-50 mt-3"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                                                        aria-expanded="true" aria-controls="collapseThree" value="submit"
+                                                        style={{ height: "45px", color: "black" }} />
+                                                </form>
+                                            </div>
                                         </div>
-                                        {/* <!-- ==================================================== --> */}
-                                        <input type="submit" className="btn btn-sm  btn-outline-success w-75 mt-2 " name="" value="Upload" />
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                             {/* <!-- ---------------------------------_Add Questions Ends-------------------------- --> */}
@@ -1195,17 +1225,16 @@ export default function AdminModule() {
                                                 </div>
                                             </div>
                                             <div className="d-block p-4" style={{ textAlign: "center" }}>
-                                                <form action="">
-                                                    <input className="m-3 text-center form-control" type="text" name="examtitle" id="examtitle"
-                                                        placeholder="Enter Exam Title" /><br />
-                                                    <input className="m-3 text-center form-control" type="date" name="examdate" id="examdate"
+                                                <form action="" onSubmit={cllCreateexam}>
+                                                    <input className="m-3 text-center form-control" type="text" name="examTitle" onChange={handleInputs} value={exam.examTitle}
+                                                        id="examtitle" placeholder="Enter Exam Title" /><br />
+                                                    <input className="m-3 text-center form-control" type="date" name="examDate" id="examdate" onChange={handleInputs} value={exam.examDate}
                                                         placeholder="Enter examdate" /><br />
-                                                    <input className="m-3 text-center form-control" type="time" name="Examtime" id="examtime"
-                                                        placeholder="Enter time" /><br />
-                                                    <input className="m-3 text-center form-control" type="number" name="examduration"
+                                            
+                                                    <input className="m-3 text-center form-control" type="number" name="examDuration" onChange={handleInputs} value={exam.examDuration}
                                                         id="examduration" placeholder="Enter Exam Duration" /><br />
-                                                    <input className="m-3 text-center form-control" type="text" name="examcenter" id="examcenter"
-                                                        placeholder="Enter Exam center" /><br />
+                                                    {/* <input className="m-3 text-center form-control" type="text" name="examVenue" onChange={handleInputs} value={exam.examVenue}
+                                                        id="examcenter" placeholder="Enter Exam center" /><br /> */}
                                                     <input className="m-4 mt-5 text-center form-control" type="submit" value="EXAM SCHEDULED" />
                                                 </form>
                                             </div>
@@ -1221,18 +1250,18 @@ export default function AdminModule() {
                                                 </div>
                                             </div>
                                             <div className="d-block p-4" style={{ textAlign: "center" }}>
-                                                <form action="">
-                                                    <input className="m-3 text-center form-control" type="number" name="shiftid" id="shiftid"
-                                                        placeholder="Enter Shift id" /><br />
-                                                    <input className="m-3 text-center form-control" type="number" name="shiftnumber" id="shiftnumber"
-                                                        placeholder="Enter Shift number" /><br />
-                                                    <input className="m-3 text-center form-control" type="number" name="shiftcandidate"
-                                                        id="shiftcandidate" placeholder="Enter Shift Candidate" /><br />
-                                                    <input className="m-3 text-center form-control" type="number" name="shiftstarttime"
-                                                        id="shiftstarttime" placeholder="Enter Shift Start Time" /><br />
-                                                    <input className="m-3 text-center form-control" type="number" name="shiftendtime"
-                                                        id="shiftendtime" placeholder="Enter Shift End Time" /><br />
-                                                    <input className="m-4 mt-5 text-center form-control" type="submit" value="Login" />
+                                                <form action="" onSubmit={callShedule}>
+                                                    <input className="m-3 text-center form-control" type="number" name="shiftNumber" onChange={handleInputs2} value={schedule.shiftNumber} id="shiftid"
+                                                        placeholder="Enter shiftNumber" /><br />
+                                                    <input className="m-3 text-center form-control" type="number" name="maxCandidates" onChange={handleInputs2} value={schedule.maxCandidates}
+                                                        id="shiftnumber" placeholder="Enter maxCandidates" /><br />
+                                                    <input className="m-3 text-center form-control" type="text" name="shiftTimeFrom" onChange={handleInputs2} value={schedule.shiftTimeFrom}
+                                                        id="shiftcandidate" placeholder="Enter shiftTimeFrom" /><br />
+                                                    <input className="m-3 text-center form-control" type="text" name="shiftTimeTo" onChange={handleInputs2} value={schedule.shiftTimeTo}
+                                                        id="shiftstarttime" placeholder="Enter shiftTimeTo" /><br />
+                                                         <input className="m-3 text-center form-control" type="text" name="examVenue" onChange={handleInputs2} value={schedule.examVenue}
+                                                        id="examVenue" placeholder="Enter the Venue" /><br />
+                                                    <input className="m-4 mt-5 text-center form-control" type="submit" value="Crate Shift " />
                                                 </form>
                                             </div>
                                         </div>

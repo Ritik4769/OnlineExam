@@ -97,7 +97,7 @@ export default function Instructionpage() {
                                     <input type="checkbox" className=" d-inline" name="" id="" /><p className="px-2 d-inline">The Computer provided to me is in proper working condition. <br /><p className="ps-4">I have read and understood the instruction given above</p> </p>
                                 </div>
                                 <div>
-                                    <input type="submit" class="btn btn-danger px-5 py-2 text-white" style={{ borderRadius: "20px" }} value="Start Test" name="" id="" />
+                                    <input type="submit" className="btn btn-danger px-5 py-2 text-white" style={{ borderRadius: "20px" }} value="Start Test" name="" id="" />
                                 </div>
                             </div>
                         </form>

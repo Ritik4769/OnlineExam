@@ -891,6 +891,11 @@ input[type=number] {
   overflow-y: scroll;
 }
 
+.Questionsscroll{
+  overflow-y: scroll;
+
+}
+
 .section-tab {
   border-radius: 0px;
   background-color: red;

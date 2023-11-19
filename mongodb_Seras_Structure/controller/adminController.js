@@ -1,25 +1,85 @@
 // controllers/examController.js
-import { userDocument, exam, shift, QuestionBank } from '../modules/Registration.js';
+import { exam, rsg, shift, QuestionBank, questionPaper } from '../modules/Registratio1.js';
+import { adminLoginModel } from '../modules/adminModule.js';
+import { placementRecords } from '../modules/adminAddPlacementRecord.js';
+
 import xlsx from 'xlsx';
 let workbook_response;
+import jwt from 'jsonwebtoken'
 var secret_key = process.env.Admin_key;
+
+//admin login
+export const adminLoginController = async (request,response)=>{
+try{
+  const {email,password}=request.body;
+
+  const adminInfo=await adminLoginModel.findOne({email:email});
+  console.log("admin info outer : ",adminInfo);
+
+  if(adminInfo==null){
+    console.log("admin info under : ",adminInfo);
+    console.log("Entry in aminInfor check ");
+    return response.status(202).json({ message: 'Invalid Email Id ' });
+  }
+  else{
+    if(adminInfo.password===password){
+      console.log("Entry in if part password match");
+      
+      const token = jwt.sign({adminInfo:email},secret_key,{expiresIn:"1d"});
+      console.log("token :",token);
+      // localStorage.setItem('AdminToken',token); 
+      // response.cookie("adminEmailToken", token, { httpOnly: true, maxAge: 86400 * 1000 });
+      // response.cookie('adEmail', 'example@email.com', { maxAge: 900000, httpOnly: true });
+     return response.status(201).json({ message: 'login successfull',token:token });  
+    }
+    else{
+      console.log("Entry in else part password match");
+
+      return response.status(203).json({ message: 'incorrect password'});
+
+    }
+  }
+}catch(err){
+  console.log("technical issue in admin logi controller catch :",err);
+  return response.status(204).json({ message: 'technical issue'});
+}
+
+}
+export const verifyAdmin= async (req,res,next)=>{
+  
+  const {token}=req.body;
+  
+  
+  if (!token) {
+      return res.status(202).json({ error: 'Token is not provided' });
+  }
+  
+  jwt.verify(token, secret_key, (err, decoded) => {
+      if (err) {
+      return res.status(202).json({ error: 'Invalid token' });
+      }
+      return res.status(201).json({ error: 'verified Admin' });
+       req.user = decoded;
+      
+  })
+}
 
 // Create a new exam
 const createExam = async (req, res) => {
 
   console.log("admin controller");
   try {
-
-    const { examTitle, examDate, examDuration, examVenue } = req.body;
+    console.log(req.body)
+    const { examTitle, examDate, examDuration } = req.body;
     const newExam = new exam({
       examTitle,
       examDate,
-      examDuration,
-      examVenue
+      examDuration
+      // examVenue
     });
     const savedExam = await newExam.save();
 
-    const enrollid = await userDocument.find();
+    // const enrollid = await userDocument.find();
 
     if (savedExam) {
       return res.status(201).json({ newExam: newExam });
@@ -37,10 +97,9 @@ const createShift = async (req, res) => {
 
   console.log("creatshift inside");
   try {
-    const { shiftNumber, shiftTimeFrom, shiftTimeTo } = req.body;
+    const { shiftNumber, shiftTimeFrom, shiftTimeTo,examVenue } = req.body;
     let { maxCandidates } = req.body;
     const examid = req.params.examid;
-
     let lastCandidateValue; // Declare the variable outside the function
     if (shiftNumber > 1) {
       const shift1 = shiftNumber - 1;
@@ -56,7 +115,6 @@ const createShift = async (req, res) => {
             if (enrolledCandidates.length > 0) {
               const lastCandidate = enrolledCandidates[enrolledCandidates.length - 1];
               lastCandidateValue = lastCandidate.EnrollID;
-
               console.log('Last enrolled candidate:', lastCandidateValue);
             } else {
               console.log('No candidates in the array.');
@@ -70,7 +128,7 @@ const createShift = async (req, res) => {
         });
 
 
-      const enrollid = await userDocument.find({ EnrollID: { $gt: lastCandidateValue } });
+      const enrollid = await rsg.find({ EnrollID: { $gt: lastCandidateValue } });
       console.log("enroll id : ", enrollid);
       if (maxCandidates > enrollid.length) {
         maxCandidates = enrollid.length;
@@ -89,6 +147,7 @@ const createShift = async (req, res) => {
         maxCandidates,
         shiftTimeFrom,
         shiftTimeTo,
+        examVenue,
         exam: examid, // Reference to the parent exam
         enrolledCandidates// Array of candidate enrollment IDs
       });
@@ -96,7 +155,7 @@ const createShift = async (req, res) => {
       res.status(201).json(savedShift);
     }
     else {
-      const enrollid = await userDocument.find();
+      const enrollid = await rsg.find();
       console.log("enroll id : ", enrollid);
       if (maxCandidates > enrollid.length) {
         maxCandidates = enrollid.length;
@@ -119,6 +178,7 @@ const createShift = async (req, res) => {
         maxCandidates,
         shiftTimeFrom,
         shiftTimeTo,
+        examVenue,
         exam: examid, // Reference to the parent exam
         enrolledCandidates// Array of candidate enrollment IDs
       });
@@ -229,7 +289,7 @@ const readExcelController = async (req, res, next) => {
   const existingRecord1 = await QuestionBank.find();
   res.status(200).send(existingRecord1);
 
-  next();
+  // next();
 }
 
 const getQuestionController = async (req, res) => {
@@ -259,13 +319,15 @@ const getQuestionController = async (req, res) => {
       }
     }
 
-    console.log(selectedQuestionsBySubject);
     var obj = {
       EnrollID: enrollID,
       paper: selectedQuestionsBySubject
     }
 
-    console.log(obj);
+    // console.log(obj);
+    const newQuestionPaper = new questionPaper(obj);
+    const saveQuestionPaper = await newQuestionPaper.save();
+    // console.log("dave : ",saveQuestionPaper)
     return res.status(201).json({ QuestionPaperObject: obj });
     // res.status(201).json(selectedQuestionsBySubject);
   } catch (err) {
@@ -274,4 +336,69 @@ const getQuestionController = async (req, res) => {
   }
 }
 
-export { createExam, createShift, uploadQuestionFile, readExcelController, getQuestionController };
+const viewRegistrationCandidate = async (req, res) => {
+  try {
+    var candidateData = await rsg.find();
+    res.json(candidateData);
+  } catch (err) {
+    console.log('Something went wrong:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+const viewRegistrationCandidateDocument = async (req, res) => {
+  try {
+    var userId = req.params.userId;
+    // console.log("userId : " , userId);
+    var candidateDocument = await rsg.findOne({ _id: userId });
+    res.json(candidateDocument);
+
+    // console.log("Candidate data : " , candidateDocument);
+  } catch (err) {
+    console.log('Something went wrong:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+const allowUser = async (req, res) => {
+  var Id = req.params.userId;
+  console.log("Id : ", Id);
+  try {
+    var result = await rsg.updateOne({ _id: Id }, { $set: { examAllow: true } });
+    console.log("Admin Allow User Update Successfully");
+  } catch (error) {
+    console.log("Error while Allow user for 4th attempt : ", error);
+  }
+}
+
+const addPlacementRecord = async (req, res) => {
+  console.log("xgyhujikoiuytf");
+  const { studentName, studentNumber, studentEmail, studentCompanyName, studentImage } = req.body;
+  var studentImage2 = req.files['studentImage'][0].originalname
+  console.log("studentImage : ",studentImage2)
+  const studentRecord = {
+    studentname: studentName ,
+    studentnumber: studentNumber,
+    studentemail: studentEmail,
+    studentcompanyname: studentCompanyName,
+    studentimage: studentImage2
+  }
+  try {
+    const result = await placementRecords.create(studentRecord);
+    console.log("result  : " , result);
+  } catch (err) {
+    console.log("error : " , err);
+  }
+}
+
+const viewplacementRecord = async ( req , res )=>{
+  try {
+    const placedRecord = await placementRecords.find();
+    res.json(placedRecord);
+  } catch (err) {
+    console.log("error : " , err);
+  }
+}
+
+
+export { createExam, createShift, uploadQuestionFile, readExcelController, getQuestionController , viewRegistrationCandidate , viewRegistrationCandidateDocument , allowUser , addPlacementRecord , viewplacementRecord};

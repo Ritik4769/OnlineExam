@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+    import React, { useState } from 'react';
 import axios from 'axios';
+import Cookie from "js-cookie";
+
 import { useNavigate } from 'react-router-dom';
 // import NavBar from './components/NavBar';
 export default function ModalComponent() {
@@ -25,7 +27,17 @@ export default function ModalComponent() {
             axios.post('http://localhost:3002/candidate/verifyOtp', userOtp).then((response) => {
                 console.log("result",response);
                 if(response.status===201){
-                    console.log('hello user',response);
+                    console.log('cookie  : ',response);
+                    const responseData = response.data;
+                    var userID = responseData.userID;
+                    console.log("id..... : ",userID);
+                    Cookie.set("userID", userID, {
+                        expires: 1,
+                        secure: true,
+                        sameSite: "strict",
+                        path: "/"
+                    })
+
                     history('/registration');
                 }
             }).catch((error) => {

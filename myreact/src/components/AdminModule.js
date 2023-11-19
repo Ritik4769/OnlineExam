@@ -1,25 +1,29 @@
 // import React from 'react';
 import React, { useState } from 'react';
 import axios from 'axios';
+import {createExam,createSchedule} from "./adminModule/admindashAxios"
 import { useNavigate } from 'react-router-dom';
 import logo from '../Images/InfoBeans Foundation Logo - PNG (1).png';
 import avatar from '../Images/man-with-beard-avatar-character-isolated-icon-free-vector.jpg';
 var examid;
 var EnrollIDs = [];
+
+var examobj={},sheduleObj={}
+// export { examObject};
 export default function AdminModule() {
     const history = useNavigate();
     const [exam, setUser] = useState({
         examTitle: '',
         examDate: '',
         examDuration: '',
-        examVenue: '',
     });
-
+  
     const [schedule, setUser1] = useState({
         shiftNumber: '',
         maxCandidates: '',
         shiftTimeFrom: '',
-        shiftTimeTo: ''
+        shiftTimeTo: '',
+        examVenue: '',
     });
 
     const [uploadQuestion, setUser2] = useState({
@@ -27,94 +31,62 @@ export default function AdminModule() {
         questionFile2: ''
 
     });
-
+    
     const handleInputs = (e) => {
+        console.log(e);
         const name = e.target.name;
         const value = e.target.value;
-        setUser({ ...exam, [name]: value });
-        console.log(name)
-        console.log(value)
-    };
+        examobj={ ...exam, [name]: value }
+        setUser({ ...exam, [name]: value });};
+        
+        function cllCreateexam(e) {createExam(e,examobj)}
 
     const handleInputs2 = (e) => {
+        console.log("hello");
         const name = e.target.name;
         const value = e.target.value;
+        sheduleObj={...schedule, [name]: value }
         setUser1({ ...schedule, [name]: value });
-        console.log(name);
-        console.log(value);
     };
+    function callShedule(e) {
+        createSchedule(e,sheduleObj)
+    }
 
-    const handleInputs3 = (e,) => {
+    const handleInputs3 = (e) => {
         const name = e.target.name;
         const file = e.target.files[0];
         setUser2({ ...uploadQuestion, [name]: file });
         console.log(uploadQuestion);
-        console.log("file name : ", file);
-        console.log("file: ", file);
     };
 
-    const createExam = async (e) => {
-        if (e) {
-            e.preventDefault();
-        }
-        console.log("in createExam");
 
-        console.log(exam);
-        const { examTitle, examDate, examDuration, examVenue } = exam;
-        console.log(examTitle);
-        //my
-        try {
-            axios.post('http://localhost:3002/admin/exams', exam).then((response) => {
+    // const createSchedule = async (e) => {
+    //     if (e) {
+    //         e.preventDefault();
+    //     }
+    //     console.log("in createSchedule");
 
-                console.log("result", response);
-                if (response.status === 201) {
-                    const responseData = response.data;
-                    const newExam = responseData.newExam;
-                    examid = newExam._id;
-                    console.log(examid);
-                    console.log(newExam);
-                    console.log('component caling');
-                    EnrollIDs = responseData.EnrollIDs;
-                    console.log(EnrollIDs);
-                    
-                    // history("/otpcomponent");
-                }
-            }).catch((error) => {
-                console.log('', error);
-            })
-        } catch (error) {
-            console.log('Error:', error);
-            window.alert('Failed to register');
-        }
-    };
+    //     console.log(schedule);
+    //     const { shiftNumber, maxCandidates, shiftTimeFrom, shiftTimeTo } = schedule;
+    //     console.log(shiftNumber);
+    //     console.log(examid);
+    //     //my
+    //     try {
+    //         axios.post(`http://localhost:3002/admin/shifts/${examid}`, schedule).then((response) => {
 
-    const createSchedule = async (e) => {
-        if (e) {
-            e.preventDefault();
-        }
-        console.log("in createSchedule");
-
-        console.log(schedule);
-        const { shiftNumber, maxCandidates, shiftTimeFrom, shiftTimeTo } = schedule;
-        console.log(shiftNumber);
-        console.log(examid);
-        //my
-        try {
-            axios.post(`http://localhost:3002/admin/shifts/${examid}`, schedule).then((response) => {
-
-                console.log("result", response);
-                if (response.status === 201) {
-                    console.log('component caling');
-                    // history("/otpcomponent");
-                }
-            }).catch((error) => {
-                console.log('', error);
-            })
-        } catch (error) {
-            console.log('Error:', error);
-            window.alert('Failed to register');
-        }
-    };
+    //             console.log("result", response);
+    //             if (response.status === 201) {
+    //                 console.log('component caling');
+    //                 // history("/otpcomponent");
+    //             }
+    //         }).catch((error) => {
+    //             console.log('', error);
+    //         })
+    //     } catch (error) {
+    //         console.log('Error:', error);
+    //         window.alert('Failed to register');
+    //     }
+    // };
 
     const UploadQuestion = async (e) => {
         if (e) {
@@ -533,7 +505,7 @@ export default function AdminModule() {
                                                 </div>
                                             </div>
                                             <div className="d-block p-4" style={{ textAlign: "center" }}>
-                                                <form action="" onSubmit={createExam}>
+                                                <form action="" onSubmit={cllCreateexam}>
                                                     <input className="m-3 text-center form-control" type="text" name="examTitle" onChange={handleInputs} value={exam.examTitle}
                                                         id="examtitle" placeholder="Enter Exam Title" /><br />
                                                     <input className="m-3 text-center form-control" type="date" name="examDate" id="examdate" onChange={handleInputs} value={exam.examDate}
@@ -542,8 +514,8 @@ export default function AdminModule() {
                                                     {/* placeholder="Enter time" /><br /> */}
                                                     <input className="m-3 text-center form-control" type="number" name="examDuration" onChange={handleInputs} value={exam.examDuration}
                                                         id="examduration" placeholder="Enter Exam Duration" /><br />
-                                                    <input className="m-3 text-center form-control" type="text" name="examVenue" onChange={handleInputs} value={exam.examVenue}
-                                                        id="examcenter" placeholder="Enter Exam center" /><br />
+                                                    {/* <input className="m-3 text-center form-control" type="text" name="examVenue" onChange={handleInputs} value={exam.examVenue}
+                                                        id="examcenter" placeholder="Enter Exam center" /><br /> */}
                                                     <input className="m-4 mt-5 text-center form-control" type="submit"
                                                         value="EXAM SCHEDULED" />
                                                 </form>
@@ -560,7 +532,7 @@ export default function AdminModule() {
                                                 </div>
                                             </div>
                                             <div className="d-block p-4" style={{ textAlign: "center" }}>
-                                                <form action="" onSubmit={createSchedule}>
+                                                <form action="" onSubmit={callShedule}>
                                                     <input className="m-3 text-center form-control" type="number" name="shiftNumber" onChange={handleInputs2} value={schedule.shiftNumber} id="shiftid"
                                                         placeholder="Enter shiftNumber" /><br />
                                                     <input className="m-3 text-center form-control" type="number" name="maxCandidates" onChange={handleInputs2} value={schedule.maxCandidates}
@@ -569,8 +541,8 @@ export default function AdminModule() {
                                                         id="shiftcandidate" placeholder="Enter shiftTimeFrom" /><br />
                                                     <input className="m-3 text-center form-control" type="text" name="shiftTimeTo" onChange={handleInputs2} value={schedule.shiftTimeTo}
                                                         id="shiftstarttime" placeholder="Enter shiftTimeTo" /><br />
-                                                    {/* <input className="m-3 text-center form-control" type="number" name="shiftendtime"
-                                                        id="shiftendtime" placeholder="Enter Shift End Time" /><br /> */}
+                                                    <input className="m-3 text-center form-control" type="number" name="examVenue" onChange={handleInputs2} value={schedule.examVenue}
+                                                        id="examVenue" placeholder="Enter Shift End Time" /><br />
                                                     <input className="m-4 mt-5 text-center form-control" type="submit" value="Crate Shift " />
                                                 </form>
                                             </div>

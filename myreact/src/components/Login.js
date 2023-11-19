@@ -18,8 +18,8 @@ export default function Login() {
         const name = e.target.name;
         const value = e.target.value;
         logUser({ ...login, [name]: value });
-        console.log(name)
-        console.log(value)
+        // console.log(name)
+        // console.log(value)
     };
 
     const candidateLogin = async (e) => {
@@ -27,11 +27,10 @@ export default function Login() {
             e.preventDefault();
         }
         console.log("in createExam");
-
-        console.log(login);
+        // console.log(login);
         const { EnrollID, Password } = login;
-        console.log(EnrollID);
-        console.log(Password);
+        // console.log(EnrollID);
+        // console.log(Password);
         //my
         try {
             axios.post('http://localhost:3002/candidate/login', login).then((response) => {

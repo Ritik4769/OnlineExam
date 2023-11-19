@@ -7,7 +7,7 @@ var storage = multer.diskStorage({
     filename: (req, file, cb) => {
         let ext = path.extname(file.originalname)
         // cb(null, file.filename + "" + Date.now() + path.extname(file.originalname))
-        cb(null, file.originalname) 
+        cb(null, file.originalname)
     }
 })
 
@@ -27,7 +27,14 @@ var upload2 = multer({
     { name: 'questionFile', maxCount: 1 }
 ]);;
 
-export { upload,upload2};
+
+var upload3 = multer({
+    storage: storage
+}).fields([
+    { name: 'studentImage', maxCount: 1 }
+]);
+
+export { upload, upload2, upload3 };
 
 // skc
 // var storage1 = multer.diskStorage({

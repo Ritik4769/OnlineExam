@@ -23,8 +23,7 @@ export default function Instructionpage() {
                 // console.log("result", response);
                 if (response.status === 201) {
                     // console.log('Examportal complete.........',response); 
-                    const responseData = response.data;
-                    var QuestionPaperObject = responseData.QuestionPaperObject;
+                   c
                     // console.log(QuestionPaperObject);
                     history("/ExamPortal");
                 } else  {

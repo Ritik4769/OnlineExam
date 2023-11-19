@@ -29,52 +29,84 @@ const userSchema = new mongoose.Schema({
     attempt: {
         type: Number,
         require: true
-    }
-})
-const rsg = new mongoose.model('Registration2', userSchema);
-
-
-
-const userDocumentSchema = new mongoose.Schema({
-    userID: {
-        type: String,
-        required: true
-    },
+    }, 
     EnrollID: {
         type: String,
         require: true
     },
     income: {
         type: String,
-        required: true,
         trim: true
     },
     aadharFile: {
         type: String,
-        required: true
     },
     incomeCertificate: {
         type: String,
-        required: true
     },
     fatherAadharcard: {
         type: String,
-        required: true
     },
     marksheet: {
         type: String,
-        required: true
     },
     latestMarksheet: {
         type: String,
-        required: true
     },
     ClearRounds: {
         type: Number,
         require: true
+    },
+    examAllow:{
+        type:Boolean,
+        require:true,
+        default:true
     }
 })
-const userDocument = new mongoose.model('userDocument', userDocumentSchema);
+const rsg = new mongoose.model('Registration2', userSchema);
+
+
+
+// const userDocumentSchema = new mongoose.Schema({
+//     userID: {
+//         type: String,
+//         required: true
+//     },
+//     EnrollID: {
+//         type: String,
+//         require: true
+//     },
+//     income: {
+//         type: String,
+//         required: true,
+//         trim: true
+//     },
+//     aadharFile: {
+//         type: String,
+//         required: true
+//     },
+//     incomeCertificate: {
+//         type: String,
+//         required: true
+//     },
+//     fatherAadharcard: {
+//         type: String,
+//         required: true
+//     },
+//     marksheet: {
+//         type: String,
+//         required: true
+//     },
+//     latestMarksheet: {
+//         type: String,
+//         required: true
+//     },
+//     ClearRounds: {
+//         type: Number,
+//         require: true
+//     }
+// })
+// const userDocument = new mongoose.model('userDocument', userDocumentSchema);
 // exam.mjs
 
 
@@ -90,11 +122,7 @@ const examSchema = new mongoose.Schema({
     examDuration: {
         type: Number, // Represented in minutes
         required: true,
-    },
-    examVenue: {
-        type: String,
-        required: true,
-    },
+    }
 });
 
 const exam = mongoose.model('Exam', examSchema);
@@ -114,6 +142,10 @@ const shiftSchema = new mongoose.Schema({
     },
     shiftTimeTo: {
         type: String, // Ending time of the shift
+        required: true,
+    }, 
+    examVenue: {
+        type: String,
         required: true,
     },
     exam: {
@@ -202,7 +234,7 @@ const questionPaper = mongoose.model('questionPapers', questionPapers);
 
 
 
-export { rsg, userDocument, exam, shift, QuestionBank,questionPaper };
+export { rsg, exam, shift, QuestionBank,questionPaper };
 
 
 

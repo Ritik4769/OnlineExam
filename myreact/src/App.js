@@ -8,29 +8,33 @@ import WeFacilitate from './components/WeFacilitate';
 import OurBatches from './components/OurBatches';
 import OurAchivements from './components/OurAchivements';
 import OurTeam from './components/OurTeam';
-import Registration from './components/registration';
+import Registration from './components/r';
 import Login from './components/Login';
 import Instructionpage from './components/Instructionpage';
 import ModalComponent from './components/ModalComponent';
 import AdminModule from './components/AdminModule2';
-import ExamPortal from './components/ExamPortal5';
+import ExamPortal from './components/ExamPortal4';
+import AdminLogin from './components/AdminLogin';
+import VerifyAdmin from './components/VerifyAdmin';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'; // Add 'useLocation' here
 import './App.css';
 function App() {
   return (
     <Router>
-      <AppContent/>
+      <AppContent />
     </Router>
   );
 }
 
 function AppContent() {
   const location = useLocation();
-  const isAdminRoute = location.pathname.includes('/admin');  
+  const isAdminRoute = location.pathname.includes('/admin');
+  const isExamPortal = location.pathname.includes('/ExamPortal');
 
+  const renderNavBarAndFooter = !isAdminRoute && !isExamPortal;
   return (
     <>
-      {!isAdminRoute && <NavBar />}
+      {renderNavBarAndFooter && <NavBar />}
       <Routes>
         <Route path="/" element={
           <>
@@ -43,14 +47,16 @@ function AppContent() {
             <OurTeam />
           </>
         } />
+        <Route path="/admin" element={<VerifyAdmin />} />
+        <Route path="/adminLogin" element={<AdminLogin />} />
+        <Route path="/adminDashboard" element={<AdminModule />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/login" element={<Login />} />
         <Route path="/Instructionpage" element={<Instructionpage />} />
         <Route path="/otpcomponent" element={<ModalComponent />} />
-        <Route path="/admin" element={<AdminModule />} />
-        <Route path="/ExamPortal" element={<ExamPortal/>} />
+        <Route path="/ExamPortal" element={<ExamPortal />} />
       </Routes>
-      {!isAdminRoute && <Footer />}
+      {renderNavBarAndFooter && <Footer />}
     </>
   );
 }

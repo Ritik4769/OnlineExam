@@ -400,13 +400,15 @@ export default function Registration() {
                                         <div className="mt-4 col-sm-12 col-md-12 col-lg-6 d-block align-items-center">
                                             <img src={img8} className="mt-4" height="20vh" alt="user_icon"
                                                 style={{ marginLeft: "18%" }} />
-                                            <input type="text" className="income-enter p-3 text-start" name="income" onChange={(e) => handleFileChange1(e, 'income')}
+                                            <input type="text" className="income-enter p-3 text-start" name="income"
+                                             onChange={(e) => handleFileChange1(e, 'income',0)}
                                                 placeholder="Enter Family income" />
                                         </div>
                                         <div className="mt-4 col-sm-12 col-md-12 col-lg-6 d-flex justify-content-center">
                                             <img src={img8} className="mt-4" height="20vh"
                                                 alt="user_icon" />
-                                            <input type="file" id='aadharFile' className="custom-file-input" name="aadharFile" onChange={(e) => handleFileChange1(e, 'aadharFile' , 1)} style={{ width: "20%" }} />
+                                            <input type="file" id='aadharFile' className="custom-file-input" name="aadharFile" 
+                                            onChange={(e) => handleFileChange1(e, 'aadharFile' , 1)} style={{ width: "20%" }} />
                                             <label className=" custom-file-label m-4" htmlFor="username" id="fileLabel1"
                                                 style={{ width: "50%" }}>Upload Aadhar Card
                                             </label>
@@ -416,7 +418,8 @@ export default function Registration() {
                                         <div className="mt-4 col-lg-6 d-flex justify-content-center">
                                             <img src={img8} className="mt-4" height="20vh"
                                                 alt="user_icon" />
-                                            <input type="file" className="custom-file-input" id='incomeCertificate' name="incomeCertificate" onChange={(e) => handleFileChange1(e, 'incomeCertificate' , 2)} style={{ width: "20%" }} />
+                                            <input type="file" className="custom-file-input" id='incomeCertificate' name="incomeCertificate"
+                                             onChange={(e) => handleFileChange1(e, 'incomeCertificate' , 2)} style={{ width: "20%" }} />
                                             <label className="custom-file-label m-4" htmlFor="username" id="fileLabel2"
                                                 style={{ width: "50%" }}>Upload Income Certoficate
                                             </label>
@@ -424,7 +427,8 @@ export default function Registration() {
                                         <div className="mt-4 col-lg-6 d-flex justify-content-center">
                                             <img src={img8} className="mt-4" height="20vh"
                                                 alt="user_icon" />
-                                            <input type="file" className="custom-file-input" id='fatherAadharcard' name="fatherAadharcard" onChange={(e) => handleFileChange1(e, 'fatherAadharcard' , 3)} style={{ width: "20%" }} />
+                                            <input type="file" className="custom-file-input" id='fatherAadharcard' name="fatherAadharcard" 
+                                            onChange={(e) => handleFileChange1(e, 'fatherAadharcard' , 3)} style={{ width: "20%" }} />
                                             <label className="custom-file-label m-4" htmlFor="username" id="fileLabel3"
                                                 style={{ width: "50%" }}>Upload Father's Aadhar Card
                                             </label>
@@ -434,7 +438,8 @@ export default function Registration() {
                                         <div className="mt-4 col-lg-6 d-flex justify-content-center">
                                             <img src={img8} className="mt-4" height="20vh"
                                                 alt="user_icon" />
-                                            <input type="file" className="custom-file-input" id='marksheet' name="marksheet" onChange={(e) => handleFileChange1(e, 'marksheet' , 4)} style={{ width: "20%" }} />
+                                            <input type="file" className="custom-file-input" id='marksheet' name="marksheet"
+                                             onChange={(e) => handleFileChange1(e, 'marksheet' , 4)} style={{ width: "20%" }} />
                                             <label className="custom-file-label m-4" id="fileLabel4"
                                                 style={{ width: "50%" }}>Upload 12th class Marksheet
                                             </label>
@@ -442,7 +447,8 @@ export default function Registration() {
                                         <div className="mt-4 col-lg-6 d-flex justify-content-center">
                                             <img src={img8} className="mt-4" height="20vh"
                                                 alt="user_icon" />
-                                            <input type="file" className="custom-file-input" id='latestMarksheet' name="latestMarksheet" onChange={(e) => handleFileChange1(e, 'latestMarksheet' , 5)} style={{ width: "20%" }} />
+                                            <input type="file" className="custom-file-input" id='latestMarksheet' name="latestMarksheet" 
+                                            onChange={(e) => handleFileChange1(e, 'latestMarksheet' , 5)} style={{ width: "20%" }} />
                                             <label className="custom-file-label m-4"  id="fileLabel5"
                                                 style={{ width: "50%" }}>Upload latest year marksheet
                                             </label>
