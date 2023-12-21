@@ -21,6 +21,23 @@ const placementRecord = new mongoose.Schema({
         required: true,
         trim: true
     },
+    studentjoiningdate: {
+        type: String,
+        require: true,
+        trim: true
+    },
+    studentbatchnumber: {
+        type: Number,
+        required: true
+    },
+    studentbatchsession: {
+        type: Number,
+        required: true
+    },
+    studentpackage: {
+        type: Number,
+        required: true
+    },
     studentimage: {
         type: String,
         required: false,

@@ -1,58 +1,126 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../Images/InfoBeans Foundation Logo - PNG (1).png";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
+import Timer from "./Timer";
 
 export default function ExamPortal() {
     const location = useLocation();
     const { QuestionPaperObject } = location.state || {};
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [currentQuestionIndex1, setCurrentQuestionIndex1] = useState(0);
     const [currentSubject, setCurrentSubject] = useState("ENG01");
+    const [currentSubjectIndex, setCurrentSubjectIndex] = useState(0);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedAnswers, setSelectedAnswers] = useState({});
-    var count = 0;
-    const subjects = ["ENG01", "HIN02", "MAT03", "COM05", "GK06", "REA04"];
+    const [markedForReview, setMarkedForReview] = useState([]);
+    const [markedForReview1, setMarkedForReview1] = useState([]);
+    const [markedForReview2, setMarkedForReview2] = useState([]);
+    var firstSubject = QuestionPaperObject.paper[currentSubjectIndex];
+    console.log("Question Paper Object: ", QuestionPaperObject);
+    // console.log("FirstSubject : ", QuestionPaperObject.paper[currentSubjectIndex].questions[currentQuestionIndex]);
+    const subjects = ["ENG01", "HIN02", "MAT03", "REAS04", "COM05", "GK06"];
 
     const handleSubjectChange = (subject, index) => {
-
-        // setCurrentSubject(subject);
-        // setCurrentQuestionIndex(index);
+        setCurrentSubject(subject);
+        setCurrentSubjectIndex(index);
+        setCurrentQuestionIndex(0);
+        firstSubject = QuestionPaperObject.paper[index];
     };
 
-    // Function to handle selecting an answer
-    const handleSelectAnswer = (questionIndex, answer) => {
+    const handlePreviousQuestion = (questionIndex) => {
+        if (questionIndex != 0)
+            setCurrentQuestionIndex(questionIndex - 1)
+        else {
+            if (currentSubjectIndex != 0) {
+                setCurrentSubjectIndex(currentSubjectIndex - 1)
+                setCurrentQuestionIndex(QuestionPaperObject.paper[currentSubjectIndex - 1].questions.length - 1)
+                const subjectId = QuestionPaperObject.paper[currentSubjectIndex - 1].subjectID;
+                setCurrentSubject(subjectId);
+            } else {
+                console.log("Question Ended")
+            }
+        }
+    }
 
+    const handleNextQuestion = (questionIndex) => {
+        setMarkedForReview2([...markedForReview2, QuestionPaperObject.paper[currentSubjectIndex].questions[currentQuestionIndex].QuestionID]);
+
+        if (questionIndex != firstSubject.questions.length - 1)
+            setCurrentQuestionIndex(questionIndex + 1);
+        else {
+            if (currentSubjectIndex != 5) {
+                setCurrentSubjectIndex(currentSubjectIndex + 1);
+                setCurrentQuestionIndex(0);
+                const subjectId = QuestionPaperObject.paper[currentSubjectIndex + 1].subjectID;
+                setCurrentSubject(subjectId);
+            } else {
+                console.log("Question Ended")
+            }
+        }
+    }
+
+    const handleNumberQuestion = (subjectIndex, questionIndex) => {
+        setCurrentSubjectIndex(subjectIndex);
+        setCurrentQuestionIndex(questionIndex);
+        setCurrentSubject(QuestionPaperObject.paper[subjectIndex].subjectID)
+    }
+
+    var obj = {
+        EnrollID: QuestionPaperObject.EnrollID,
+        currentSubjectIndex,
+        currentQuestionIndex
+    }
+    const handleSelectAnswer = (userAnswer) => {
+        var actualAnswer = QuestionPaperObject.paper[currentSubjectIndex].questions[currentQuestionIndex].Answer;
+        console.log("QuestionPaperObject.EnrollID : ", QuestionPaperObject.EnrollID)
+        setMarkedForReview1([...markedForReview1, QuestionPaperObject.paper[currentSubjectIndex].questions[currentQuestionIndex].QuestionID]);
+
+        if (actualAnswer === userAnswer) {
+            obj.answerStatus = true;
+            console.log("Correct answer");
+            try {
+                axios.post(`http://localhost:3002/ExamPortal/updateAnswer`, obj).then((response) => {
+                    console.log("1result", response);
+                    
+                }).catch((error) => {
+                    console.log(error);
+                })
+            } catch (error) {
+                console.log('Error:', error);
+            }
+        } else {
+            console.log("Wrong answer");
+            obj.answerStatus = false;
+            try {
+                axios.post(`http://localhost:3002/ExamPortal/updateAnswer`, obj).then((response) => {
+                    console.log("result", response);
+                }).catch((error) => {
+                    console.log(error);
+                })
+            } catch (error) {
+                console.log('Error:', error);
+            }
+        }
         setSelectedAnswers({
             ...selectedAnswers,
-            [questionIndex]: answer,
+            [QuestionPaperObject.paper[currentSubjectIndex].questions[currentQuestionIndex].QuestionID]: userAnswer
         });
+        console.log("selectedAnswers: ", selectedAnswers)
     };
 
-    // Function to handle navigating to the next question
-    const handleNextQuestion = () => {
-        console.log("in next ")
-        count++;
-
-        if (currentQuestionIndex < QuestionPaperObject.paper.length - 1) {
-            console.log("gdugeugy", setCurrentQuestionIndex(currentQuestionIndex + 1));
-
+    const handleMarkForReview = (QuestionID) => {
+        setMarkedForReview([...markedForReview, QuestionID]);
+    }
+    const EndTest = () => {
+        try {
+            axios.post(`http://localhost:3002/ExamPortal/EndTest/${QuestionPaperObject.EnrollID}`).then((response) => {
+                console.log("result", response);
+            }).catch((error) => {
+                console.log(error);
+            })
+        } catch (error) {
+            console.log('Error:', error);
         }
-
-
-    };
-
-    // Function to handle navigating to the previous question
-    const handlePreviousQuestion = () => {
-        count--
-        if (currentQuestionIndex > 0) {
-            setCurrentQuestionIndex(currentQuestionIndex - 1);
-        }
-    };
-
-    // Get the current question and its selected answer
-    const currentQuestion = QuestionPaperObject.paper[currentQuestionIndex].questions;
-    const selectedAnswer = selectedAnswers[currentQuestionIndex] || "";
-    console.log(currentQuestion);
-    console.log(+selectedAnswer);
+    }
 
     return (
         <div className="w-100 m-0 row ">
@@ -77,10 +145,8 @@ export default function ExamPortal() {
                         <div className="nav nav-tabs p-3  w-75 d-flex justify-content-around " id="v-pills-tab" role="tablist">
                             {subjects.map((subject, index) => (
                                 <button
-                                    key={subject}
                                     className={`nav-link ${currentSubject === subject ? "active" : ""} btn btn-link`}
-                                    onClick={() => handleSubjectChange(subject, index)}
-                                >
+                                    onClick={() => handleSubjectChange(subject, index)}>
                                     {subject}
                                 </button>
                             ))}
@@ -92,259 +158,92 @@ export default function ExamPortal() {
                     <div className=" tab-pane fade show active" id="v-pills-english" role="tabpanel"
                         aria-labelledby="v-pills-home-tab">
                         <div className="container p-0">
-                            {/* <div className="row Questionsscroll">
-                                <div className="col-12  Questionsscroll">
+                            <div className="row " style={{ height: "auto" }}>
+                                <div className="col-12  my-2 Questionsscroll">
                                     <div className="card">
-                                        <div className="card-header">
-                                            <h3 className="card-title">{`Question ${currentQuestionIndex + 1}`}</h3>
-                                        </div>
                                         <div className="card-body p-5" id="background-img">
-                                            <h4 className="card-text">{`Q${currentQuestionIndex + 1}. ${currentQuestion[count].Question}`}</h4>
-                                            <div className="form-check mt-4 ms-5">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="radio"
-                                                    name="mcqOptions"
-                                                    id="option1"
-                                                    value="option1"
-                                                    checked={selectedAnswer === "option1"} // Check if this option is selected
-                                                    onChange={() => handleSelectAnswer(currentQuestionIndex, "option1")}
-                                                />
-                                                <label className="form-check-label" htmlFor="option1">{`A) ${currentQuestion[count].OptionA}`}</label>
+                                            <h4 className="card-text questionClass">{`Q.${firstSubject.questions[currentQuestionIndex].QuestionID}) ${firstSubject.questions[currentQuestionIndex].Question}`}</h4>
+                                            <div className="form-check mt-4 ms-4">
+                                                <input className="form-check-input" type="radio" name="mcqOptions" id="option1" value="option1" checked={selectedAnswers[firstSubject.questions[currentQuestionIndex].QuestionID] === "A"} onChange={() => handleSelectAnswer("A")} />
+                                                <label className="form-check-label" htmlFor="option1">{`A) ${firstSubject.questions[currentQuestionIndex].OptionA}`}</label>
                                             </div>
-                                            <div className="form-check mt-4 ms-5">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="radio"
-                                                    name="mcqOptions"
-                                                    id="option2"
-                                                    value="option2"
-                                                    checked={selectedAnswer === "option2"}
-                                                    onChange={() => handleSelectAnswer(currentQuestionIndex, "option2")}
-                                                />
-                                                <label className="form-check-label" htmlFor="option2">{`B) ${currentQuestion[count].OptionB}`}</label>
+                                            <div className="form-check mt-4 ms-4">
+                                                <input className="form-check-input" type="radio" name="mcqOptions" id="option2" value="option2" checked={selectedAnswers[firstSubject.questions[currentQuestionIndex].QuestionID] === "B"} onChange={() => handleSelectAnswer("B")} />
+                                                <label className="form-check-label" htmlFor="option2">{`B) ${firstSubject.questions[currentQuestionIndex].OptionB}`}</label>
                                             </div>
-                                            <div className="form-check mt-4 ms-5">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="radio"
-                                                    name="mcqOptions"
-                                                    id="option3"
-                                                    value="option3"
-                                                    checked={selectedAnswer === "option3"}
-                                                    onChange={() => handleSelectAnswer(currentQuestionIndex, "option3")}
-                                                />
-                                                <label className="form-check-label" htmlFor="option3">{`C) ${currentQuestion[count].OptionC}`}</label>
+                                            <div className="form-check mt-4 ms-4">
+                                                <input className="form-check-input" type="radio" name="mcqOptions" id="option3" value="option3" checked={selectedAnswers[firstSubject.questions[currentQuestionIndex].QuestionID] === "C"} onChange={() => handleSelectAnswer("C")} />
+                                                <label className="form-check-label" htmlFor="option3">{`C) ${firstSubject.questions[currentQuestionIndex].OptionC}`}</label>
                                             </div>
-                                            <div className="form-check mt-4 ms-5">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="radio"
-                                                    name="mcqOptions"
-                                                    id="option4"
-                                                    value="option4"
-                                                    checked={selectedAnswer === "option4"}
-                                                    onChange={() => handleSelectAnswer(currentQuestionIndex, "option4")}
-                                                />
-                                                <label className="form-check-label" htmlFor="option4">{`D) ${currentQuestion[count].OptionD}`}</label>
+                                            <div className="form-check mt-4 ms-4">
+                                                <input className="form-check-input" type="radio" name="mcqOptions" id="option4" value="option4" checked={selectedAnswers[firstSubject.questions[currentQuestionIndex].QuestionID] === "D"} onChange={() => handleSelectAnswer("D")} />
+                                                <label className="form-check-label" htmlFor="option4">{`D) ${firstSubject.questions[currentQuestionIndex].OptionD}`}</label>
                                             </div>
                                         </div>
-                                        <div className="card-footer p-3 ">
+                                        <div className="card-footer p-3">
                                             <div className="d-flex justify-content-around w-100">
-                                                <button className="btn btn-outline-danger" type="button" onClick={handlePreviousQuestion}>
-                                                    <i className="bi bi-arrow-left-circle-fill"></i>Previous
-                                                </button>
-                                                <button className="btn btn-outline-warning" type="button">Mark for review</button>
-                                                <button className="btn btn-outline-primary" type="button" onClick={handleNextQuestion}>
-                                                    Next<i className="bi bi-arrow-right-circle-fill"></i>
-                                                </button>
+                                                <button className="btn btn-outline-danger" onClick={() => handlePreviousQuestion(currentQuestionIndex)} type="button">Previous</button>
+                                                <button className="btn btn-outline-warning" onClick={() => handleMarkForReview(firstSubject.questions[currentQuestionIndex].QuestionID)} type="button">Mark for review</button>
+                                                <button className="btn btn-outline-primary" onClick={() => handleNextQuestion(currentQuestionIndex)} type="button">Next</button>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div className="w-100 d-flex row m-0 mt-2 p-4 inner-shadow border-Radius" style={{justifyContent:"space-evenly"}}>
+                                        <div className="col-12 col-sm-6 col-md-3" style={{width:"auto"}}>
+                                            <h5 className="text-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" className="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                            </svg> Answered</h5>
+                                        </div>
+                                        <div className="col-12 col-sm-6 col-md-3" style={{width:"auto"}}>
+                                            <h5 className="text-secondary"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" className="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
+                                            </svg> Not Answered</h5>
+                                        </div>
+                                        <div className="col-12 col-sm-6 col-md-3" style={{width:"auto"}}>
+                                            <h5 className="text-warning"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" className="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                                            </svg> Marked for review </h5>
                                         </div>
                                     </div>
                                 </div>
-                            </div> */}
-
-
-                            <div className="row Questionsscroll" style={{height:"480px"}}>
-                                {currentQuestion.map((question, index) => (
-                                    <div className="col-12  my-2 Questionsscroll" key={index}>
-                                        <div className="card">
-                                            <div className="card-header">
-                                                <h3 className="card-title">{`Question ${currentQuestionIndex + index + 1}`}</h3>
-                                            </div>
-                                            <div className="card-body p-5" id="background-img">
-                                                <h4 className="card-text">{`Q${currentQuestionIndex + index + 1}. ${question.Question}`}</h4>
-                                                <div className="form-check mt-4 ms-5">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="radio"
-                                                        name={`mcqOptions-${index}`}
-                                                        id={`option1-${index}`}
-                                                        value="option1"
-                                                        checked={selectedAnswers[currentQuestionIndex + index] === "option1"}
-                                                        onChange={() => handleSelectAnswer(currentQuestionIndex + index, "option1")}
-                                                    />
-                                                    <label className="form-check-label" htmlFor={`option1-${index}`}>{`A) ${question.OptionA}`}</label>
-                                                </div>
-                                                <div className="form-check mt-4 ms-5">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="radio"
-                                                        name={`mcqOptions-${index}`}
-                                                        id={`option2-${index}`}
-                                                        value="option2"
-                                                        checked={selectedAnswers[currentQuestionIndex + index] === "option2"}
-                                                        onChange={() => handleSelectAnswer(currentQuestionIndex + index, "option2")}
-                                                    />
-                                                    <label className="form-check-label" htmlFor={`option2-${index}`}>{`B) ${question.OptionB}`}</label>
-                                                </div>
-                                                <div className="form-check mt-4 ms-5">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="radio"
-                                                        name={`mcqOptions-${index}`}
-                                                        id={`option3-${index}`}
-                                                        value="option3"
-                                                        checked={selectedAnswers[currentQuestionIndex + index] === "option3"}
-                                                        onChange={() => handleSelectAnswer(currentQuestionIndex + index, "option3")}
-                                                    />
-                                                    <label className="form-check-label" htmlFor={`option3-${index}`}>{`C) ${question.OptionC}`}</label>
-                                                </div>
-                                                <div className="form-check mt-4 ms-5">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="radio"
-                                                        name={`mcqOptions-${index}`}
-                                                        id={`option4-${index}`}
-                                                        value="option4"
-                                                        checked={selectedAnswers[currentQuestionIndex + index] === "option4"}
-                                                        onChange={() => handleSelectAnswer(currentQuestionIndex + index, "option4")}
-                                                    />
-                                                    <label className="form-check-label" htmlFor={`option4-${index}`}>{`D) ${question.OptionD}`}</label>
-                                                </div>
-                                            </div>
-                                            <div className="card-footer p-3">
-                                                <div className="d-flex justify-content-around w-100">
-                                                    <button className="btn btn-outline-danger" type="button" onClick={handlePreviousQuestion}>
-                                                        <i className="bi bi-arrow-left-circle-fill"></i>Previous
-                                                    </button>
-                                                    <button className="btn btn-outline-warning" type="button">Mark for review</button>
-                                                    <button className="btn btn-outline-primary" type="button" onClick={handleNextQuestion}>
-                                                        Next<i className="bi bi-arrow-right-circle-fill"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
                             </div>
-
                         </div>
                     </div>
-
-                    <div className="tab-pane fade" id="v-pills-hindi" role="tabpanel" aria-labelledby="v-pills-profile-tab">hindi
-                    </div>
-                    <div className="tab-pane fade" id="v-pills-math" role="tabpanel" aria-labelledby="v-pills-messages-tab">math</div>
-                    <div className="tab-pane fade" id="v-pills-computer" role="tabpanel" aria-labelledby="v-pills-settings-tab">
-                        computer</div>
-                    <div className="tab-pane fade" id="v-pills-gk" role="tabpanel" aria-labelledby="v-pills-settings-tab">gk</div>
-                    <div className="tab-pane fade" id="v-pills-lr" role="tabpanel" aria-labelledby="v-pills-settings-tab">LR</div>
                 </div>
             </div>
-            {/* <!-- ========================header Ends========================== --> */}
             <div className="col-12 col-sm-3 p-1">
                 <div className="border-Radius inner-shadow p-2 d-flex a justify-content-center">
-                    <h4 className="h4 text-center">Time Left:&nbsp;<span className="text-danger">02:59:59</span> </h4>
+                    <h4 className="h4 text-center">Time Left:&nbsp;
+                        <span className="text-danger">
+                            {/* <Timer initialTime={90 * 60} /> */}
+                            59:59
+                        </span>
+                    </h4>
                 </div>
                 <div className="p-2 inner-shadow mt-1 border-Radius">
                     <h6>Questions Overview:</h6>
                     <div className="d-flex flex-wrap " id="question-marks-div">
                         <div className="row m-0  w-100 mt-2">
-                            <div className="col-2 col-sm-3 col-lg-2 mb-3 p-1   "><span className="question-mark bg-danger p-2">01</span></div>
-                            <div className="col-2 col-sm-3 col-lg-2 mb-3 p-1  "><span className="question-mark p-2">02</span></div>
-                            <div className="col-2 col-sm-3 col-lg-2 mb-3 p-1  "><span className="question-mark p-2">03</span></div>
-                            <div className="col-2 col-sm-3 col-lg-2 mb-3 p-1  "><span className="question-mark p-2 bg-success">04</span></div>
-                            <div className="col-2 col-sm-3 col-lg-2 mb-3 p-1  "><span className="question-mark p-2">05</span></div>
-                            <div className="col-2 col-sm-3 col-lg-2 mb-3 p-1  "><span className="question-mark p-2">06</span></div>
-                            <div className="col-2 col-sm-3 col-lg-2 mb-3 p-1  "><span className="question-mark p-2">07</span></div>
-                            <div className="col-2 col-sm-3 col-lg-2 mb-3 p-1  "><span className="question-mark p-2">08</span></div>
-                            <div className="col-2 col-sm-3 col-lg-2 mb-3 p-1  "><span className="question-mark p-2">09</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>10</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>11</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>12</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>13</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>14</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>15</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>16</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>17</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>18</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>19</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>20</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>21</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>22</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>23</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>24</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>25</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>26</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>27</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>28</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>29</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>30</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>31</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>32</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>33</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>34</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>35</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>36</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>37</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>38</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>39</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>40</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>41</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>42</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>43</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>44</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>45</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>46</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>47</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>48</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>49</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>50</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>51</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>52</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>53</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>54</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>55</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>56</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>57</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>58</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>59</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>60</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>61</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>62</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>63</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>64</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>65</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>66</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>67</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>68</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>69</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>70</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>71</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>72</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>73</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>74</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>75</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>76</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>77</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>78</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>79</span></div>
-                            <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1 '><span className='question-mark p-2'>80</span></div>
+                            {QuestionPaperObject.paper.map((subject, subjectIndex) => (
+                                subject.questions.map((question, questionIndex) => (
+                                    <div className='col-2 col-sm-3 col-lg-2 mb-3 p-1'>
+                                        <span className={`question-mark p-2 ${question.QuestionID}} ${markedForReview2.includes(question.QuestionID) ? 'bg-danger' : ''} ${markedForReview1.includes(question.QuestionID) ? 'bg-success' : ''} ${markedForReview.includes(question.QuestionID) ? 'bg-warning' : ''}`} onClick={() => handleNumberQuestion(subjectIndex, questionIndex)}>
+                                            {question.QuestionID}
+                                        </span>
+                                    </div>
+                                ))
+                            ))}
                         </div>
                     </div>
                     <button className="btn btn-outline-primary w-100 mt-2" type="button">Instructions</button>
                     <button className="btn btn-outline-primary w-100 mt-2" type="button">Questions</button>
-                    <button className="btn btn-outline-danger  w-100 mt-2" type="button">End Test</button>
+                    <button className="btn btn-outline-danger  w-100 mt-2" type="button" onClick={EndTest}>End Test</button>
                 </div>
             </div>
         </div >

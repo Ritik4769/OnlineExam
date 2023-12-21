@@ -4,14 +4,8 @@
   font-family: 'Poppins', sans-serif;
 }
 
-i {
-  font-size: 30px;
-
-}
-
 li {
   font-size: 20px;
-
 }
 
 #registerbtn {
@@ -26,8 +20,6 @@ li {
   color: #ffffff;
 }
 
-
-
 #logobox {
   border-radius: 0px 50px 0px 0px;
 }
@@ -40,7 +32,6 @@ li {
 #logocontainer {
   background: rgb(255, 255, 255);
   background: linear-gradient(0deg, rgba(255, 255, 255, 1) 48%, rgba(233, 31, 63, 1) 48%);
-
 }
 
 
@@ -152,38 +143,6 @@ li {
   .section-image {
     order: 2;
   }
-
-  /* .rapper {
-    display: block;
-    height: fit-content;
-    width: 50%;
-    z-index: 10;
-    margin-right: auto
-  }
-
-  .slide-container {
-    height: 90vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    align-items: flex-start
-  }
-
-  .fixedimages {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-width: 50vw;
-    position: relative;
-    right: 0
-  }
-
-  .fixedimages>img {
-    width: 80%;
-    align-self: center;
-    transition: opacity 1s
-  } */
 }
 
 .images-wrapper-fixed-stop {
@@ -276,8 +235,6 @@ li {
 
 /* ========================================================== */
 
-
-
 #wefacilitate {
   border-radius: 0% 0% 35% 0%;
 }
@@ -298,7 +255,112 @@ li {
   transition: 0.5s ease-in;
 }
 
-/* ========================================================== */
+/* ========================Our Team Css=========================== */
+
+#ourTeam {
+  width: 100%;
+  padding: 30px 0;
+  position: relative;
+  height: 70vh;
+  background: #F9F5F4;
+}
+
+#ourTeam #myCarousel {
+  margin-top: 10px;
+}
+
+#ourTeam .controls {
+  width: 40px;
+  padding: 10px;
+  color: #000;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 5%;
+}
+
+#ourTeam .controls span i {
+  color: #000;
+  font-size: 25px;
+}
+
+.teamCarousel .team-carousel-inner .team-carousel-item .col-lg-4 .content {
+  position: relative;
+  width: 400px;
+  height: 250px;
+  border-radius: 12px;
+}
+
+.teamCarousel .team-carousel-inner .team-carousel-item .col-lg-4 .content img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.teamCarousel .team-carousel-inner .team-carousel-item .col-lg-4 .content .content2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 12px;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.teamCarousel .team-carousel-inner .team-carousel-item .col-lg-4 .content img {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+  .team-carousel-inner .team-carousel-item>div {
+    display: none;
+  }
+
+  .team-carousel-inner .team-carousel-item>div:first-child {
+    display: block;
+  }
+}
+
+.team-carousel-inner .team-carousel-item.active,
+.team-carousel-inner .team-carousel-item-start,
+.team-carousel-inner .team-carousel-item-next,
+.team-carousel-inner .team-carousel-item-prev {
+  display: flex;
+}
+
+@media (min-width: 768px) {
+
+  .team-carousel-inner .team-carousel-item-right.active,
+  .team-carousel-inner .team-carousel-item-next,
+  .team-carousel-item-next:not(.team-carousel-item-start) {
+    transform: translateX(25%) !important;
+  }
+
+  .team-carousel-inner .team-carousel-item-left.active,
+  .team-carousel-item-prev:not(.team-carousel-item-end),
+  .active.team-carousel-item-start,
+  .team-carousel-item-prev:not(.team-carousel-item-end) {
+    transform: translateX(-25%) !important;
+  }
+
+  .team-carousel-item-next.team-carousel-item-start,
+  .active.team-carousel-item-end {
+    transform: translateX(0) !important;
+  }
+
+  .team-carousel-inner .team-carousel-item-prev,
+  .team-carousel-item-prev:not(.team-carousel-item-end) {
+    transform: translateX(-25%) !important;
+  }
+}
 
 /* ------------------OurBatches---------------------------------- */
 #carouselExampleControls {
@@ -380,22 +442,14 @@ li {
 /* ==========================footer========================== */
 footer {
   background-color: #e91f3f;
-
-
-  /*  */
   border-radius: 5em 0 0 0;
   overflow: hidden;
-
-
 }
 
 #backfrounfImg {
   background-image: url('Images/Backgroung\ img.png');
-  /* Replace 'your-image.jpg' with your image file path */
   background-size: contain;
-  /* or 'contain' or other values depending on your requirements */
   background-position: right bottom;
-  /* This positions the background image at the bottom-right corner */
   background-repeat: no-repeat;
 }
 
@@ -416,10 +470,6 @@ input:focus {
   outline: none;
 }
 
-input {
-  font-size: 1rem;
-}
-
 .accordion-button:focus {
   box-shadow: none;
   background-color: #fff;
@@ -430,10 +480,7 @@ input {
   font-weight: 600;
 }
 
-input[type=text],
-input[type=password],
-input[type=date],
-input[type=number] {
+.input-enter {
   height: 3vw;
   width: 50%;
   border: 0px solid black;
@@ -442,15 +489,10 @@ input[type=number] {
 
 .custom-file-input {
   position: absolute;
-  /* top: 0;
-  left: 0; */
-  /* height: 50px; */
   width: 10px;
   opacity: 0;
   margin-top: 1%;
   z-index: 2;
-  /* background-color: red; */
-  /* border: 2px solid red; */
   cursor: pointer;
 }
 
@@ -458,13 +500,21 @@ input[type=number] {
   border: 0px solid #ccc;
   border-bottom: 2px solid red;
   background-color: #fff;
-  /* cursor: pointer; */
 }
 
 .income-enter {
   margin-left: 5%;
 }
 
+#state,
+#city {
+    outline: none;
+    padding: 10px !important;
+}
+
+.textarea {
+    outline: none;
+}
 /* =============================================================== */
 /* =======================Activities Slider ====================== */
 
@@ -563,27 +613,27 @@ input[type=number] {
   display: inline-block;
 }
 
-.c-cta__button__search {
+.c-cta_button_search {
   width: 15px;
   height: 15px;
   margin-right: 3rem;
 }
 
-.c-cta__button__search svg {
+.c-cta_button_search svg {
   width: inherit;
   height: inherit;
   fill: white;
 }
 
-.c-cta__button__menu {
+.c-cta_button_menu {
   width: 20px;
   height: 2px;
   background-color: white;
   position: relative;
 }
 
-.c-cta__button__menu:after,
-.c-cta__button__menu:before {
+.c-cta_button_menu:after,
+.c-cta_button_menu:before {
   content: "";
   width: inherit;
   height: inherit;
@@ -592,11 +642,11 @@ input[type=number] {
   left: 0;
 }
 
-.c-cta__button__menu:after {
+.c-cta_button_menu:after {
   bottom: -5px;
 }
 
-.c-cta__button__menu:before {
+.c-cta_button_menu:before {
   top: -5px;
 }
 
@@ -800,73 +850,6 @@ input[type=number] {
 }
 
 /* ==============================Admin Css========================= */
-
-/* #dashBoardNav {
-  display: none;
-}
-
-#Upload-questions-m {
-  height: 88.3vh;
-}
-
-#Upload-questions {
-  height: 50vh;
-  border-radius: 20px;
-  background: rgb(239, 28, 28);
-}
-
-@media screen and (max-width : 991px) {
-  #nav-pills-disapear {
-    display: none;
-  }
-
-  .disaaper-nav {
-    display: none;
-  }
-
-  #dashBoardNav {
-    display: block;
-  }
-}
-
-.dashBorad-table-div {
-  max-height: 65vh;
-  overflow-x: scroll;
-  overflow-y: scroll;
-
-}
-
-.section-tab {
-  border-radius: 0px;
-  background-color: #ea1b3d;
-}
-
-.inbeansred {
-  background-color: #ea1b3d;
-}
-
-.nav-pills .nav-link.active {
-  background-color: rgb(255, 255, 255);
-  color: rgb(255, 0, 0);
-}
-
-.section-tab.nav-link.active {
-  color: red;
-}
-
-.section-tab.nav-link {
-  color: white;
-}
-
-.section-tab.nav-link {
-  color: white;
-  border-radius: 30px 0px 0px 10px;
-  padding: 15px;
-  margin-left: 10px;
-  text-align: left;
-  padding-left: 2.5em;
-} */
-
 .rowId {
   --bs-gutter-x: "0"
 }
@@ -891,9 +874,8 @@ input[type=number] {
   overflow-y: scroll;
 }
 
-.Questionsscroll{
+.Questionsscroll {
   overflow-y: scroll;
-
 }
 
 .section-tab {
@@ -907,15 +889,40 @@ input[type=number] {
   background-color: white;
   border-radius: 30px 0px 0px 10px;
   width: 90%;
-  text-align: left;
+  text-align: center;
+  transition: 1s;
 }
 
 .section-tab.nav-link:hover {
   color: black;
 }
 
-/* =================instruction page css */
+.nav-link.btn {
+  background-color: rgb(249, 249, 249);
+  color: #ea1b3d;
+  border-radius: 0px 0px 20px 0px;
+  padding: 10px 20px;
+  margin: 5px;
+  border: 1px solid #ea1b3d;
+}
 
+.nav-link.active.btn {
+  background-color: #ea1b3d;
+  color: white;
+  border: 1px solid white;
+}
+
+.nav-pills .nav-link {
+  color: white;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+  color: red !important;
+  background-color: white !important;
+}
+
+/* =================instruction page css */
 
 .bg-rgba {
   background-color: rgba(240, 240, 240, 1);
@@ -944,8 +951,8 @@ dd {
 
 .instructions {
   width: 100%;
-  height: 500px;
-  overflow-y: scroll;
+  height: auto;
+  /* overflow-y: scroll; */
 }
 
 ul {
@@ -969,22 +976,54 @@ ul li {
 }
 
 #scrollDivs {
-  overflow-y: scroll;
   height: 70%;
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
 
-/*===============Exam Portal CSS Start================*/
+#scrollDivs::-webkit-scrollbar {
+  width: 0;
+}
+
+/* /===============Instruction Page CSS Start================/ */
+.instructionTable {
+  max-height: 570px;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+.instructionTable::-webkit-scrollbar {
+  width: 0;
+}
+
+#check {
+  border: none;
+  font-weight: 900;
+  font-size: 1.5vw;
+}
+
+#check.disabled {
+  /* color: black; */
+  border: 1px solid black;
+}
+
+#check:hover {
+  border: none;
+  background-color: #fff;
+  box-shadow: 0 0px 5px 2px #fff
+}
+
+/* /===============Exam Portal CSS Start================/ */
 #logoLink {
   border-right: 5px solid #ea1b3d;
 }
 
 .inner-shadow {
-  box-shadow: inset 0 0 7px;
+  box-shadow: inset 0 0 4px;
 }
 
 .outer-shadow {
-  box-shadow: inset 0 0 7px;
-
+  box-shadow: inset 0 0 4px;
 }
 
 .border-Radius {
@@ -992,36 +1031,112 @@ ul li {
 }
 
 .question-mark {
-  height: 20px;
-  width: 20px;
+  display: block;
+  width: 90%;
+  text-align: center;
   border-radius: 50%;
-  box-shadow: inset 0 0 7px;
+  box-shadow: 1px 1px 4px;
+  font-weight: bolder;
+}
+
+.question-mark:hover {
+  cursor: pointer;
+}
+
+.visitedClass {
+  background-color: #ea1b3d;
+  color: white;
+}
+
+.answerClass {
+  background-color: #1bac52;
+  color: white;
+}
+
+.reviewClass {
+  background-color: #ffc107;
+  color: white;
 }
 
 #question-marks-div {
   max-height: 67vh;
+  /* height: calc(100vh - 35vh); */
   overflow-y: scroll;
+  scrollbar-width: none;
 }
 
-.nav-link.btn {
+#question-marks-div::-webkit-scrollbar {
+  width: 0;
+}
+
+.examNavlink.nav-link.btn {
   background-color: rgb(249, 249, 249);
-  color: #ea1b3d;
   border-radius: 0px 0px 20px 0px;
   padding: 10px 20px;
   margin: 5px;
   border: 1px solid #ea1b3d;
 }
 
-.nav-link.active.btn {
+.examNavlink.nav-link.active.btn {
   background-color: #ea1b3d;
-  color: white;
   color: white;
   border: 1px solid white;
 }
 
-/* #background-img {
-  background-image: url(Images/InfoBeans\ Foundation\ Logo\ -\ PNG\ \(1\).png);
+.questionClass {
+  height: 8vh;
+}
+
+.iconWarn {
+  width: auto;
+}
+
+/* /===============Exam Portal CSS Ends================/ */
+
+/* REGISTRATION SECOND ACCORDIAN CSS START */
+#firstaccordianbasicdetailform {
+  display: none;
+}
+
+#registrationformspan {
+  height: 2.5vw;
+  margin-top: 10%;
+  color: black;
+  cursor: pointer;
+}
+
+#registrationformspan:hover {
+  color: blue;
+}
+
+
+.sparks:hover {
+  border-radius: 20px;
+  background-image: url("./Images/boobEffect2.gif");
   background-size: cover;
-  
-} */
-/*===============Exam Portal CSS Ends================*/
+}
+
+#state,
+#city {
+  outline: none;
+  padding: 10px !important;
+}
+
+.textareareg {
+  outline: none;
+}
+
+/* REGISTRATION SECOND ACCORDIAN CSS ENDS */
+body #loader {
+  display: none;
+}
+
+body #loader.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}

@@ -1,22 +1,24 @@
-import { rsg, exam, shift } from "../modules/Registratio1.js";
+import { rsg, questionPaper, lastEnrollModel } from "../modules/Registratio1.js";
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
-import jwt from "jsonwebtoken";
 import dotenv from 'dotenv';
-dotenv.config();
-var Candidate_key = process.env.Candidate_key;
-var id = "None";
-console.log("candi:", Candidate_key);
-// const maxAge = 3 * 24 * 60 * 60;
-
+import stripe from 'stripe';
 import { transporter } from '../modules/emailModule.js';
-var lastEnrollmentID = 'ITEP0914';
-const maxAge = 86400 * 1000;
-// import bcrypt from "bcrypt";
 import randomstring from 'randomstring';
+
+dotenv.config();
+
+const { STRIPE_SECRET_KEY } = process.env;
+const stripeInstance = stripe(STRIPE_SECRET_KEY);
+var id = "None";
+var enrollPrefix = 'ITEP09';
+var lastEnroll = '';
+var initialEnrollId = enrollPrefix + '0001';
 var userdata = {}, otp = "";
 var getaadhar;
+
 export const SECRET_KEY = crypto.randomBytes(32).toString('hex');
+
 class RegistrationController {
 
     static verifyemail = async (req, res) => {
@@ -39,8 +41,7 @@ class RegistrationController {
                 if (info) {
                     console.log('Email sent');
                     return res.status(201).json({ message: "Email Sent" });
-                }
-                else {
+                } else {
                     console.log('email not sent');
                     return res.status(404).json({ mesaage: "not sent" });
                 }
@@ -56,7 +57,6 @@ class RegistrationController {
             } else {
                 console.log("Contact to admin...");
             }
-
         }
     }
 
@@ -66,7 +66,12 @@ class RegistrationController {
         if (otp == userotp) {
             console.log('otp verified');
             try {
+                const year = new Date().getFullYear();
+                const month = new Date().getMonth() + 1;
+                const day = new Date().getDate();
+                const date = `${year}-${month}-${day}`;
                 const hashpassword = await bcrypt.hash(userdata.password, 10);
+                console.log("hashpassword :", hashpassword)
                 console.log(req.body.userotp);
                 const user = await rsg.create({
                     username: userdata.username,
@@ -75,15 +80,18 @@ class RegistrationController {
                     dob: userdata.dob,
                     email: userdata.email,
                     password: hashpassword,
-                    attempt: 2,
-                    EnrollID: "",
+                    address: userdata.address,
+                    city: userdata.city,
+                    state: userdata.state,
+                    attempt: 0,
                     income: "",
                     aadharFile: "",
                     incomeCertificate: "",
                     fatherAadharcard: "",
                     marksheet: "",
                     latestMarksheet: "",
-                    ClearRounds: 0
+                    ClearRounds: 0,
+                    registrationDate: date
                 });
                 if (user) {
                     console.log("user id : ", user.id);
@@ -93,65 +101,64 @@ class RegistrationController {
             } catch (error) {
                 console.log("error" + error);
             }
-        }
-        else {
+        } else {
             return res.status(403).json({ message: "Wrong Otp" });
         }
-
     }
 
-    // question file upload
+    static setEnrollIdController = async (req, res) => {
+        const enrollPrefix = req.params.enrollPrefix;
+        console.log("Enroll prefix :---->", enrollPrefix);
+        const result = await lastEnrollModel.findOneAndUpdate({}, { lastEnrollId: enrollPrefix });
+        if (!result) {
+            console.log(result);
+            lastEnrollModel.create({
+                lastEnrollId: enrollPrefix
+            })
+        }
+    }
 
     static documentRegistration = async (req, res) => {
-        const userID = req.params.userID;
-
-        console.log("in userID", userID);
+        let aadharCardNumber = req.params.aadharCardNumber;
+        console.log("in aadharCardNumber", aadharCardNumber);
         console.log("in documentRegistration");
         var aadharFile = req.files['aadharFile'][0].originalname;
         var incomeCertificate = req.files['incomeCertificate'][0].originalname;
         var fatherAadharcard = req.files['fatherAadharcard'][0].originalname;
         var marksheet = req.files['marksheet'][0].originalname;
         var latestMarksheet = req.files['latestMarksheet'][0].originalname;
+        const lastId = await lastEnrollModel.find();
+        console.log("lastEnrollModel :- ", lastId[0]);
 
-        function generateNextEnrollmentID(lastEnrollmentID) {
-            const lastTwoDigits = parseInt(lastEnrollmentID.substr(6), 10);
-            const nextTwoDigits = lastTwoDigits + 1;
-            const newEnrollmentID = `ITEP09${nextTwoDigits.toString().padStart(2, '0')}`;
-            return newEnrollmentID;
+        function generateNextEnrollmentID() {
+            var lastEnrollId = lastId[0].lastEnrollId;
+            console.log("lastEnrollId", lastEnrollId);
+            var lastDigits = parseInt(lastEnrollId.substring(6).toString());
+            console.log("lastDigits :===== ", lastDigits);
+            console.log("enrollCounter : ", lastDigits);
+            lastDigits++;
+
+            lastDigits = lastDigits.toString().padStart(4, '0');
+            console.log("lastdigit padstart : ", lastDigits);
+            var enrollId = (lastEnrollId.substring(0, 6).toString()) + lastDigits;
+            console.log("enroll Id : ", enrollId);
+            return enrollId;
         }
-
-        // Test the function
-        var nextEnrollmentID = generateNextEnrollmentID(lastEnrollmentID);
-        lastEnrollmentID = nextEnrollmentID;
-        console.log(nextEnrollmentID); // Output: TEP0902
-        console.log("id : ", id);
-        console.log("aadharFile : ", aadharFile);
+        var nextEnrollmentID = generateNextEnrollmentID();
+        lastEnroll = nextEnrollmentID;
+        await lastEnrollModel.findOneAndUpdate({}, { lastEnrollId: lastEnroll });
+        console.log("NewEnrollId : ", lastEnroll);
 
         try {
             if (id == "None") {
-                const user = await rsg.updateOne({ _id: userID }, {
+                const user = await rsg.updateOne({ aadharNo: aadharCardNumber }, {
+                    $push: {
+                        EnrollID: {
+                            enrollID: lastEnroll,
+                            score: 0
+                        }
+                    },
                     $set: {
-                        EnrollID: lastEnrollmentID,
-                        income: req.body.income,
-                        aadharFile:aadharFile,
-                        incomeCertificate: incomeCertificate,
-                        fatherAadharcard: fatherAadharcard,
-                        marksheet: marksheet,
-                        latestMarksheet: latestMarksheet,
-                        ClearRounds: 1
-                    }
-                });
-                if (user) {
-                    // console.log('data save', user);
-                    res.setHeader('Content-Type', 'application/json');
-                    return res.status(201).json({ message: 'Data saved', EnrollID: [0] });
-                } else {
-                    return res.status(202).json({ message: 'Error....', EnrollID: [0] });
-                }
-            } else {
-                const user = await rsg.updateOne({ _id: id }, {
-                    $set: {
-                        EnrollID: lastEnrollmentID,
                         income: req.body.income,
                         aadharFile: aadharFile,
                         incomeCertificate: incomeCertificate,
@@ -162,112 +169,187 @@ class RegistrationController {
                     }
                 });
                 if (user) {
-                    // console.log('data save', user);
+                    res.setHeader('Content-Type', 'application/json');
+                    return res.status(201).json({ message: 'Data saved', EnrollID: [0] });
+                } else {
+                    return res.status(202).json({ message: 'Error....', EnrollID: [0] });
+                }
+            } else {
+                const user = await rsg.updateOne({ _id: id }, {
+                    $push: {
+                        EnrollID: {
+                            enrollID: lastEnroll,
+                            score: 0
+                        }
+                    },
+                    $set: {
+                        income: req.body.income,
+                        aadharFile: aadharFile,
+                        incomeCertificate: incomeCertificate,
+                        fatherAadharcard: fatherAadharcard,
+                        marksheet: marksheet,
+                        latestMarksheet: latestMarksheet,
+                        ClearRounds: 1
+                    }
+                });
+                if (user) {
                     res.setHeader('Content-Type', 'application/json');
                     return res.status(201).json({ message: 'Data Update', EnrollID: [0] });
                 } else {
                     return res.status(202).json({ message: 'Error....', EnrollID: [0] });
                 }
             }
-
         } catch (error) {
             console.log("error" + error);
         }
-        
     }
 
-
     static candidateLogin = async (request, response) => {
-
         console.log("in candidate controller");
         try {
             const { EnrollID, Password } = request.body;
-            console.log(EnrollID)
-            console.log(Password);
-            const role = "";
-            const user = {};
-            //  var checkuser={};
-            const checkuser = await rsg.findOne({ EnrollID: EnrollID });
+            const checkuser = await rsg.findOne({ 'EnrollID.enrollID': EnrollID });
+            console.log("in try", checkuser);
             if (checkuser == null) {
-                return response.status(202).json({ message: 'EnrollID is wrong ' });
+                return response.status(202).json({ message: 'EnrollID is wrong' });
             }
-
-            console.log(" checkuser : ", checkuser.EnrollID);
-            console.log(" checkuser1 : ", checkuser.password);
-
             var pass = await bcrypt.compare(Password, checkuser.password);
-            console.log(pass)
-            if ((checkuser.EnrollID == EnrollID) && (pass)) {
+            if ((pass)) {
                 checkuser.attempt = checkuser.attempt + 1;
-                console.log("id : ", checkuser._id);
-                await checkuser.save();
-                const shifts = await shift.find();
-                // console.log("shift data : ",shiftdata); 
-                for (var shiftData of shifts) {
-                    for (const candidate of shiftData.enrolledCandidates) {
-                        if (candidate.EnrollID === EnrollID) {
-                            response.cookie('EnrollID', EnrollID, { maxAge: 86400 * 1000 });
-                            console.log(123);
+                for (const candidate of checkuser.EnrollID) {
+                    if (candidate.enrollID === EnrollID) {
+                        if (candidate.Attendance !== "Present") {
                             candidate.Attendance = "Present";
-                            candidate.userID = checkuser._id;
                             console.log("candidate  : ", candidate);
-                            await shiftData.save();
+                            await checkuser.save();
                             break;
+                        } else if (candidate.Attendance === "Present" && candidate.RemainingTime !== 0) {
+                            break;
+                        } else {
+                            return response.status(204).json({ message: 'You Already Given the Exam' });
                         }
                     }
                 }
-                return response.status(201).json({ message: 'Login succussfully...' });
-            }
-            else if (!checkuser.EnrollID == EnrollID) {
-                return response.status(202).json({ message: 'EnrollID is wrong ' });
-
+                return response.status(201).json({ message: 'Login succussfully...', user: checkuser });
+            } else if (!checkuser.EnrollID.enrollID == EnrollID) {
+                return response.status(202).json({ message: 'EnrollID is wrong 1' });
             } else if (!pass) {
                 return response.status(203).json({ message: 'password is wrong ' });
-
             } else {
                 console.log("somthing went wrong.....");
-                // return response.status(202).json({ message: 'Something went wrong...' });
             }
-
         } catch (err) {
             console.log("error : " + err);
         }
     }
 
-    // static authenticateJWT = (request, response, next) => {
-    //     console.log("authenticateJWT : ");
-    //     const token = request.cookies.jwt;
-    //     if (!token) {
-    //         response.json({ message: "Error Occured while dealing with Token inside authenticateJWT" });
-    //     }
-    //     jwt.verify(token, SECRET_KEY, (err, payload) => {
-    //         if (err)
-    //             response.json({ message: "Error Occured while dealing with Token during verify" });
-    //         request.payload = payload;
-    //         next();
-    //     });
-    // }
+    static checkAadharNumberController = async (request, response) => {
+        var aadharNumber = request.params.aadharNumber;
+        console.log("Aadhar number in check aadhar card number controller : ", aadharNumber);
+        try {
+            var existinuseraadharnumber = await rsg.findOne({ aadharNo: aadharNumber });
+            console.log("existinuseraadharnumber : ", existinuseraadharnumber);
+            if (existinuseraadharnumber == null) {
+                response.json(false);
+            } else if (existinuseraadharnumber.attempt > 3) {
+                existinuseraadharnumber.examAllow = false;
+                await existinuseraadharnumber.save();
+                response.json(1);
+            } else {
+                response.json(existinuseraadharnumber.aadharNo);
+            }
+        } catch (error) {
+            console.log("error : ", error);
+        }
+    }
 
-    // static authorizeUser = (request, response, next) => {
-    //     console.log("authorizeUser : ");
-    //     console.log(request.payload.aadharFile)
-    //     if (request.payload.role == "admin")
-    //         response.render("admin");
-    //     else if (request.payload.role == "user")
-    //         response.render("home", { email: request.payload.email, aadharFile: request.payload.aadharFile });
-    //     next();
-    // }
+    static updateQuestionWithAnswer = async (request, response) => {
+        console.log("In updateQuestionWithAnswer : ");
+        var obj = request.body;
+        console.log("updateQuestionWithAnswer:  === = = = = : ", obj)
+        var QuestionPaperObject = await questionPaper.findOne({ EnrollID: obj.EnrollID })
+        QuestionPaperObject.paper[obj.currentSubjectIndex].questions[obj.currentQuestionIndex].answerStatus = obj.answerStatus;
+        QuestionPaperObject.paper[obj.currentSubjectIndex].questions[obj.currentQuestionIndex].selectedAnswer = obj.userAnswer;
+        QuestionPaperObject.paper[obj.currentSubjectIndex].questions[obj.currentQuestionIndex].answerColor = obj.selectedColor;
+        await QuestionPaperObject.save();
+        response.status(201).json({ message: "Updated" });
+    }
 
-    // static viewProfile = async (req, res) => {
-    //     try {
-    //         console.log(req.params.email)
-    //         res.cookie('jwt', " ", { httpOnly: true, maxAge: 1 });
+    static updateColor = async (request, response) => {
+        var obj = request.body;
+        var QuestionPaperObject = await questionPaper.findOne({ EnrollID: obj.EnrollID })
+        QuestionPaperObject.paper[obj.currentSubjectIndex].questions[obj.currentQuestionIndex].answerColor = obj.selectedColor;
+        await QuestionPaperObject.save();
+        response.status(201).json({ message: "Updated" });
+    }
 
-    //         res.render("home", { email: "", aadharFile: "" });
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
+    static updateRemainingTime = async (request, response) => {
+        var enrollId = request.query.enrollId;
+        try {
+            const checkuser = await rsg.findOne({ 'EnrollID.enrollID': enrollId });
+            console.log("minutes : ", request.body.minutes);
+            checkuser.EnrollID[checkuser.EnrollID.length - 1].RemainingTime = request.body.minutes;
+            await checkuser.save();
+            response.status(201).json({ msg: "time updated successfully" });
+        } catch (err) {
+            console.log("error : " + err);
+            response.status(203).json({ msg: "error while updating time" });
+        }
+    }
 
-    // }
+    static endTest = async (request, response) => {
+        console.log("In endTest : ");
+        var score = 0;
+        var QuestionPaperObject = await questionPaper.findOne({ EnrollID: request.params.EnrollID })
+        for (const subject of QuestionPaperObject.paper) {
+            for (const question of subject.questions) {
+                const answerStatus = question.answerStatus;
+                if (answerStatus) {
+                    score++;
+                }
+            }
+        }
+        QuestionPaperObject.Score = score;
+        await QuestionPaperObject.save();
+
+        await rsg.updateOne(
+            { "EnrollID.enrollID": request.params.EnrollID },
+            { $set: { "EnrollID.$.score": score, "EnrollID.$.RemainingTime": 0 } }
+        );
+        response.status(201).json({ message: "End Test Completed" });
+    }
+
+    static payment = async (req, res) => {
+        const detail = {
+            enrollId: 123,
+            amount: 10000,
+            currency: 'inr'
+        };
+        console.log('detail : ', detail);
+
+        try {
+            const session = await stripeInstance.checkout.sessions.create({
+                payment_method_types: ['card'],
+                line_items: [{
+                    price_data: {
+                        currency: detail.currency,
+                        product_data: {
+                            name: 'Product Name',
+                        },
+                        unit_amount: detail.amount,
+                    },
+                    quantity: 1,
+                }],
+                mode: 'payment',
+                success_url: 'http://localhost:3000/registration',
+                cancel_url: 'http://localhost:3000/registration'
+            });
+            res.json({ id: session.id });
+        } catch (error) {
+            console.error('Error creating Stripe session:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    };
 }
+
 export { RegistrationController };

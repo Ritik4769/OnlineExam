@@ -8,7 +8,7 @@ import WeFacilitate from './components/WeFacilitate';
 import OurBatches from './components/OurBatches';
 import OurAchivements from './components/OurAchivements';
 import OurTeam from './components/OurTeam';
-import Registration from './components/r';
+import Registration from './components/registration';
 import Login from './components/Login';
 import Instructionpage from './components/Instructionpage';
 import ModalComponent from './components/ModalComponent';
@@ -30,7 +30,6 @@ function AppContent() {
   const location = useLocation();
   const isAdminRoute = location.pathname.includes('/admin');
   const isExamPortal = location.pathname.includes('/ExamPortal');
-
   const renderNavBarAndFooter = !isAdminRoute && !isExamPortal;
   return (
     <>
@@ -44,7 +43,7 @@ function AppContent() {
             <WeFacilitate />
             <OurBatches />
             <OurAchivements />
-            <OurTeam />
+            {/* <OurTeam /> */}
           </>
         } />
         <Route path="/admin" element={<VerifyAdmin />} />

@@ -9,42 +9,42 @@ export default function WeFacilitate() {
                 <div className="row">
                     <div className="col-12 col-sm-6 col-lg-4  d-flex  justify-content-center  mb-5">
                         <div className="wefacilitatediv d-flex  justify-content-center p-1">
-                            <h5 className="text-center  "> <i className="fa-solid fa-pen-nib"></i><br /><br />Free
+                            <h5 className="text-center  "> <i className="fa-solid fa-pen-nib"style={{fontSize:"30px"}}></i><br /><br />Free
                                 Education</h5>
                         </div>
                     </div>
                     <div className="col-12 col-sm-6 col-lg-4  d-flex  justify-content-center mb-5">
                         <div className="wefacilitatediv d-flex  justify-content-center p-1">
-                            <h5 className="text-center  "><i className="fa-solid fa-laptop"></i> <br /> <br />Free
+                            <h5 className="text-center  "><i className="fa-solid fa-laptop"style={{fontSize:"30px"}}></i> <br /> <br />Free
                                 Laptops</h5>
                         </div>
                     </div>
                     <div className="col-12 col-sm-6 col-lg-4  d-flex  justify-content-center mb-5">
                         <div className="wefacilitatediv d-flex  justify-content-center p-1">
-                            <h5 className="text-center "><i className="fa-solid fa-user"></i><br />
+                            <h5 className="text-center "><i className="fa-solid fa-user"style={{fontSize:"30px"}}></i><br />
                                 <br />Persnality
-                                Devleopement</h5>
+                                Development </h5>
                         </div>
                     </div>
+                   
+                   
                     <div className="col-12 col-sm-6 col-lg-4  d-flex  justify-content-center mb-5">
                         <div className="wefacilitatediv d-flex  justify-content-center p-1">
-                            <h5 className="text-center  "> <i className="fa-solid fa-pen-nib"></i><br /><br />Free
-                                Education
+                            <h5 className="text-center  "> <i className="fa-solid fa-pen-nib"style={{fontSize:"30px"}}></i><br /><br />Social Work
                             </h5>
                         </div>
                     </div>
                     <div className="col-12 col-sm-6 col-lg-4  d-flex  justify-content-center mb-5">
                         <div className="wefacilitatediv d-flex  justify-content-center p-1">
-                            <h5 className="text-center  "><i className="fa-solid fa-laptop"></i> <br /> <br />Free
-                                Laptops</h5>
+                            <h5 className="text-center  "><i className="fa-solid fa-laptop"style={{fontSize:"30px"}}></i> <br /> <br />​​Corporate Visits</h5>
                         </div>
                     </div>
                     <div className="col-12 col-sm-6 col-lg-4  d-flex  justify-content-center mb-5">
 
                         <div className="wefacilitatediv d-flex  justify-content-center p-1">
-                            <h5 className="text-center  "><i className="fa-solid fa-user"></i><br />
+                            <h5 className="text-center  "><i className="fa-solid fa-user"style={{fontSize:"30px"}}></i><br />
                                 <br />Persnality
-                                Devleopement</h5>
+                                Development</h5>
                         </div>
                     </div>
                 </div>

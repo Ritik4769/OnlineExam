@@ -1,109 +1,181 @@
 import React from "react";
-import axios from 'axios';
+import axios from "axios";
 import Cookie from "js-cookie";
-import { useNavigate } from 'react-router-dom';
-
+import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../Images/InfoBeans Foundation Logo - PNG (1).png";
+import InstructionForCandidate from "./InstructionForCandidate";
+
 export default function Instructionpage() {
-    // const history = useNavigate();
-    const navigate = useNavigate();
-    const portalPageQuestion = async (e) => {
-        if (e) {
-            e.preventDefault();
-        }
-        console.log("in ExamPortal");
-        var EnrollId = Cookie.get("EnrollID");
-        console.log(EnrollId);
+  const location = useLocation();
+  const user = JSON.parse(location.state);
+  const navigate = useNavigate();
+  var EnrollId = Cookie.get("EnrollID");
 
-        try {
-            axios.post('http://localhost:3002/candidate/ExamPortal', { EnrollId }).then((response) => {
-                // console.log("result", response);
-                if (response.status === 201) {
-                    const responseData = response.data;
-                    var QuestionPaperObject = responseData.QuestionPaperObject;
-                    // history.push("/ExamPortal", { QuestionPaperObject });
-                    navigate("/ExamPortal", { state: { QuestionPaperObject } });
-                } else {
-                    console.log('Something went wrong');
-                }
-            }).catch((error) => {
-                console.log('', error);
-            })
-        } catch (error) {
-            console.log('Error:', error);
-            window.alert('Failed to register');
-        }
-    };
+  const removeClass = () => {
+    document.getElementById('check').classList.toggle('disabled');
+    document.getElementById('check').classList.toggle('btn-light');
+    if (document.getElementById('checkbox').checked)
+      document.getElementById('containClass').style.color = 'rgb(59, 154, 57)';
+    else
+      document.getElementById('containClass').style.color = 'rgb(0,0,0)';
+  }
+  const portalPageQuestion = async (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+    console.log("in ExamPortal");
+    try {
+      axios
+        .post("http://localhost:3002/candidate/ExamPortal", { EnrollId })
+        .then((response) => {
+          if (response.status === 201) {
+            const responseData = response.data;
+            var QuestionPaperObject = responseData.QuestionPaperObject;
+            navigate("/ExamPortal", { state: { QuestionPaperObject, username: user.username, remainingTime: user.EnrollID[user.EnrollID.length - 1].RemainingTime } });
+            // navigate("/ExamPortal", { state: { QuestionPaperObject, username : user.username }, replace: true });
+          } else {
+            console.log("Something went wrong");
+          }
+        })
+        .catch((error) => {
+          console.log("Error: ", error);
+        });
+    } catch (error) {
+      console.log("Error: ", error);
+      window.alert("Failed to register");
+    }
+  };
 
-    return (
-        <>
-            <section className="w-100 h-100 bg-rgba p-2">
-                <div className="container p-2 shadow bg-white rounded-2 my-2">
-                    <div className="row">
-                        <div className="col-md-1 p-2">
-                            <img width="110px" className="mx-auto d-block" src={logo} alt="" />
-                        </div>
-                        <div className="col-md-11 py-2 px-2 border-left text-center">
-                            <h3>Information Technology Excellence Program</h3>
-                            <div className="w-25 d-flex align-items-center justify-content-center px-2 mx-auto bg-light text-center" style={{ borderRadius: "30px" }}>
-                                <p style={{ textShadow: "0 4px 4px rgba(0, 0, 0, 0.25)", marginTop: "10px" }}>Phase 1 : Online Exam</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="instructions">
-                        <div className="my-1 py-2 border-top">
-                            <h4 className="ms-2 mt-2"> Instructions for Online Examinations</h4>
-                            <p className="py-2 text-danger">
-                                Please read the instruction carefully  before starting the test.
-                            </p>
-                            <ol type="1">
-                                <li>Click <b>start </b> test on bottom of your screen to begin the test.</li>
-                                <li>Mobile and smart watch are not allowed in during exam you keep your mobile and watch in your bag.       </li>
-                                <li>The clock has been set at server and Count Downtimer at the top Right side of the screen will display left out time to closure from where you can monitor time you have to complete exam</li>
-                                <li>Click on one of the answer,simply click the desired option.</li>
-                                <li>Candidate can change their response of atempted answer anytime during examination slot time by clicking another answer which candidates want to change answer.</li>
-                                <li>Six subject button on top of your screen select the subject and attempt their question</li>
-                                <li>All subject have equal question and all question carry equal number.</li>
-                                <li>Click on previous to going on previous question</li>
-                                <li>Click on next to going on next question.</li>
-                                <li>The color coded daigram on right side of screen show the status of questions.
-                                    <ul>
-                                        <li>
-                                            <div className="red" style={{ backgroundColor: "red" }}></div> <div className="px-2"> <p>: Not answered / <b> Not attempted</b> Question</p> </div>
-                                        </li>
-                                        <li>
-                                            <div className="yellow" style={{ backgroundColor: "yellow" }}></div> <div className="px-2"> <p>: Answered / <b>Marked Attempted</b>for review</p> </div>
-                                        </li>
-                                        <li>
-                                            <div className="green" style={{ backgroundColor: "green" }}></div> <div className="px-2"> <p>: Not answered / <b> Not attempted</b> Question</p> </div>
-                                        </li>
-                                        <li>
-                                            <div className="grey" style={{ backgroundColor: "grey" }}></div> <div className="px-2"> <p>: Not visited Question</p> </div>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>All the answered questions will be counted for final result</li>
-                                <li>Their is no negative marking for <b>incorrect/wrong</b> answer</li>
-                                <li>Result will be declared between 2-3 days after exam.</li>
-
-                            </ol>
-                        </div>
-
-                    </div>
-                    <div className="w-100 p-2 border-top d-flex justify-content-between align-items-center">
-                        <form action="" onSubmit={portalPageQuestion} className="w-100">
-                            <div className="w-100 d-flex justify-content-between align-items-center">
-                                <div>
-                                    <input type="checkbox" className=" d-inline" name="" id="" /><p className="px-2 d-inline">The Computer provided to me is in proper working condition. <br /><p className="ps-4">I have read and understood the instruction given above</p> </p>
-                                </div>
-                                <div>
-                                    <input type="submit" className="btn btn-danger px-5 py-2 text-white" style={{ borderRadius: "20px" }} value="Start Test" name="" id="" />
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+  return (
+    <>
+      <section className="w-100 h-100 bg-rgba p-2">
+        <div className="container p-2 shadow bg-white rounded-2 my-2">
+          <div className="row bg-light">
+            <div className="col-md-1 p-2">
+              <img
+                width="110px"
+                className="mx-auto d-block"
+                src={logo}
+                alt=""
+              />
+            </div>
+            <div className="col-md-11 py-2 px-2 border-left text-center">
+              <h3>Information Technology Excellence Program</h3>
+              <div
+                className="w-25 d-flex align-items-center justify-content-center px-2 mx-auto bg-light text-center"
+                style={{ borderRadius: "30px" }}
+              >
+                <p
+                  style={{
+                    textShadow: "0 4px 4px rgba(0, 0, 0, 0.25)",
+                    marginTop: "10px",
+                  }}
+                >
+                  Phase 1 : Online Exam
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="instructions p-3">
+            <div className="row w-100 m-0">
+              <div className="col-12 col-md-9">
+                <div className="order-last order-md-first instructionTable">
+                  <InstructionForCandidate />
+                  <div className="w-100" >
+                    <hr />
+                    <h3>General Instructions:-</h3>
+                    <h6>Read the Instructions carefully</h6>
+                    <table className="table table-responsive">
+                      <thead>
+                        <tr>
+                          <th>S.No.</th>
+                          <th>Subject Section Name</th>
+                          <th>No. of Questions</th>
+                          <th>Marks Per Question</th>
+                          <th>Negative Marking</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td>English</td>
+                          <td>10</td>
+                          <td>1</td>
+                          <td>0</td>
+                        </tr>
+                        <tr>
+                          <td>2</td>
+                          <td>Hindi</td>
+                          <td>10</td>
+                          <td>1</td>
+                          <td>0</td>
+                        </tr>
+                        <tr>
+                          <td>3</td>
+                          <td>GK</td>
+                          <td>15</td>
+                          <td>1</td>
+                          <td>0</td>
+                        </tr>
+                        <tr>
+                          <td>4</td>
+                          <td>COMP</td>
+                          <td>15</td>
+                          <td>1</td>
+                          <td>0</td>
+                        </tr>
+                        <tr>
+                          <td>5</td>
+                          <td>Maths</td>
+                          <td>25</td>
+                          <td>1</td>
+                          <td>0</td>
+                        </tr>
+                        <tr>
+                          <td>6</td>
+                          <td>LR</td>
+                          <td>25</td>
+                          <td>1</td>
+                          <td>0</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <hr />
+                  </div>
                 </div>
-            </section>
-        </>
-    )
+                <div>
+                  <input id="checkbox" type="checkbox" className=" d-inline" onClick={removeClass} />
+                  <p id="containClass" className="d-inline" style={{ marginLeft: "10px", fontWeight: "900" }}>The Computer provided to me is in proper working condition.
+                    <br />
+                    <span className="ps-4">
+                      I have read and understood the instruction given above
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div className="col-12 col-md-3 infoBeansred d-flex flex-direction-column">
+                <div className="row m-0 w-100 ">
+                  <div className="col-md-12 col-sm-6 col-6 ">
+                    <img src={logo} className="w-100 rounded-circle " alt="" />
+                  </div>
+                  <div className="col-md-12 col-sm-6 col-6 text-light align-items-center justify-content-center ">
+                    <span>
+                      <h5><b>Name:</b> {user.username} </h5>
+                      <h5><b>Enroll Id:</b> {EnrollId}</h5>
+                      <h5><b>DOB:</b> {user.dob}</h5>
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "end", marginBottom: "10%" }}>
+                    <button className="btn disabled px-5 py-2" id="check" onClick={portalPageQuestion}>
+                      Start Test
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
 }

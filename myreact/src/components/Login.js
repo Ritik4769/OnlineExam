@@ -1,15 +1,29 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Modal from 'react-modal';
 import Cookie from "js-cookie";
-
+import './Login_for_exam/Login.css'
+import {Loader,toggleLoader} from './Loader.js';
+const modalCss = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        backgroundColor: 'transparent',
+        border: 'none',
+        borderRadius: '8px',
+        width: '500px'
+    }
+}
 export default function Login() {
     const [registrationStatus, setRegistrationStatus] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const history = useNavigate();
-
-    // var [isUserLogin, setUserLogin] = useState(false);
     const [login, logUser] = useState({
         EnrollID: '',
         Password: ''
@@ -18,24 +32,23 @@ export default function Login() {
         const name = e.target.name;
         const value = e.target.value;
         logUser({ ...login, [name]: value });
-        // console.log(name)
-        // console.log(value)
     };
-
+    
     const candidateLogin = async (e) => {
         if (e) {
             e.preventDefault();
         }
         console.log("in createExam");
-        // console.log(login);
         const { EnrollID, Password } = login;
-        // console.log(EnrollID);
-        // console.log(Password);
-        //my
-        try {
-            axios.post('http://localhost:3002/candidate/login', login).then((response) => {
 
-                console.log("result", response);
+        try {
+            console.log("Hello");
+            toggleLoader();
+            axios.post('http://localhost:3002/candidate/login', login).then((response) => {
+                toggleLoader();
+                console.log("User at front end", response.data.user);
+                var user = JSON.stringify(response.data.user);
+                console.log("result", user);
                 if (response.status === 201) {
                     console.log('login complete.........');
                     setRegistrationStatus('success');
@@ -47,20 +60,19 @@ export default function Login() {
                         path: "/"
                     })
 
-                    setIsModalOpen(true);                    // history("/otpcomponent");
-                    history("/Instructionpage");
-                    // history.push(`/Instructionpage/${EnrollID}`);
-                    // setUserLogin(true);
-
+                    setIsModalOpen(true);
+                    history("/Instructionpage", { state: user });
                 } else if (response.status === 202) {
                     console.log('Something went wrong');
-
                     setRegistrationStatus('Enrollid not match');
                     setIsModalOpen(true);
                 } else if (response.status === 203) {
                     console.log('Something went wrong');
-
                     setRegistrationStatus('password not match');
+                    setIsModalOpen(true);
+                } else if (response.status === 204) {
+                    console.log('204 Something went wrong');
+                    setRegistrationStatus('You Already Given the Exam');
                     setIsModalOpen(true);
                 }
             }).catch((error) => {
@@ -73,55 +85,51 @@ export default function Login() {
     };
 
     return (
-        <> <div className="p-5 container justify-align-center w-50 "   >
-            <form method='post' onSubmit={candidateLogin}>
-                <div className="row  p-5 w-80" style={{ boxShadow: "2px 2px 2px 2px black" }}>
-                    <center><h1><b>Login Form</b> </h1></center>
-                    <div className="mt-4 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center" >
-                        <input type="text" className=" p-3" name="EnrollID" id="EnrollID" onChange={handleInputs} value={login.EnrollID} placeholder="Enter Enroll Number" />
-                    </div>
-                    <div className="mt-4 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center">
-                        <input type="password" className=" p-3" name="Password" id="Password" onChange={handleInputs} value={login.Password} placeholder="Enter Enroll Password" />
-
-                    </div>
-                    <div className="mt-4 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center">
-                        {/* <input type="text" className=" p-3" name="phoneNo" id="phoneNo" 
-                        placeholder="Enter Password" /> */}
-                        <input type="submit" className=" btn btn-primary w-50" value="login" />
-                    </div>
-                    <div className="mt-4 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center">
-                        don't have account &nbsp;<a className="text-blue" href="/">Register here</a>
-                    </div>
-
+        <> 
+       < Loader />
+        <div className="p-5  container justify-align-center  "   >
+            <div className='row w-200 m-0' >
+                <div className='col-12 col-md-6 offset-md-3  d-flex justify-content-center  ' >
+                    <form className=' w-100 sheduleform  ' method='post' onSubmit={candidateLogin}>
+                        <h1 className='text-center'  >Login Form</h1>
+                        <div className=" mt-4 form-floating mb-3">
+                            <input type="text" className="form-control" name="EnrollID" id="EnrollID" onChange={handleInputs} value={login.EnrollID} placeholder="Enter Enroll Number" />
+                            <label htmlFor="floatingInput" style={{zIndex:"0"}}><i className="bi bi-envelope"></i>&nbsp;Enter Enroll ID</label>
+                        </div>
+                        <div className=" mt-4 form-floating mb-3">
+                            <input type="password" className="form-control" name="Password" id="Password" onChange={handleInputs} value={login.Password} placeholder="Enter Enroll Password" />
+                            <label htmlFor="floatingInput" style={{zIndex:"0"}}><i className="bi bi-key"></i>&nbsp;Enter Enroll Password</label>
+                        </div>
+                        <input type="submit" className=" mt-4 btn btn-outline-danger w-100" value="login" />
+                    </form>
                 </div>
-            </form>
-
-
+            </div>
+            {/* Your registration form and other elements */}
             <div>
-                {/* Your registration form and other elements */}
-
-                <Modal
-                    isOpen={isModalOpen}
-                    contentLabel="Registration Modal"
-                // onRequestClose={closeModal}
-                >
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title">Login Status</h5>
-                            <button type="button" className="btn-close" aria-label="Close"></button>
-                        </div>
-                        <div className="modal-body">
-                            {registrationStatus === 'success' ? (
-                                <p>Login successful....</p>
-                            ) : registrationStatus === 'error' ? (
-                                <p>Something went wrong......</p>
-                            ) : registrationStatus === 'Enrollid not match' ? (
-                                <p>EnrollID not match</p>
-                            ) : registrationStatus === 'password not match' ? (
-                                <p>password not match</p>) : null}
-                        </div>
-                        <div className="modal-footer">
-                            <button onClick={() => setIsModalOpen(false)}>Close</button>
+                <Modal isOpen={isModalOpen} contentLabel="Registration Modal" style={modalCss}>
+                    <div classname="modal" tabindex="-1" style={{ width: '100%', margin: 'auto', padding: '10px', boxShadow: '2px 2px 2px 2px rgba(0,0,0,0.3)', borderRadius: '10px', background: 'white' }}>
+                        <div className="modal-dialog">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title">Login Status</h5>
+                                    {/* <button type="button" className="btn-close" aria-label="Close"></button> */}
+                                </div>
+                                <div className="modal-body">
+                                    {registrationStatus === 'success' ? (
+                                        <p>Login successful....</p>
+                                    ) : registrationStatus === 'error' ? (
+                                        <p>Something went wrong......</p>
+                                    ) : registrationStatus === 'Enrollid not match' ? (
+                                        <p>EnrollID not match</p>
+                                    ) : registrationStatus === 'password not match' ? (
+                                        <p>password not match</p>
+                                    ) : registrationStatus === 'You Already Given the Exam' ? (
+                                        <p>You Already Given the Exam</p>) : null}
+                                </div>
+                                <div className="modal-footer">
+                                    <button onClick={() => setIsModalOpen(false)} className='btn btn-danger text-light'>Close</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </Modal>

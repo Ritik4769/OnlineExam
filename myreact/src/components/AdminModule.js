@@ -5,6 +5,7 @@ import {createExam,createSchedule} from "./adminModule/admindashAxios"
 import { useNavigate } from 'react-router-dom';
 import logo from '../Images/InfoBeans Foundation Logo - PNG (1).png';
 import avatar from '../Images/man-with-beard-avatar-character-isolated-icon-free-vector.jpg';
+import Swal from 'sweetalert2';
 var examid;
 var EnrollIDs = [];
 
@@ -102,7 +103,15 @@ export default function AdminModule() {
         //my
         try {
             axios.post('http://localhost:3002/admin/uploadQuestionFile', formData).then((result) => {
-                console.log(result);
+                if(result.status=='201'){
+                    Swal.fire({                        
+                        icon: "success",
+                        text:'Question uploaded Successfully',
+                        showConfirmButton: false,
+                        timer: 1500
+                      });
+                      console.log(result);
+                }
             }).catch((error) => {
                 console.log('', error);
             })

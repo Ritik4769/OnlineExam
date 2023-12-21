@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Swal from 'sweetalert2'; 
 var examid;
 var EnrollIDs = [];
 export const createExam = async (e,exam) => {
@@ -15,6 +16,12 @@ export const createExam = async (e,exam) => {
 
             console.log("result", response);
             if (response.status === 201) {
+                Swal.fire({                        
+                    icon: "success",
+                    text:'Exam Scheduled succesfully',
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
                 const responseData = response.data;
                 const newExam = responseData.newExam;
                 examid = newExam._id;
@@ -44,11 +51,15 @@ export const createSchedule = async (e,schedule) => {
        
        /* Shedule bhi ho rahi bus ye eaxam is tum log kese la rhe the dekh lo baki shedule bhi ho rhi h
         Exam sheduyoe bhi hojaygi eaxam id ki gagaj koi sa bhi random num daal dena */
-        axios.post(`http://localhost:3002/admin/shifts/${examid}`, schedule).then((response) => {
-
-
+        axios.post(`http://localhost:3002/admin/shifts`, schedule).then((response) => {
             console.log("result", response);
             if (response.status === 201) {
+                Swal.fire({                        
+                    icon: "success",
+                    text:'Shift Scheduled succesfully',
+                    showConfirmButton: false,
+                    timer: 2000
+                  });
                 console.log('component caling');
             }
         }).catch((error) => {

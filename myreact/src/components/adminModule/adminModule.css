@@ -1,0 +1,48 @@
+#driopArea{
+    width: 100% ;
+    min-width: 300px;
+    height: 450px;
+    background-color: #872341;
+   border-radius: 20px; 
+   text-align: center;
+   color: white;
+
+
+}
+
+
+#questionUplodInput{
+    width: 100%;
+    height: 100%;
+    display: flex ;
+    flex-direction: column;
+
+}
+
+#questionUplodInput{
+    width: 100%;
+    height: 70%;
+    background-color: #BE3144;
+    color: white;
+    border-radius: 20px; 
+    opacity: 1;
+    border: 2px solid rgb(255, 255, 255);
+}
+#questionuploadlabel {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.sheduleform{
+    background-color: whitesmoke;
+    border-radius: 15px;
+    border-top: 5px solid red ;
+    border-bottom: 5px solid red ;
+    max-width: 450px;
+}
+
+
+
+
+
+
