@@ -1,29 +1,17 @@
-import React, { useState,useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 var bannerObj = {};
-var Trainers=[];
-function AddBannerModal(props) {
+
+function AddBannerModal() {
     const [messageObj, setMessageObj] = useState({
         message: "",
         class: "",
         icon: <></>,
     });
     const [modal, setModal] = useState(false);
-    const [nestedModal, setNestedModal] = useState(false);
-    const [closeAll, setCloseAll] = useState(false);
     const toggle = () => setModal(!modal);
-    const toggleNested = () => {
-        setNestedModal(!nestedModal);
-        setCloseAll(false);
-    };
-    const toggleAll = () => {
-        setNestedModal(!nestedModal);
-        setCloseAll(true);
-    };
 
-    const [messageBox, setMessageBox] = useState();
     var getBannerdata = (e) => {
         var { name, value } = e.target;
         if (e.target.type === "file") {
@@ -32,18 +20,18 @@ function AddBannerModal(props) {
         } else {
             bannerObj = { ...bannerObj, [name]: value };
         }
-        console.log(bannerObj);
     };
-
-
 
     function addBatch(e) {
         const formData = new FormData();
-        for (const key in bannerObj) {
-            if (bannerObj[key]) {
-                formData.append(key, bannerObj[key]);
-            }
-        }
+        // for (const key in bannerObj) {
+        //     if (bannerObj[key]) {
+        //         formData.append(key, bannerObj[key]);
+        //     }
+        // }
+        Object.entries(bannerObj).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
         try {
             axios
                 .post(`http://localhost:3002/admin/addBanner`, formData)
@@ -61,17 +49,13 @@ function AddBannerModal(props) {
                             icon: <i className="bi bi-dash-circle"></i>,
                         });
                     }
-
                     if (result.status === 201) {
                         setTimeout(() => {
                             toggle();
                             setMessageObj({ message: "", class: "", icon: <></> });
                         }, 1000);
-                    } else {
-                        console.log(result.data.status);
                     }
-                })
-                .catch((error) => {
+                }).catch((error) => {
                     setMessageObj({
                         message: "Error While Adding Faculty",
                         class: "alert alert-danger",
@@ -85,7 +69,6 @@ function AddBannerModal(props) {
                 class: "alert alert-danger",
                 icon: <i className="bi bi-dash-circle"></i>,
             });
-
             console.log("Error:", error);
             window.alert("Failed to register");
         }
@@ -109,7 +92,7 @@ function AddBannerModal(props) {
                         <h4>
                             <i
                                 className="bi bi-image text-info"
-                                style={{ fontSize: "40px"}}
+                                style={{ fontSize: "40px" }}
                             ></i>
                             &nbsp;Add New Batch
                         </h4>
@@ -150,10 +133,8 @@ function AddBannerModal(props) {
                                 placeholder="linkedId"
                             />
                         </div>
-
-                        {messageBox}
                         <div class="alert alert-danger" role="alert">
-                        <i class="bi bi-info-circle-fill"></i> &nbsp; Recommended banner size  1000X347 px
+                            <i class="bi bi-info-circle-fill"></i> &nbsp; Recommended banner size  1000X347 px
                         </div>
 
                     </ModalBody>

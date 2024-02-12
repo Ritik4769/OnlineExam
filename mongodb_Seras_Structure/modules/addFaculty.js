@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 const facultyRecord = new mongoose.Schema({
     facultyname: {
         type: String,
@@ -27,7 +28,7 @@ const facultyRecord = new mongoose.Schema({
         trim: true,
         default: Date.now()
     },
-    department:{
+    department: {
         type: String,
         required: true,
         trim: true
@@ -37,7 +38,7 @@ const facultyRecord = new mongoose.Schema({
         required: false,
         trim: true
     },
-    Skills:{
+    Skills: {
         type: String,
         required: true,
         trim: true

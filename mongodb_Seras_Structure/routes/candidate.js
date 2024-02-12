@@ -13,4 +13,5 @@ router.post('/payment', RegistrationController.payment);
 router.post('/ExamPortal', getQuestionController);
 router.post('/checkAadharNumber/:aadharNumber', RegistrationController.checkAadharNumberController);
 router.post('/setEnrollId/:enrollPrefix', RegistrationController.setEnrollIdController);
+
 export default router;

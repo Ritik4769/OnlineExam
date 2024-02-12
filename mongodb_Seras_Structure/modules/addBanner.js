@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 const bannerRecord = new mongoose.Schema({
     bannerName: {
         type: String,

@@ -1,98 +1,16 @@
 import React from "react";
 import { useEffect } from "react";
 import Typed from "typed.js";
+import logo from "../Images/InfoBeans Foundation LogoOnly.png";
 
 export default function SkillSection() {
-  // useEffect(() => {
-  //   new Typed(".en-auto", {
-  //     strings: ["Vovels", "Tense"],
-  //     typeSpeed: 150,
-  //     backSpeed: 150,
-  //     loop: true,
-  //     cursorChar:"\u00A0"
-  //   });
-
-  //   new Typed(".confident-auto", {
-  //     strings: ["Confidence", "Empathy", "Respect", "feedback"],
-  //     typeSpeed: 150,
-  //     backSpeed: 150,
-  //     loop: true,
-  //     cursorChar:"\u00A0"
-  //   });
-
-  //   new Typed(".team-auto", {
-  //     strings: [
-  //       "Problem Solving",
-  //       "Innovation",
-  //       "Personal Growth",
-  //       "Productivity",
-  //     ],
-  //     typeSpeed: 150,
-  //     backSpeed: 150,
-  //     loop: true,
-  //     cursorChar:"\u00A0"
-  //   });
-
-  //   new Typed(".leader-auto", {
-  //     strings: ["Inspires Hard Work", "Increases Efficiency", "Motivates Team"],
-  //     typeSpeed: 150,
-  //     backSpeed: 150,
-  //     loop: true,
-  //     cursorChar:"\u00A0"
-  //   });
-
-  //   new Typed(".html-auto", {
-  //     strings: ["Forms", "Tables", "Div", "Media", "Semantic Tags"],
-  //     typeSpeed: 150,
-  //     backSpeed: 150,
-  //     loop: true,
-  //     cursorChar:"\u00A0"
-  //   });
-
-  //   new Typed(".css-auto", {
-  //     strings: [
-  //       "CSS Selectors",
-  //       "Box Model",
-  //       "Flexbox",
-  //       "Grid",
-  //       "Media Queries",
-  //     ],
-  //     typeSpeed: 150,
-  //     backSpeed: 150,
-  //     loop: true,
-  //     cursorChar:"\u00A0"
-  //   });
-
-  //   new Typed(".js-auto", {
-  //     strings: [
-  //       "Asynchronous",
-  //       "Box Model",
-  //       "Promises",
-  //       "Async/Await",
-  //       "Call Backs",
-  //     ],
-  //     typeSpeed: 150,
-  //     backSpeed: 150,
-  //     loop: true,
-  //     cursorChar:"\u00A0"
-  //   });
-
-  //   new Typed(".mongo-auto", {
-  //     strings: ["DataBase", "Collections", "Documents", "Fields", "Query"],
-  //     typeSpeed: 150,
-  //     backSpeed: 150,
-  //     loop: true,
-  //     cursorChar:"\u00A0"
-  //   });
-  // },[]);
-
   useEffect(() => {
     const initializeTyped = (selector, strings, delay) => {
       return setTimeout(() => {
         new Typed(selector, {
           strings,
-          typeSpeed: 150,
-          backSpeed: 150,
+          typeSpeed: 200,
+          backSpeed: 200,
           loop: true,
           cursorChar: "|",
         });
@@ -100,187 +18,303 @@ export default function SkillSection() {
     };
 
     // Delay between instances
-    const delay = 500;
+    const delay = 1000;
 
     const timeouts = [
       initializeTyped(".en-auto", ["Vowels", "Tense"], 0),
-      initializeTyped(".confident-auto", ["Confidence", "Empathy", "Respect", "feedback"], delay),
-      initializeTyped(".team-auto", ["Problem Solving", "Innovation", "Personal Growth", "Productivity"], 2 * delay),
-      initializeTyped(".leader-auto", ["Inspires Hard Work", "Increases Efficiency", "Motivates Team"], 3 * delay),
-      initializeTyped(".html-auto", ["Forms", "Tables", "Div", "Media", "Semantic Tags"], 4 * delay),
-      initializeTyped(".css-auto", ["CSS Selectors", "Box Model", "Flexbox", "Grid", "Media Queries"], 5 * delay),
-      initializeTyped(".js-auto", ["Asynchronous", "Promises", "Async/Await", "Call Backs"], 6 * delay),
-      initializeTyped(".mongo-auto", ["Database", "Collections", "Documents", "Fields", "Query"], 7 * delay),
+      initializeTyped(
+        ".confident-auto",
+        ["Confidence", "Empathy", "Respect", "feedback"],
+        2 * delay
+      ),
+      initializeTyped(
+        ".team-auto",
+        ["Problem Solving", "Innovation", "Personal Growth", "Productivity"],
+        4 * delay
+      ),
+      initializeTyped(
+        ".leader-auto",
+        ["Inspires Hard Work", "Increases Efficiency", "Motivates Team"],
+        6 * delay
+      ),
+      initializeTyped(
+        ".html-auto",
+        ["Forms", "Tables", "Div", "Media", "Semantic Tags"],
+        delay
+      ),
+      initializeTyped(
+        ".css-auto",
+        ["CSS Selectors", "Box Model", "Flexbox", "Grid", "Media Queries"],
+        3 * delay
+      ),
+      initializeTyped(
+        ".js-auto",
+        ["Asynchronous", "Promises", "Async/Await", "Call Backs"],
+        5 * delay
+      ),
+      initializeTyped(
+        ".mongo-auto",
+        ["Database", "Collections", "Documents", "Fields", "Query"],
+        7 * delay
+      ),
     ];
 
     return () => {
-      // Clear timeouts on component unmount
       timeouts.forEach(clearTimeout);
     };
   }, []);
 
-
-
-
-
   return (
-    <div className="container-fluid infoBeansred p-0">
-      <div className="container-fluid bg-white" id="curve-div">
-        <div className="container p-5">
-          <h1 className="text-center h1 text-danger">Skill</h1>
-          <div className="row ">
-            <div className="col-12 col-lg-6">
-              <div className="w-100">
+    <div className="container-fluid mb-5 p-0">
+      <h1 className="text-center h1 text-white infoBeansred p-2">Skills</h1>
+      <div className="row m-0 p-0">
+        <div className="col-12 col-md-4">
+          {/* Skills div for larger screens */}
+          <div className="d-none d-md-block">
+            {/* English */}
+            <div className="d-flex justify-content-end p-4">
+              <div>
+                <h4 className="p-0 m-0" style={{ width: "200px" }}>
+                  <i
+                    className="fa-solid fa-language"
+                    style={{ fontSize: "40px", color: "red" }}
+                  ></i>
+                  &nbsp; English
+                </h4>
                 <div className="w-100">
-                  <h4 className=" text-center text-danger">Soft Skills</h4>
-                </div>
-                <div className=" w-100 ">
-                  <div
-                    className="w-50 d-flex align-items-start"
-                    style={{ marginLeft: "20%" }}
-                  >
-                    <ul className="row list-unstyled p-0 m-0 ">
-                      <div className="col-12 mt-5">
-                        <li className="">
-                          {" "}
-                          <i
-                            className="fa-solid fa-language"
-                            style={{ fontSize: "40px", color: "orange" }}
-                          ></i>
-                          &nbsp; English
-                        </li>
-                      </div>
-                      <div className="col-12 pt-1">
-                        <div>
-                          <span className="en-auto text-muted text-center"></span>
-                        </div>
-                      </div>
-                      <div className="col-12  mt-5   ">
-                        <li className="">
-                          {" "}
-                          <i
-                            className="fa-solid fa-volume-high"
-                            style={{ fontSize: "40px", color: "lightgreen" }}
-                          ></i>
-                          &nbsp;Communication
-                        </li>
-                      </div>
-
-                      <div className="col-12 pt-1">
-                        <div>
-                          <span className="confident-auto text-muted"></span>
-                        </div>
-                      </div>
-                      <div className="col-12 mt-5">
-                        <li className="">
-                          {" "}
-                          <i
-                            className="fa-solid fa-people-group"
-                            id="figma-icon"
-                            style={{ fontSize: "40px" }}
-                          ></i>
-                          &nbsp;&nbsp;Team Work
-                        </li>
-                      </div>
-                      <div className="col-12 pt-1">
-                        <div>
-                          <span className="team-auto text-muted"></span>
-                        </div>
-                      </div>
-                      <div className="col-12  mt-5">
-                        <li className="">
-                          {" "}
-                          <i
-                            className="fa-solid fa-person"
-                            id="java-icon"
-                            style={{ fontSize: "40px" }}
-                          ></i>
-                          &nbsp;&nbsp;Leadership
-                        </li>
-                      </div>
-                      <div className="col-12    pt-1">
-                        <div>
-                          <span className="leader-auto text-muted "></span>
-                        </div>
-                      </div>
-                    </ul>
-                  </div>
+                  <span className="en-auto text-muted text-center"></span>
                 </div>
               </div>
             </div>
-            <div className="col-12 col-lg-6">
-              <div className="w-100 ">
+            {/* Communication */}
+            <div className="d-flex justify-content-center p-4">
+              <div>
+                <h4 className="p-0 m-0" style={{ width: "280px" }}>
+                  <i
+                    className="fa-solid fa-volume-high"
+                    style={{ fontSize: "40px", color: "blue" }}
+                  ></i>
+                  &nbsp; Communication
+                </h4>
                 <div className="w-100">
-                  <h4 className=" text-center text-danger">Hard Skills</h4>
+                  <span className="confident-auto text-muted text-center"></span>
                 </div>
-                <div className=" w-100 ">
-                  <div
-                    className="w-50 d-flex align-items-start"
-                    style={{ marginLeft: "20%" }}
-                  >
-                    <ul className="row list-unstyled p-0 m-0 ">
-                      <div className="col-12 mt-5">
-                        <li className="">
-                          {" "}
-                          <i
-                            className="fa-brands fa-html5"
-                            style={{ fontSize: "40px", color: "red" }}
-                          ></i>
-                          &nbsp; HTML
-                        </li>
-                      </div>
-                      <div className="col-12 pt-1">
-                        <div>
-                          <span className="html-auto text-muted text-center"></span>
-                        </div>
-                      </div>
-                      <div className="col-12  mt-5  ">
-                        <li className="">
-                          {" "}
-                          <i
-                            className="fa-brands fa-css3"
-                            style={{ fontSize: "40px", color: "blue" }}
-                          ></i>
-                          &nbsp;Css
-                        </li>
-                      </div>
-                      <div className="col-12 pt-1">
-                        <div>
-                          <span className="css-auto text-muted"></span>
-                        </div>
-                      </div>
-                      <div className="col-12 mt-5">
-                        <li className="">
-                          <i
-                            className="fa-brands fa-js"
-                            style={{ fontSize: "40px", color: "darkyellow" }}
-                          ></i>
-                          &nbsp;Java Script
-                        </li>
-                      </div>
-                      <div className="col-12 pt-1">
-                        <div>
-                          <span className="js-auto text-muted"></span>
-                        </div>
-                      </div>
-                      <div className="col-12  mt-5">
-                        <li className="">
-                          {" "}
-                          <i
-                            className="fa-brands fa-envira"
-                            style={{ fontSize: "40px", color: "green" }}
-                          ></i>
-                          &nbsp;Mongo Db
-                        </li>
-                      </div>
-                      <div className="col-12    pt-1">
-                        <div>
-                          <span className="mongo-auto text-muted "></span>
-                        </div>
-                      </div>
-                    </ul>
-                  </div>
+              </div>
+            </div>
+            {/* Team Work */}
+            <div className="d-flex justify-content-center p-4">
+              <div>
+                <h4 className="p-0 m-0" style={{ width: "280px" }}>
+                  <i
+                    className="fa-solid fa-people-group"
+                    style={{ fontSize: "40px", color: "#eeee21" }}
+                  ></i>
+                  &nbsp; Team Work
+                </h4>
+                <div className="w-100">
+                  <span className="team-auto text-muted text-center"></span>
                 </div>
+              </div>
+            </div>
+            {/* Leadership */}
+            <div className="d-flex justify-content-end p-4">
+              <div>
+                <h4 className="p-0 m-0" style={{ width: "200px" }}>
+                  <i
+                    className="fa-solid fa-person"
+                    style={{ fontSize: "40px", color: "green" }}
+                  ></i>
+                  &nbsp; Leadership
+                </h4>
+                <div className="w-100">
+                  <span className="leader-auto text-muted text-center"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Skills div for small screens */}
+          <div className="d-md-none">
+            {/* English */}
+            <div className="p-4">
+              <h4 className="p-0 m-0">
+                <i
+                  className="fa-solid fa-language"
+                  style={{ fontSize: "40px", color: "red" }}
+                ></i>
+                &nbsp; English
+              </h4>
+              <div className="w-100">
+                <span className="en-auto text-muted text-center"></span>
+              </div>
+            </div>
+            {/* Communication */}
+            <div className="p-4">
+              <h4 className="p-0 m-0">
+                <i
+                  className="fa-solid fa-volume-high"
+                  style={{ fontSize: "40px", color: "blue" }}
+                ></i>
+                &nbsp; Communication
+              </h4>
+              <div className="w-100">
+                <span className="confident-auto text-muted text-center"></span>
+              </div>
+            </div>
+            {/* Team Work */}
+            <div className="p-4">
+              <h4 className="p-0 m-0">
+                <i
+                  className="fa-solid fa-people-group"
+                  style={{ fontSize: "40px", color: "#eeee21" }}
+                ></i>
+                &nbsp; Team Work
+              </h4>
+              <div className="w-100">
+                <span className="team-auto text-muted text-center"></span>
+              </div>
+            </div>
+            {/* Leadership */}
+            <div className="p-4">
+              <h4 className="p-0 m-0">
+                <i
+                  className="fa-solid fa-person"
+                  style={{ fontSize: "40px", color: "green" }}
+                ></i>
+                &nbsp; Leadership
+              </h4>
+              <div className="w-100">
+                <span className="leader-auto text-muted text-center"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-12 col-md-4 d-flex align-items-center">
+          {/* Responsive image, disappears on small screens */}
+          <img
+            src={logo}
+            className="w-100 d-none d-md-block"
+            alt="InfoBeans Foundation Logo"
+            id="skillsLogo"
+          />
+        </div>
+
+        <div className="col-12 col-md-4">
+          {/* Soft Skills div for larger screens */}
+          <div className="d-none d-md-block">
+            {/* HTML */}
+            <div className="d-flex justify-content-start p-4">
+              <div>
+                <h4 className="p-0 m-0" style={{ width: "200px" }}>
+                  <i
+                    className="fa-brands fa-html5"
+                    style={{ fontSize: "40px", color: "red" }}
+                  ></i>
+                  &nbsp; HTML
+                </h4>
+                <div className="w-100">
+                  <span className="html-auto text-muted text-center"></span>
+                </div>
+              </div>
+            </div>
+            {/* CSS */}
+            <div className="d-flex justify-content-center p-4">
+              <div>
+                <h4 className="p-0 m-0" style={{ width: "200px" }}>
+                  <i
+                    className="fa-brands fa-css3"
+                    style={{ fontSize: "40px", color: "blue" }}
+                  ></i>
+                  &nbsp; CSS
+                </h4>
+                <div className="w-100">
+                  <span className="css-auto text-muted text-center"></span>
+                </div>
+              </div>
+            </div>
+            {/* JavaScript */}
+            <div className="d-flex justify-content-center p-4">
+              <div>
+                <h4 className="p-0 m-0" style={{ width: "200px" }}>
+                  <i
+                    className="fa-brands fa-js"
+                    style={{ fontSize: "40px", color: "#eeee21" }}
+                  ></i>
+                  &nbsp; JavaScript
+                </h4>
+                <div className="w-100">
+                  <span className="js-auto text-muted text-center"></span>
+                </div>
+              </div>
+            </div>
+            {/* MongoDB */}
+            <div className="d-flex justify-content-start p-4">
+              <div>
+                <h4 className="p-0 m-0" style={{ width: "200px" }}>
+                  <i
+                    className="fa-brands fa-envira"
+                    style={{ fontSize: "40px", color: "green" }}
+                  ></i>
+                  &nbsp; MongoDB
+                </h4>
+                <div className="w-100">
+                  <span className="mongo-auto text-muted text-center"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Soft Skills div for small screens */}
+          <div className="d-md-none">
+            {/* HTML */}
+            <div className="p-4">
+              <h4 className="p-0 m-0">
+                <i
+                  className="fa-brands fa-html5"
+                  style={{ fontSize: "40px", color: "red" }}
+                ></i>
+                &nbsp; HTML
+              </h4>
+              <div className="w-100">
+                <span className="html-auto text-muted text-center"></span>
+              </div>
+            </div>
+            {/* CSS */}
+            <div className="p-4">
+              <h4 className="p-0 m-0">
+                <i
+                  className="fa-brands fa-css3"
+                  style={{ fontSize: "40px", color: "blue" }}
+                ></i>
+                &nbsp; CSS
+              </h4>
+              <div className="w-100">
+                <span className="css-auto text-muted text-center"></span>
+              </div>
+            </div>
+            {/* JavaScript */}
+            <div className="p-4">
+              <h4 className="p-0 m-0">
+                <i
+                  className="fa-brands fa-js"
+                  style={{ fontSize: "40px", color: "#eeee21" }}
+                ></i>
+                &nbsp; JavaScript
+              </h4>
+              <div className="w-100">
+                <span className="js-auto text-muted text-center"></span>
+              </div>
+            </div>
+            {/* MongoDB */}
+            <div className="p-4">
+              <h4 className="p-0 m-0">
+                <i
+                  className="fa-brands fa-envira"
+                  style={{ fontSize: "40px", color: "green" }}
+                ></i>
+                &nbsp; MongoDB
+              </h4>
+              <div className="w-100">
+                <span className="mongo-auto text-muted text-center"></span>
               </div>
             </div>
           </div>

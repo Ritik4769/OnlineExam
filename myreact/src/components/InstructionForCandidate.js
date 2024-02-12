@@ -13,7 +13,7 @@ export default function InstructionForCandidate() {
             </p>
             <ol type="1">
                 <li>
-                    Click <b>start </b> test on bottom of your screen to begin
+                    Click start test on bottom of your screen to begin
                     the test.
                 </li>
                 <li>
@@ -51,13 +51,25 @@ export default function InstructionForCandidate() {
                     <ul>
                         <li>
                             <div
+                                className="green"
+                                style={{ backgroundColor: "green" }}
+                            ></div>{" "}
+                            <div className="px-2">
+                                {" "}
+                                <p>
+                                    : Answered / Attempted Question
+                                </p>{" "}
+                            </div>
+                        </li>
+                        <li>
+                            <div
                                 className="red"
                                 style={{ backgroundColor: "red" }}
                             ></div>{" "}
                             <div className="px-2">
                                 {" "}
                                 <p>
-                                    : Not answered / <b> Not attempted</b> Question
+                                    : Visited / Not Attempted Question
                                 </p>{" "}
                             </div>
                         </li>
@@ -69,19 +81,7 @@ export default function InstructionForCandidate() {
                             <div className="px-2">
                                 {" "}
                                 <p>
-                                    : Answered / <b>Marked Attempted</b>for review
-                                </p>{" "}
-                            </div>
-                        </li>
-                        <li>
-                            <div
-                                className="green"
-                                style={{ backgroundColor: "green" }}
-                            ></div>{" "}
-                            <div className="px-2">
-                                {" "}
-                                <p>
-                                    : Not answered / <b> Not attempted</b> Question
+                                    : Answered / Marked for review
                                 </p>{" "}
                             </div>
                         </li>
@@ -92,7 +92,7 @@ export default function InstructionForCandidate() {
                             ></div>{" "}
                             <div className="px-2">
                                 {" "}
-                                <p>: Not visited Question</p>{" "}
+                                <p>: Not Visited Question</p>{" "}
                             </div>
                         </li>
                     </ul>
@@ -102,7 +102,7 @@ export default function InstructionForCandidate() {
                     result
                 </li>
                 <li>
-                    Their is no negative marking for <b>incorrect/wrong</b>{" "}
+                    Their is no negative marking for incorrect/wrong{" "}
                     answer
                 </li>
                 <li>

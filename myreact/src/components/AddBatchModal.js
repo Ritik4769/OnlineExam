@@ -1,214 +1,193 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from 'sweetalert2';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 var batchObj = {};
-var Trainers=[];
+var Trainers = [];
+
 function AddBatchModal(props) {
     const [messageObj, setMessageObj] = useState({
         message: "",
         class: "",
         icon: <></>,
     });
+    const {getRemainingBatch} = props
     const [modal, setModal] = useState(false);
-    const [nestedModal, setNestedModal] = useState(false);
-    const [closeAll, setCloseAll] = useState(false);
     const toggle = () => setModal(!modal);
-    const toggleNested = () => {
-        setNestedModal(!nestedModal);
-        setCloseAll(false);
-    };
-    const toggleAll = () => {
-        setNestedModal(!nestedModal);
-        setCloseAll(true);
-    };
-    
-    const [messageBox, setMessageBox] = useState();
-    var batchname=false,trainername=false,center=false,startdate=false,enddate=false,batchimage=false;
+    const [centers, setCenters] = useState([]);
+    var batchname = false, trainername = false, center = false, startdate = false, enddate = false, batchimage = false;
+
     const validateField = (name, value) => {
         let error = '';
-
         switch (name) {
-                case 'trainerName':
-                    if (value == '') {
-                        document.getElementById("trainerName").innerHTML = "Center Required";
-                        trainername = false;
-                        return false;
-                    }
-                    else {               
-                        trainername = true;
-                        return true;                    
-                    }
+            case 'trainerName':
+                if (value == '') {
+                    document.getElementById("trainerName").innerHTML = "Center Required";
+                    trainername = false;
+                    return false;
+                } else {
+                    trainername = true;
+                    return true;
+                }
                 break;
-                case 'batchName':
-                    if (value.trim() == "") {
-                        document.getElementById("batchName").style.color = "red";
-                        document.getElementById("batch").innerHTML = "Company Name Required";
-                        batchname = false;
-                        return false;
+            case 'batchName':
+                if (value.trim() == "") {
+                    document.getElementById("batchName").style.color = "red";
+                    document.getElementById("batch").innerHTML = "Company Name Required";
+                    batchname = false;
+                    return false;
+                } else {
+                    var reg = /^[0-9A-Za-z\s]+$/;
+                    if (reg.test(value)) {
+                        document.getElementById('batchName').style.color = "green";
+                        document.getElementById("batch").innerHTML = "";
+                        batchname = true;
+                        return true
+                    } else {
+                        document.getElementById('batchName').style.color = "red";
+                        document.getElementById("batch").innerHTML = "Invalid Company name";
+                        batchname = true;
+                        return true
                     }
-                    else {
-                        var reg = /^[0-9A-Za-z\s]+$/;
-                        if (reg.test(value)) {
-                            document.getElementById('batchName').style.color = "green";
-                            document.getElementById("batch").innerHTML = "";                        
-                            batchname = true;
-                            return true
-                        }
-                        else{
-                            document.getElementById('batchName').style.color = "red";
-                            document.getElementById("batch").innerHTML = "Invalid Company name";                        
-                            batchname = true;
-                            return true
-                        }                        
-                    }
-                break;      
-                
-                case 'startDate':
-                    if (value == "") {
-                        document.getElementById("startDate").style.color = "red";
-                        document.getElementById("sdate").innerHTML = "Joining Date Required";
-                        startdate = false;
-                        return false;
-                    }
-                    else {               
-                        document.getElementById("startDate").style.color = "green";
-                        document.getElementById("sdate").innerHTML = "";
-                        startdate = true;
-                        return true;                    
-                    }
+                }
                 break;
 
-                case 'endDate':
-                    if (value == "") {
-                        document.getElementById("endDate").style.color = "red";
-                        document.getElementById("edate").innerHTML = "Joining Date Required";
-                        enddate = false;
-                        return false;
-                    }
-                    else {               
-                        document.getElementById("endDate").style.color = "green";
-                        document.getElementById("edate").innerHTML = "";
-                        enddate = true;
-                        return true;                    
-                    }
-                break;
-                
-                case 'batchCenter':
-                    if (value == '') {
-                        document.getElementById("center").innerHTML = "Center Required";
-                        center = false;
-                        return false;
-                    }
-                    else {               
-                        center = true;
-                        return true;                    
-                    }
-                break;
-                case 'batchImage':
-                    var batchImage = document.getElementById("batchImage");
-                    if (batchImage.files.length === 0) {
-                        document.getElementById("img").innerHTML = "Image Required";
-                        batchimage = false;
-                        return false;
-                    }
-                    else {               
-                        batchimage = true;
-                        return true;                    
-                    }
+            case 'startDate':
+                if (value == "") {
+                    document.getElementById("startDate").style.color = "red";
+                    document.getElementById("sdate").innerHTML = "Joining Date Required";
+                    startdate = false;
+                    return false;
+                } else {
+                    document.getElementById("startDate").style.color = "green";
+                    document.getElementById("sdate").innerHTML = "";
+                    startdate = true;
+                    return true;
+                }
                 break;
 
+            case 'endDate':
+                if (value == "") {
+                    document.getElementById("endDate").style.color = "red";
+                    document.getElementById("edate").innerHTML = "Joining Date Required";
+                    enddate = false;
+                    return false;
+                } else {
+                    document.getElementById("endDate").style.color = "green";
+                    document.getElementById("edate").innerHTML = "";
+                    enddate = true;
+                    return true;
+                }
+                break;
+
+            case 'batchCenter':
+                if (value == '') {
+                    document.getElementById("center").innerHTML = "Center Required";
+                    center = false;
+                    return false;
+                } else {
+                    center = true;
+                    return true;
+                }
+                break;
+            case 'batchImage':
+                var batchImage = document.getElementById("batchImage");
+                if (batchImage.files.length === 0) {
+                    document.getElementById("img").innerHTML = "Image Required";
+                    batchimage = false;
+                    return false;
+                } else {
+                    batchimage = true;
+                    return true;
+                }
+                break;
             default:
                 break;
         }
         return error;
     };
-    
-    const [centers,setCenters]=useState([]);
-    
-     useEffect(()=>{
-     const fetchCenters = async () => {
+
+    useEffect(() => {
+        const fetchCenters = async () => {
             try {
                 const response = await axios.get('http://localhost:3002/admin/getCenters');
-                var Centers = response.data;
-                console.log(Centers);
-                setCenters(Centers);
+                setCenters(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
                 Trainers = [{ name: "Unable to get Centers Data" }];
             }
         };
         fetchCenters();
-     },[]);    
+    }, []);
+
+    useEffect(() => {
+        var getTrainers = async () => {
+            try {
+                const response = await axios.get('http://localhost:3002/admin/getTrainers');
+                Trainers = response.data;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                Trainers = [{ name: "Unable to get Trainers Data" }]
+            }
+        }
+        getTrainers()
+    }, [batchObj])
 
     var getBatchdata = (e) => {
         var { name, value } = e.target;
         if (e.target.type === "file") {
             const batchImg = e.target.files[0];
-            validateField(name,value);
+            validateField(name, value);
             batchObj = { ...batchObj, [name]: batchImg };
         } else {
-            validateField(name,value);
+            validateField(name, value);
             batchObj = { ...batchObj, [name]: value };
         }
     };
-    useEffect(()=>{
-        var getTrainers =async ()=>{
-         try {
-             const response = await axios.get('http://localhost:3002/admin/getTrainers');
-              Trainers=response.data;
-         } catch (error) {
-           console.error('Error fetching data:', error);
-           Trainers=[{name:"Unable to get Trainers Data"}]
-         }
-        } 
-        getTrainers()
-     },[batchObj])
 
     function addBatch(e) {
         const formData = new FormData();
-        for (const key in batchObj) {
-            if (batchObj[key]) {
-                formData.append(key, batchObj[key]);
-            }
-        }
+        // for (const key in batchObj) {
+        //     if (batchObj[key]) {
+        //         formData.append(key, batchObj[key]);
+        //     }
+        // }
+        Object.entries(batchObj).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
         try {
-            if(batchname && trainername && startdate && enddate && center && batchimage){
-            axios.post(`http://localhost:3002/admin/addBatch`, formData)
-                .then((result) => {
-                    if (result.data.status == "Batch Adeed Sucessfully!!!!") {
+            if (batchname && trainername && startdate && enddate && center && batchimage) {
+                axios.post(`http://localhost:3002/admin/addBatch`, formData, { crossorigin: true })
+                    .then((result) => {
+                        if (result.data.status == "Batch Adeed Sucessfully!!!!") {
+                            setMessageObj({
+                                message: result.data.status,
+                                class: "alert alert-primary",
+                                icon: <i className="bi bi-check-lg"></i>,
+                            });
+                            getRemainingBatch(result.data.Batch)
+                        } else {
+                            setMessageObj({
+                                message: result.data.status,
+                                class: "alert alert-danger",
+                                icon: <i className="bi bi-dash-circle"></i>,
+                            });
+                        }
+                        if (result.status === 201) {
+                            setTimeout(() => {
+                                toggle();
+                                setMessageObj({ message: "", class: "", icon: <></> });
+                            }, 1000);
+                        }
+                    }).catch((error) => {
                         setMessageObj({
-                            message: result.data.status,
-                            class: "alert alert-primary",
-                            icon: <i className="bi bi-check-lg"></i>,
-                        });
-                    } else {
-                        setMessageObj({
-                            message: result.data.status,
+                            message: "Error While Adding Faculty",
                             class: "alert alert-danger",
                             icon: <i className="bi bi-dash-circle"></i>,
                         });
-                    }
-
-                    if (result.status === 201) {
-                        setTimeout(() => {
-                            toggle();
-                            setMessageObj({ message: "", class: "", icon: <></> });
-                        }, 1000);
-                    } else {
-                        console.log(result.data.status);
-                    }
-                })
-                .catch((error) => {
-                    setMessageObj({
-                        message: "Error While Adding Faculty",
-                        class: "alert alert-danger",
-                        icon: <i className="bi bi-dash-circle"></i>,
+                        console.log("error in addBatch: ", error);
                     });
-                    console.log("", error);
-                });
-            }
-            else{
+            } else {
                 Swal.fire({
                     icon: "error",
                     text: 'Some fields are empty',
@@ -222,7 +201,6 @@ function AddBatchModal(props) {
                 class: "alert alert-danger",
                 icon: <i className="bi bi-dash-circle"></i>,
             });
-
             console.log("Error:", error);
             window.alert("Failed to register");
         }
@@ -261,7 +239,7 @@ function AddBatchModal(props) {
                                 onChange={(e) => {
                                     getBatchdata(e);
                                 }}
-                                
+
                                 name="batchName"
                                 className="form-control"
                                 id="batchName"
@@ -276,36 +254,36 @@ function AddBatchModal(props) {
 
                         <div className="form-floating mb-3">
                             <select className="form-control"
-                             onChange={(e) => {
-                                getBatchdata(e);
-                            }}
-                            name="trainerName"
-                            id='trainerName'>
-                                <option value="NULL">Select Trainer</option>                               
+                                onChange={(e) => {
+                                    getBatchdata(e);
+                                }}
+                                name="trainerName"
+                                id='trainerName'>
+                                <option value="NULL">Select Trainer</option>
                                 {
-                                    Trainers.map((Trainer)=>{
+                                    Trainers.map((Trainer) => {
                                         return <option value={Trainer.facultyname}>{Trainer.facultyname}</option>
                                     })
                                 }
-                                
+
                             </select>
                             <label htmlFor="trainerName">
                                 {" "}
                                 <i className="bi bi-person-circle"></i> &nbsp; Trainer Name
-                            </label>                           
+                            </label>
                         </div>
-                         <p id="trainer"></p>
+                        <p id="trainer"></p>
                         <div className=" mb-3">
                             <label for="batchCenter">Batch Center</label>
-                            <select className="batchCenter form-control" onChange={(e) => {getBatchdata(e);}} name="batchCenter">
+                            <select className="batchCenter form-control" onChange={(e) => { getBatchdata(e); }} name="batchCenter">
                                 <option value=''>Select Center</option>
                                 {
-                                    centers.map((center,index)=>{
-                                        return(
+                                    centers.map((center, index) => {
+                                        return (
                                             <option key={index} value={center.centerName}>{center.centerName}</option>
                                         )
                                     })
-                                }                               
+                                }
                             </select>
                         </div>
                         <p id="center"></p>
@@ -326,7 +304,7 @@ function AddBatchModal(props) {
                                 <i className="bi bi-calendar-date"></i>&nbsp;Start Date
                             </label>
                         </div>
-                       <p id="sdate"></p>
+                        <p id="sdate"></p>
                         <div className="form-floating mb-3">
                             <input
                                 type="date"
@@ -357,12 +335,10 @@ function AddBatchModal(props) {
                                 name="batchImage"
                                 id="batchImage"
                                 placeholder="linkedId"
-                                
+
                             />
                         </div>
                         <p id="img"></p>
-                     
-                        {messageBox}
                     </ModalBody>
                     <ModalFooter>
                         <Button color="primary" type="submit">

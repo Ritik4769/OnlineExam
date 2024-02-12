@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 const centerRecord = new mongoose.Schema({
     centerName: {
         type: String,
@@ -18,7 +19,6 @@ const centerRecord = new mongoose.Schema({
         trim: true,
         default: "Not Added"
     },
-    
     startDate: {
         type: Date,
         required: true,

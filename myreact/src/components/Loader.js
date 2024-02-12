@@ -1,29 +1,32 @@
 import { useState } from "react";
 let toggleLoader;
-function Loader(){
-      const [isLoading,setIsLoading]=useState(false);
-      toggleLoader = () => {
-        (isLoading) ? setIsLoading(false) : setIsLoading(true);
+
+function Loader() {
+    const [isLoading, setIsLoading] = useState(false);
+    toggleLoader = () => {
+        setIsLoading(!isLoading);
         document.getElementById('loader').classList.toggle('loader');
     }
-    return(
-    <>
-      <div id='loader' className="position-fixed top-0 ">
+
+    return (
+        <>
+            <div id='loader' className="position-fixed top-0 ">
                 {isLoading ? (
                     <>
-                        <div className="spinner-grow m-1 text-danger " role="status" style={{width:'10px',height:'10px'}}>
+                        <div className="spinner-grow m-1 text-danger " role="status" style={{ width: '10px', height: '10px' }}>
                             <span className="visually-hidden">Loading...</span>
                         </div>
-                        <div className="spinner-grow m-1 text-danger " role="status" style={{width:'10px',height:'10px'}}>
+                        <div className="spinner-grow m-1 text-danger " role="status" style={{ width: '10px', height: '10px' }}>
                             <span className="visually-hidden">Loading...</span>
                         </div>
-                        <div className="spinner-grow m-1 text-danger " role="status" style={{width:'10px',height:'10px'}}>
+                        <div className="spinner-grow m-1 text-danger " role="status" style={{ width: '10px', height: '10px' }}>
                             <span className="visually-hidden">Loading...</span>
                         </div>
                     </>
                 ) : ""}
-        </div>  
-    </>
+            </div>
+        </>
     )
 }
-export {Loader,toggleLoader};
+
+export { Loader, toggleLoader };

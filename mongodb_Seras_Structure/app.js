@@ -1,10 +1,9 @@
 import express from "express";
+import connectDB from "./db/connectdb.js";
 import candidate from "./routes/candidate.js";
 import admin from "./routes/adminRoutes.js";
 import ExamPortal from "./routes/ExamPortal.js";
 import cors from 'cors';
-import connectDB from "./db/connectdb.js";
-import cookieparser from 'cookie-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -16,9 +15,6 @@ const PORT = 3002;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
-app.use(cookieparser());
-app.use('/uploads', express.static('uploads'));
 app.use(express.static(path.join(__dirname, 'uploads')));
 app.use("/candidate", candidate);
 app.use("/admin", admin);

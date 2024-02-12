@@ -1,11 +1,9 @@
-
 import path from "path";
 import multer from "multer";
 
 var storage = multer.diskStorage({
-    destination: "./uploads",
+    destination: "./uploads/",
     filename: (req, file, cb) => {
-        let ext = path.extname(file.originalname)
         cb(null, file.originalname)
     }
 })
@@ -50,19 +48,34 @@ var upload6 = multer({
     { name: 'centerImage', maxCount: 1 }
 ]);
 
-var upload7= multer({
+var upload7 = multer({
     storage: storage
 }).fields([
     { name: 'bannerImg', maxCount: 1 }
 ]);
+
 var upload8 = multer({
     storage: storage
 }).fields([
     { name: 'interviewFile', maxCount: 1 }
-]);;
+]);
+
 var upload9 = multer({
     storage: storage
 }).fields([
     { name: 'homeFile', maxCount: 1 }
-]);;
-export { upload, upload2, upload3, upload4, upload5,upload6,upload7,upload8,upload9};
+]);
+
+var upload10 = multer({
+    storage: storage
+}).fields([
+    { name: 'companyImg', maxCount: 1 }
+]);
+
+var upload11 = multer({
+    storage: storage
+}).fields([
+    { name: 'galleryImg', maxCount: 1 }
+]);
+
+export { upload, upload2, upload3, upload4, upload5, upload6, upload7, upload8, upload9 ,upload10 ,upload11 };

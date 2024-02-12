@@ -8,10 +8,9 @@ import img6 from '../Images/email_icon.jpg';
 import img7 from '../Images/password_icon.jpg';
 import img8 from '../Images/document_icon.jpg';
 import { loadStripe } from '@stripe/stripe-js';
-import {Loader,toggleLoader} from './Loader.js';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Loader, toggleLoader } from './Loader.js';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import Cookie from "js-cookie";
-
 import axios from 'axios';
 import Modal from 'react-modal';
 const modalCss = {
@@ -32,7 +31,6 @@ const modalCss = {
 var username = false, checkemail = false, Adhaar = false, City = false, phone = false, pass = false, Address = false, State = false;
 export default function Registration() {
     var state_arr = new Array("Andaman & Nicobar", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chandigarh", "Chhattisgarh", "Dadra & Nagar Haveli", "Daman & Diu", "Delhi", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jammu & Kashmir", "Jharkhand", "Karnataka", "Kerala", "Lakshadweep", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Orissa", "Pondicherry", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Tripura", "Uttar Pradesh", "Uttaranchal", "West Bengal");
-
     var s_a = new Array();
     s_a[0] = "";
     s_a[1] = " Alipur | Andaman Island | Anderson Island | Arainj-Laka-Punga | Austinabad | Bamboo Flat | Barren Island | Beadonabad | Betapur | Bindraban | Bonington | Brookesabad | Cadell Point | Calicut | Chetamale | Cinque Islands | Defence Island | Digilpur | Dolyganj | Flat Island | Geinyale | Great Coco Island | Haddo | Havelock Island | Henry Lawrence Island | Herbertabad | Hobdaypur | Ilichar | Ingoie | Inteview Island | Jangli Ghat | Jhon Lawrence Island | Karen | Kartara | KYD Islannd | Landfall Island | Little Andmand | Little Coco Island | Long Island | Maimyo | Malappuram | Manglutan | Manpur | Mitha Khari | Neill Island | Nicobar Island | North Brother Island | North Passage Island | North Sentinel Island | Nothen Reef Island | Outram Island | Pahlagaon | Palalankwe | Passage Island | Phaiapong | Phoenix Island | Port Blair | Preparis Island | Protheroepur | Rangachang | Rongat | Rutland Island | Sabari | Saddle Peak | Shadipur | Smith Island | Sound Island | South Sentinel Island | Spike Island | Tarmugli Island | Taylerabad | Titaije | Toibalawe | Tusonabad | West Island | Wimberleyganj | Yadita";
@@ -72,14 +70,11 @@ export default function Registration() {
     s_a[35] = " Adra | Alipurduar | Amlagora | Arambagh | Asansol | Balurghat | Bankura | Bardhaman | Basirhat | Berhampur | Bethuadahari | Birbhum | Birpara | Bishanpur | Bolpur | Bongoan | Bulbulchandi | Burdwan | Calcutta | Canning | Champadanga | Contai | Cooch Behar | Daimond Harbour | Dalkhola | Dantan | Darjeeling | Dhaniakhali | Dhuliyan | Dinajpur | Dinhata | Durgapur | Gangajalghati | Gangarampur | Ghatal | Guskara | Habra | Haldia | Harirampur | Harishchandrapur | Hooghly | Howrah | Islampur | Jagatballavpur | Jalpaiguri | Jhalda | Jhargram | Kakdwip | Kalchini | Kalimpong | Kalna | Kandi | Karimpur | Katwa | Kharagpur | Khatra | Krishnanagar | Mal Bazar | Malda | Manbazar | Mathabhanga | Medinipur | Mekhliganj | Mirzapur | Murshidabad | Nadia | Nagarakata | Nalhati | Nayagarh | Parganas | Purulia | Raiganj | Rampur Hat | Ranaghat | Seharabazar | Siliguri | Suri | Takipur | Tamluk";
 
     const location = useLocation();
-
     const isFromOtp = location.state && location.state.fromOtp;
     console.log("is form otp : ", isFromOtp);
     const [registrationStatus, setRegistrationStatus] = useState(false);
-    // const [isModalOpen, setIsModalOpen] = useState(false);
     var [isUserRegistered, setUserRegistered] = useState(false);
     var [isUserDocuments, setUserDocuments] = useState(false);
-
     const history = useNavigate();
     const [user, setUser] = useState({
         username: '',
@@ -92,7 +87,7 @@ export default function Registration() {
         city: '',
         state: ''
     });
-    
+
     const [user1, setUser1] = useState({
         income: "",
         aadharFile: "",
@@ -122,14 +117,8 @@ export default function Registration() {
     };
     var incomSpanStatus = true;
     const handleFileChange1 = (e, id, no) => {
-
-
         const inputElement = document.getElementById(id);
         const labelElement = document.getElementById('fileLabel' + no);
-        console.log("no : ", no);
-        console.log("label Element : ", labelElement);
-        console.log("input Element : ", inputElement);
-
         if (e.target.type === 'file') {
             if (inputElement.files.length > 0) {
                 labelElement.innerText = inputElement.files[0].name;
@@ -139,17 +128,11 @@ export default function Registration() {
             const name = e.target.name;
             const file = e.target.files[0];
             setUser1({ ...user1, [name]: file });
-            console.log(user1)
-            console.log("file name : ", file);
-            console.log("file: ", file);
         } else {
             const name = e.target.name;
             const value = e.target.value;
             setUser1({ ...user1, [name]: value });
-            console.log("field name : ", name);
-            console.log("field value : ", value);
         }
-        // e.target.reset();
     };
     let checkAadharflag = true;
     const handlecheckAadhar = (e) => {
@@ -165,20 +148,15 @@ export default function Registration() {
             document.getElementById("aadharCheckSpan").style.color = "red";
             document.getElementById("aadharCheckSpan").innerHTML = "Addhar Number Must be a Digit only";
             checkAadharflag = false;
-        }
-        else if (!rsg.test(value)) {
+        } else if (!rsg.test(value)) {
             document.getElementById("aadharCheckSpan").style.color = "red";
             document.getElementById("aadharCheckSpan").innerHTML = "Addhar Number Must be a 12 Digit only";
             checkAadharflag = false;
-        }
-        else {
+        } else {
             document.getElementById("aadharCheckSpan").style.color = "green";
             document.getElementById("aadharCheckSpan").innerHTML = "Looking Good";
             setAadhar(value);
         }
-        console.log("Adhar number name field : ", name);
-        console.log("Adhar number value field : ", value);
-        console.log("check aadhar card number : ", aadharNumber);
     }
 
     const checkAadharNumber = (e) => {
@@ -189,28 +167,20 @@ export default function Registration() {
             toggleLoader();
             axios.post(`http://localhost:3002/candidate/checkAadharNumber/${aadharNumber}`).then((response) => {
                 toggleLoader();
-                console.log("result", response.data);
-
                 if (response.data == false) {
                     alert("not register please register first");
-                }
-                else if (response.data == 1) {
+                } else if (response.data == 1) {
                     alert("please call the admin for 4th attempt");
-                }
-                else {
+                } else {
                     alert("login success");
                     document.getElementById("collapseTwo").classList.add("show");
                     document.getElementById("collapseOne").classList.remove("show");
-                    // e.target.reset();
                     Cookie.set("aadharNumber", response.data, {
                         expires: 1,
                         secure: true,
                         sameSite: "strict",
                         path: "/"
                     });
-
-                    // document.getElementById("firstaccordianloginform").style.display = 'none'
-                    // document.getElementById("secondaccordianform").style.display = 'block'
                 }
             }).catch((error) => {
                 console.log('', error);
@@ -228,7 +198,6 @@ export default function Registration() {
 
     const validateField = (name, value) => {
         let error = '';
-
         switch (name) {
             case 'username':
                 var reg = /^[A-Za-z\s]+$/;
@@ -238,15 +207,13 @@ export default function Registration() {
                     document.getElementById("usertext").innerHTML = "Name Required";
                     username = false;
                     return false
-                }
-                else if (reg.test(value)) {
+                } else if (reg.test(value)) {
                     document.getElementById('username').style.color = "green";
                     document.getElementById('usertext').style.color = "green";
                     document.getElementById("usertext").innerHTML = "Looking Good";
                     username = true;
                     return true
-                }
-                else {
+                } else {
                     console.log("usertext")
                     document.getElementById('username').style.color = "red";
                     document.getElementById('usertext').style.color = "red";
@@ -254,15 +221,13 @@ export default function Registration() {
                     username = false;
                     return false;
                 }
-
                 break;
             case 'city':
                 if (value == '') {
                     document.getElementById("city").innerHTML = "City Required";
                     City = false;
                     return false;
-                }
-                else {
+                } else {
                     City = true;
                     return true;
                 }
@@ -272,8 +237,7 @@ export default function Registration() {
                     document.getElementById("state").innerHTML = "City Required";
                     State = false;
                     return false;
-                }
-                else {
+                } else {
                     State = true;
                     return true;
                 }
@@ -286,31 +250,25 @@ export default function Registration() {
                     document.getElementById("phone").innerHTML = "Mobile Number Required";
                     phone = false;
                     return false;
-                }
-                else if ((/^[A-Za-z]+$/).test(value)) {
+                } else if ((/^[A-Za-z]+$/).test(value)) {
                     document.getElementById("phoneNo").style.color = "red";
                     document.getElementById("phone").style.color = "red";
                     document.getElementById("phone").innerHTML = "Mobile Number must be a digit only";
                     phone = false;
                     return false;
-                }
-                else if (!reg.test(value)) {
+                } else if (!reg.test(value)) {
                     document.getElementById("phoneNo").style.color = "red";
                     document.getElementById("phone").style.color = "red";
                     document.getElementById("phone").innerHTML = "Enter 10 digits Mobile number";
                     phone = false;
                     return false;
-                }
-                else {
-
+                } else {
                     document.getElementById("phoneNo").style.color = "green";
                     document.getElementById("phone").style.color = "green";
                     document.getElementById("phone").innerHTML = "Looking Good";
                     phone = true;
                     return true;
-
                 }
-
                 break;
             case 'aadharNo':
                 let rsg = /^[1-9]{12}$/
@@ -327,22 +285,19 @@ export default function Registration() {
                     document.getElementById("adharno").innerHTML = "Addhar Number Must be a Digit only";
                     Adhaar = false;
                     return false
-                }
-                else if (!rsg.test(value)) {
+                } else if (!rsg.test(value)) {
                     document.getElementById("aadharNo").style.color = "red";
                     document.getElementById("adharno").style.color = "red";
                     document.getElementById("adharno").innerHTML = "Addhar Number Must be a 12 Digit only";
                     Adhaar = false;
                     return false
-                }
-                else {
+                } else {
                     document.getElementById("aadharNo").style.color = "green";
                     document.getElementById("adharno").style.color = "green";
                     document.getElementById("adharno").innerHTML = "Looking Good";
                     Adhaar = true;
                     return true
                 }
-
                 break;
             case 'email':
                 var email = document.getElementById("login_email");
@@ -352,8 +307,7 @@ export default function Registration() {
                     document.getElementById("emailSpan").innerHTML = "Email Required";
                     checkemail = false;
                     return false;
-                }
-                else {
+                } else {
                     var reg = /^\w+([\.-])?\w*@[a-z]*([\.][a-z]{2,3})+$/;
                     if (reg.test(value)) {
                         document.getElementById("email").style.color = "green";
@@ -361,8 +315,7 @@ export default function Registration() {
                         document.getElementById("emailSpan").innerHTML = "Looking Good";
                         checkemail = true;
                         return true;
-                    }
-                    else {
+                    } else {
                         document.getElementById("email").style.color = "red";
                         document.getElementById("emailSpan").style.color = "red";
                         document.getElementById("emailSpan").innerHTML = "Invalid email";
@@ -370,7 +323,6 @@ export default function Registration() {
                         return false;
                     }
                 }
-
                 break;
             case 'address':
                 if (value == "") {
@@ -379,8 +331,7 @@ export default function Registration() {
                     document.getElementById("add").innerHTML = "Address Required";
                     Address = false;
                     return false;
-                }
-                else {
+                } else {
                     document.getElementById("address").style.color = "green";
                     document.getElementById("add").innerHTML = "";
                     Address = true;
@@ -393,19 +344,14 @@ export default function Registration() {
                     document.getElementById("password").innerHTML = "Password Required";
                     pass = false;
                     return false;
-                }
-                else {
-                    // const reg =  /^(?=.\d)(?=.[a-z])(?=.*[A-Z]).{8,20}$/;
-                    // var reg = /^(?=.+?[A-Z])(?=.+?[a-z])(?=.+?[~!@#$%^&*()_+])(?=.+?[0-9]).{8}$/;
-                    // var reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                } else {
                     var reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
                     if (reg.test(value)) {
                         document.getElementById("password").style.color = "green";
                         document.getElementById("password").innerHTML = "Valid Password";
                         pass = true;
                         return true;
-                    }
-                    else {
+                    } else {
                         document.getElementById("password").style.color = "red";
                         document.getElementById("password").innerHTML = "Invalid Password";
                         pass = false;
@@ -413,11 +359,9 @@ export default function Registration() {
                     }
                 }
                 break;
-            // Add validation rules for other fields here
             default:
                 break;
         }
-
         return error;
     };
 
@@ -425,24 +369,14 @@ export default function Registration() {
         if (e) {
             e.preventDefault();
         }
-        console.log("in post");
-
-        console.log(user);
-        const { username, phoneNo, aadharNo, dob, email, password, } = user;
-        console.log(username);
-        //my
         try {
             if ((username && checkemail && Adhaar && phone && pass && Address && City)) {
                 toggleLoader();
                 axios.post('http://localhost:3002/candidate/verifyemail', user).then((response) => {
                     toggleLoader();
-                    console.log("result", response);
                     if (response.status === 201) {
-                        console.log('component caling');
                         history("/otpcomponent");
                     } else {
-                        console.log("now i am in modal ")
-                        // already register 
                         setUserRegistered(true);
                     }
                 }).catch((error) => {
@@ -463,26 +397,19 @@ export default function Registration() {
             e.preventDefault();
         }
         if (incomSpanStatus) {
-            console.log("in post");
             const formData = new FormData();
             for (const key in user1) {
                 if (user1[key]) {
                     formData.append(key, user1[key]);
                 }
             }
-            console.log("user 1 : ", user1);
-            console.log("form data : ", formData);
-            // var userID = Cookie.get("userID");
             const aadharCardNumber = Cookie.get("aadharNumber");
-            console.log(aadharCardNumber);
             try {
                 toggleLoader();
                 axios.post(`http://localhost:3002/candidate/documentRegistration/${aadharCardNumber}`, formData).then((result) => {
                     toggleLoader();
-                    console.log(result);
                     if (result.status === 201) {
                         alert("document uploaded successfully");
-                        //    setUserDocuments(true);
                         let inputElement = document.getElementById('collapseThree')
                         if (inputElement) {
                             const accordian = new window.bootstrap.Collapse(inputElement, {
@@ -505,7 +432,6 @@ export default function Registration() {
         }
     };
 
-
     const makePayment = async () => {
         try {
             const stripe = await loadStripe('pk_test_51O7qF0SJUnxcOIoS0sB7ANA2hIetDRhpRNTB4adPmYuOBzByrlhxBJaD9v5FFrUAlh9btXzUBeju1uuUHqZmbGgG00rLZ3hiG2');
@@ -513,9 +439,7 @@ export default function Registration() {
                 enrollId: 123,
                 amount: 100000
             }
-            console.log('detail : ', detail);
             axios.post(`http://localhost:3002/candidate/payment`, detail).then((response) => {
-                console.log('response', response);
                 const result = stripe.redirectToCheckout({
                     sessionId: response.data.id
                 });
@@ -526,16 +450,12 @@ export default function Registration() {
         }
     }
     const print_state = () => {
-        console.log('state : ');
-        console.log('document : ', document.getElementById("state"));
         var option_str = document.getElementById("state");
-        console.log('option : ', option_str);
         option_str.length = 0;
         option_str.options[0] = new Option('Select State', '');
         option_str.selectedIndex = 0;
         for (var i = 0; i < state_arr.length; i++) {
             option_str.options[option_str.length] = new Option(state_arr[i], state_arr[i]);
-            console.log('option in for loop');
         }
     }
     const print_city = (e, city_id) => {
@@ -543,7 +463,6 @@ export default function Registration() {
         setUser({ ...user, [name]: value });
         validateField(name, value);
         var state_index = e.target.selectedIndex;
-        console.log('option 2 : ', city_id);
         var option_str = document.getElementById(city_id);
         option_str.length = 0;
         option_str.options[0] = new Option('Select City', '');
@@ -556,14 +475,12 @@ export default function Registration() {
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             print_state();
-        }, 1000); // Set the delay time in milliseconds (e.g., 1000ms = 1 second)
+        }, 1000);
 
-        // Clear the timeout on component unmount to prevent further execution
         return () => clearTimeout(timeoutId);
     }, []);
 
     function checkIncome(e) {
-
         let reg = /^[A-Za-z]+$/
         let incom = e.target.value;
         let name = e.target.name;
@@ -574,366 +491,342 @@ export default function Registration() {
             document.getElementById('incomSpan').innerHTML = "Please fill this Field";
             incomSpanStatus = false
 
-        }
-        else if (reg.test(incom)) {
+        } else if (reg.test(incom)) {
             document.getElementById('income').style.color = "red";
             document.getElementById('incomSpan').style.color = "red";
             document.getElementById('incomSpan').innerHTML = "Incom must be in digit form";
             incomSpanStatus = false
 
-        }
-        else {
+        } else {
             document.getElementById('income').style.color = "green";
             document.getElementById('incomSpan').style.color = "green";
             document.getElementById('incomSpan').innerHTML = "Looking Good";
             incomSpanStatus = true
             setUser1({ ...user1, [name]: incom });
         }
-
     }
-
 
     return (
         <>
-        <Loader />
-       
-        <div className="container my-5" style={{ padding: "1 % 10 % 0 % 10 %" }}>
-            <div className="" style={{ borderRadius: "2.5%", overflow: "hidden" }}>
-                <div>
-                    <img src={img1} width="100%" alt="" />
+            <Loader />
+            <div className="container my-5" style={{ padding: "1 % 10 % 0 % 10 %" }}>
+                <div className="" style={{ borderRadius: "2.5%", overflow: "hidden" }}>
+                    <div>
+                        <img src={img1} width="100%" alt="" />
+                    </div>
+                    <div className="accordion" id="accordionExample">
+                        <div className="accordion-item">
+                            <h2 className="accordion-header" id="headingOne">
+                                <button className="accordion-button" style={{
+                                    width: "100%", backgroundColor: "#fff", borderBottom: "2px solid red"
+                                }} type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <h3>Basic Details</h3>
+                                </button>
+                            </h2>
+                            <div id="collapseOne" className={`accordion-collapse collapse ${isFromOtp ? '' : 'show'}`} aria-labelledby="headingOne"
+                                data-bs-parent="#accordionExample">
+                                <div className="accordion-body">
+                                    <div id='firstaccordianloginform'>
+                                        <form onSubmit={checkAadharNumber} encType="multipart/form-data">
+                                            <div className="mt-4 col-sm-12 col-md-12 col-lg-12 d-block align-items-center text-center">
+                                                <input type="" required maxLength='12' className="input-enter p-3 text-start" name="aadharCheck" placeholder="Enter Aadhar Card number" id="aadharCheck" onChange={(e) => handlecheckAadhar(e, 'aadharChck')} /><br />
+                                                <span id="aadharCheckSpan">    </span><br />
+                                                <input type="submit" className="btn btn-outline-danger w-25 mt-3" value="submit" style={{ height: "2.5vw" }} /><br /><br />
+                                                <span>
+                                                    or <br />
+                                                </span>
+                                                <span id='registrationformspan' onClick={registrationform} >not registered yet ? Registration here</span>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div id='firstaccordianbasicdetailform'>
+                                        <form method='post' onSubmit={PostData}>
+                                            <div className="row">
+                                                <div className="mt-4 col-sm-12 col-md-12 col-lg-6 ">
+                                                    <div className='d-flex justify-content-center'>
+                                                        <img src={img2} className="mt-4" height="20vh" alt="user_icon" />
+                                                        <input type="text" required onChange={handleInputs} className="input-enter p-3" name="username" id="username" value={user.name} placeholder="Enter name" />
+                                                    </div>
+                                                    <div className='d-flex justify-content-center'>
+                                                        <span id="usertext" style={{ marginTop: "10px" }} ></span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="mt-4 col-sm-12 col-md-12 col-lg-6 ">
+                                                    <div className='d-flex justify-content-center'>
+                                                        <img src={img3} className="mt-4" height="20vh" alt="user_icon" />
+                                                        <input type="text" required maxLength='10' className="input-enter p-3" name="phoneNo" id="phoneNo" onChange={handleInputs} value={user.name}
+                                                            placeholder="Enter Mobile Number" />
+                                                    </div>
+                                                    <div className='d-flex justify-content-center'>
+                                                        <span id='phone'></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="mt-4 col-lg-6 ">
+                                                    <div className='d-flex justify-content-center'>
+                                                        <img src={img4} className="mt-4" height="20vh" alt="user_icon" />
+                                                        <input type="text" required maxLength="12" className="input-enter p-3" name="aadharNo" id="aadharNo" onChange={handleInputs} value={user.aadharNo}
+                                                            placeholder="Enter Adhaar Number" />
+                                                    </div>
+                                                    <div className='d-flex justify-content-center'>
+                                                        <span id='adharno'></span>
+                                                    </div>
+
+                                                </div>
+
+                                                <div className="mt-4 col-lg-6 d-flex justify-content-center">
+                                                    <img src={img5} className="mt-4" height="20vh" alt="user_icon" />
+                                                    <input type="date" min="01/01/1999" max={`${new Date().getDate}`} className="input-enter p-3" name="dob" onChange={handleInputs}
+                                                        placeholder="Enter Date of Birth" />
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="mt-4 col-lg-6">
+                                                    <div className='d-flex justify-content-center'>
+                                                        <img src={img6} className="mt-4" height="20vh" alt="user_icon" />
+                                                        <input type="text" className="input-enter p-3" name="email" id="email" onChange={handleInputs} value={user.email} placeholder="Enter your email"
+                                                        />
+
+                                                    </div>
+                                                    <div className='d-flex justify-content-center'>
+                                                        <span id='emailSpan'></span>
+                                                    </div>
+                                                </div>
+                                                <div className="mt-4 col-lg-6 d-flex justify-content-center">
+                                                    <img src={img7} className="mt-4" height="20vh"
+                                                        alt="user_icon" />
+                                                    <input type="password" className="input-enter p-3" name="password" id="password" onChange={handleInputs} value={user.password}
+                                                        placeholder="Enter your password" />
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="mt-4 col-lg-6 ">
+                                                    <div className='d-flex justify-content-center'>
+                                                        <img src={img6} className="mt-4" height="20vh" alt="user_icon" />
+                                                        <textarea rows="5" className="input-enter p-3 textarea" name="address" id="address" onChange={handleInputs} value={user.address} placeholder="Enter your Address"
+                                                        />
+                                                    </div>
+                                                    <div className='d-flex justify-content-center'>
+                                                        <span id='add'></span>
+                                                    </div>
+                                                </div>
+                                                <div className="mt-4 col-lg-6 d-flex justify-content-center">
+                                                    <img src={img7} className="mt-4" height="20vh"
+                                                        alt="user_icon" />
+                                                    <select id="state" required onChange={(e) => { print_city(e, 'city') }} name="state" className="input-enter p-3"  ></select>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="mt-4 col-lg-12 d-flex justify-content-center">
+                                                    <img src={img7} className="mt-4" height="20vh"
+                                                        alt="user_icon" />
+                                                    <select id="city" required onChange={handleInputs} name='city' className="input-enter p-3" ></select>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="mt-4 col-lg-6 d-flex justify-content-center">
+                                                    <input type="reset" className="btn btn-danger w-50 mt-3" value="Reset"
+                                                        style={{ height: "2.5vw" }} />
+                                                </div>
+                                                <div className="mt-4 col-lg-6 d-flex justify-content-center">
+                                                    <input type="submit" className="btn btn-outline-danger w-50 mt-3" value="submit" style={{ height: "2.5vw" }} />
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="accordion-item">
+                            <h2 className="accordion-header" id="headingOne">
+                                <button className="accordion-button"
+                                    style={{ width: "100%", border: "0", backgroundColor: "#fff", borderBottom: "2px solid red" }}
+                                    type="button" data-bs-toggle="collapse"
+                                    data-bs-target={`${isFromOtp ? '#collapseTwo' : ''}`} aria-expanded="true" aria-controls="collapseTwo">
+                                    <h3 style={{ color: "red", fontWeight: "600" }}>Documents Upload</h3>
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" className={`accordion-collapse collapse ${isFromOtp ? 'show' : ''}`} aria-labelledby="headingOne"
+                                data-bs-parent="#accordionExample">
+                                <div className="accordion-body">
+                                    <div id='secondaccordianform'>
+                                        <form onSubmit={PostData1} encType="multipart/form-data">
+                                            <div className="row">
+                                                <div className="mt-4 col-sm-12 col-md-12 col-lg-6 d-block align-items-center">
+                                                    <img src={img8} className="mt-4" height="20vh" alt="user_icon"
+                                                        style={{ marginLeft: "19.2%" }} />
+                                                    <input type="text" required id='income' className="input-enter p-3 text-start" name="income"
+                                                        onChange={(e) => checkIncome(e)}
+                                                        placeholder="Enter Family income" style={{ marginLeft: "4%" }} />
+                                                    <br /><span id="incomSpan" style={{ marginLeft: '160px' }}></span>
+                                                </div>
+                                                <div className="mt-4 col-sm-12 col-md-12 col-lg-6 d-flex justify-content-center">
+                                                    <img src={img8} className="mt-4" height="20vh"
+                                                        alt="user_icon" />
+                                                    <input type="file" required id='aadharFile' className="custom-file-input" name="aadharFile"
+                                                        onChange={(e) => handleFileChange1(e, 'aadharFile', 1)} style={{ width: "20%" }} />
+                                                    <label className=" custom-file-label m-4" htmlFor="username" id="fileLabel1"
+                                                        style={{ width: "50%" }}>Upload Aadhar Card
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="mt-4 col-lg-6 d-flex justify-content-center">
+                                                    <img src={img8} className="mt-4" height="20vh"
+                                                        alt="user_icon" />
+                                                    <input type="file" required className="custom-file-input" id='incomeCertificate' name="incomeCertificate"
+                                                        onChange={(e) => handleFileChange1(e, 'incomeCertificate', 2)} style={{ width: "20%" }} />
+                                                    <label className="custom-file-label m-4" htmlFor="username" id="fileLabel2"
+                                                        style={{ width: "50%" }}>Upload Income Certoficate
+                                                    </label>
+                                                </div>
+                                                <div className="mt-4 col-lg-6 d-flex justify-content-center">
+                                                    <img src={img8} className="mt-4" height="20vh"
+                                                        alt="user_icon" />
+                                                    <input type="file" required className="custom-file-input" id='fatherAadharcard' name="fatherAadharcard"
+                                                        onChange={(e) => handleFileChange1(e, 'fatherAadharcard', 3)} style={{ width: "20%" }} />
+                                                    <label className="custom-file-label m-4" htmlFor="username" id="fileLabel3"
+                                                        style={{ width: "50%" }}>Upload Father's Aadhar Card
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="mt-4 col-lg-6 d-flex justify-content-center">
+                                                    <img src={img8} className="mt-4" height="20vh"
+                                                        alt="user_icon" />
+                                                    <input type="file" required className="custom-file-input" id='marksheet' name="marksheet"
+                                                        onChange={(e) => handleFileChange1(e, 'marksheet', 4)} style={{ width: "20%" }} />
+                                                    <label className="custom-file-label m-4" id="fileLabel4"
+                                                        style={{ width: "50%" }}>Upload 12th class Marksheet
+                                                    </label>
+                                                </div>
+                                                <div className="mt-4 col-lg-6 d-flex justify-content-center">
+                                                    <img src={img8} className="mt-4" height="20vh"
+                                                        alt="user_icon" />
+                                                    <input type="file" required className="custom-file-input" id='latestMarksheet' name="latestMarksheet"
+                                                        onChange={(e) => handleFileChange1(e, 'latestMarksheet', 5)} style={{ width: "20%" }} />
+                                                    <label className="custom-file-label m-4" id="fileLabel5"
+                                                        style={{ width: "50%" }}>Upload latest year marksheet
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="mt-4 col-lg-6 d-flex justify-content-center">
+                                                    <input type="reset" className="btn btn-danger w-50 mt-3" value="Reset"
+                                                        style={{ height: "2.5vw" }} />
+                                                </div>
+                                                <div className="mt-4 col-lg-6 d-flex justify-content-center">
+                                                    <input type="submit" className="btn btn-outline-danger w-50 mt-3" value="submit" id="sub"
+                                                        style={{ height: "2.5vw" }} />
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="accordion-item">
+                            <h2 className="accordion-header" id="headingOne">
+                                <button className="accordion-button"
+                                    style={{ width: "100%", border: "0", backgroundColor: "#fff", borderBottom: "2px solid red" }}
+                                    type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true"
+                                    aria-controls="collapseThree">
+                                    <h3 style={{ color: "red", fontWeight: "600" }}>Payment Details</h3>
+                                </button>
+                            </h2>
+                            <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingOne"
+                                data-bs-parent="#accordionExample">
+                                <div className="accordion-body">
+                                    <Link to="https://razorpay.me/@bdms?amount=EPec5evqGoRk2C8icWNJlQ%3D%3D">Pay Now</Link>
+                                    {/* <button className='btn btn-danger text-light' onClick={makePayment}>Pay Now</button> */}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="accordion" id="accordionExample">
-                    <div className="accordion-item">
-                        <h2 className="accordion-header" id="headingOne">
-                            <button className="accordion-button" style={{
-                                width: "100%", backgroundColor: "#fff", borderBottom: "2px solid red"
-                            }} type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                <h3>Basic Details</h3>
-                            </button>
-                        </h2>
-                        <div id="collapseOne" className={`accordion-collapse collapse ${isFromOtp ? '' : 'show'}`} aria-labelledby="headingOne"
-                            data-bs-parent="#accordionExample">
-                            <div className="accordion-body">
-                                <div id='firstaccordianloginform'>
-                                    <form onSubmit={checkAadharNumber} encType="multipart/form-data">
-                                        <div className="mt-4 col-sm-12 col-md-12 col-lg-12 d-block align-items-center text-center">
-                                            <input type="" required maxLength='12' className="input-enter p-3 text-start" name="aadharCheck" placeholder="Enter Aadhar Card number" id="aadharCheck" onChange={(e) => handlecheckAadhar(e, 'aadharChck')} /><br />
-                                            <span id="aadharCheckSpan">    </span><br />
-                                            <input type="submit" className="btn btn-outline-danger w-25 mt-3" value="submit" style={{ height: "2.5vw" }} /><br /><br />
-                                            <span>
-                                                or <br />
-                                            </span>
-                                            <span id='registrationformspan' onClick={registrationform} >not registered yet ? Registration here</span>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div id='firstaccordianbasicdetailform'>
-                                    <form method='post' onSubmit={PostData}>
-                                        <div className="row">
-                                            <div className="mt-4 col-sm-12 col-md-12 col-lg-6 ">
-                                                <div className='d-flex justify-content-center'>
-                                                    <img src={img2} className="mt-4" height="20vh" alt="user_icon" />
-                                                    <input type="text" required onChange={handleInputs} className="input-enter p-3" name="username" id="username" value={user.name} placeholder="Enter name" />
-                                                </div>
-                                                <div className='d-flex justify-content-center'>
-                                                    <span id="usertext" style={{ marginTop: "10px" }} ></span>
-                                                </div>
-                                            </div>
-
-                                            <div className="mt-4 col-sm-12 col-md-12 col-lg-6 ">
-                                                <div className='d-flex justify-content-center'>
-                                                    <img src={img3} className="mt-4" height="20vh" alt="user_icon" />
-                                                    <input type="text" required maxLength='10' className="input-enter p-3" name="phoneNo" id="phoneNo" onChange={handleInputs} value={user.name}
-                                                        placeholder="Enter Mobile Number" />
-                                                </div>
-                                                <div className='d-flex justify-content-center'>
-                                                    <span id='phone'></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="mt-4 col-lg-6 ">
-                                                <div className='d-flex justify-content-center'>
-                                                    <img src={img4} className="mt-4" height="20vh" alt="user_icon" />
-                                                    <input type="text" required maxLength="12" className="input-enter p-3" name="aadharNo" id="aadharNo" onChange={handleInputs} value={user.aadharNo}
-                                                        placeholder="Enter Adhaar Number" />
-                                                </div>
-                                                <div className='d-flex justify-content-center'>
-                                                    <span id='adharno'></span>
-                                                </div>
-
-                                            </div>
-
-                                            <div className="mt-4 col-lg-6 d-flex justify-content-center">
-                                                <img src={img5} className="mt-4" height="20vh" alt="user_icon" />
-                                                <input type="date" min="01/01/1999" max={`${new Date().getDate}`} className="input-enter p-3" name="dob" onChange={handleInputs}
-                                                    placeholder="Enter Date of Birth" />
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="mt-4 col-lg-6">
-                                                <div className='d-flex justify-content-center'>
-                                                    <img src={img6} className="mt-4" height="20vh" alt="user_icon" />
-                                                    <input type="text" className="input-enter p-3" name="email" id="email" onChange={handleInputs} value={user.email} placeholder="Enter your email"
-                                                    />
-
-                                                </div>
-                                                <div className='d-flex justify-content-center'>
-                                                    <span id='emailSpan'></span>
-                                                </div>
-                                            </div>
-                                            <div className="mt-4 col-lg-6 d-flex justify-content-center">
-                                                <img src={img7} className="mt-4" height="20vh"
-                                                    alt="user_icon" />
-                                                <input type="password" className="input-enter p-3" name="password" id="password" onChange={handleInputs} value={user.password}
-                                                    placeholder="Enter your password" />
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="mt-4 col-lg-6 ">
-                                                <div className='d-flex justify-content-center'>
-                                                    <img src={img6} className="mt-4" height="20vh" alt="user_icon" />
-                                                    <textarea rows="5" className="input-enter p-3 textarea" name="address" id="address" onChange={handleInputs} value={user.address} placeholder="Enter your Address"
-                                                    />
-                                                </div>
-                                                <div className='d-flex justify-content-center'>
-                                                    <span id='add'></span>
-                                                </div>
-                                            </div>
-                                            <div className="mt-4 col-lg-6 d-flex justify-content-center">
-                                                <img src={img7} className="mt-4" height="20vh"
-                                                    alt="user_icon" />
-                                                <select id="state" required onChange={(e) => { print_city(e, 'city') }} name="state" className="input-enter p-3"  ></select>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="mt-4 col-lg-12 d-flex justify-content-center">
-                                                <img src={img7} className="mt-4" height="20vh"
-                                                    alt="user_icon" />
-                                                <select id="city" required onChange={handleInputs} name='city' className="input-enter p-3" ></select>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="mt-4 col-lg-6 d-flex justify-content-center">
-                                                <input type="reset" className="btn btn-danger w-50 mt-3" value="Reset"
-                                                    style={{ height: "2.5vw" }} />
-                                            </div>
-                                            <div className="mt-4 col-lg-6 d-flex justify-content-center">
-                                                <input type="submit" className="btn btn-outline-danger w-50 mt-3" value="submit" style={{ height: "2.5vw" }} />
-                                            </div>
-                                        </div>
-                                    </form>
+                {/* ========================== modal-1 for Already register... */}
+                <div className="container my-5" style={{ padding: "1% 1% 0% 1%" }}>
+                    <Modal
+                        isOpen={isUserRegistered}
+                        contentLabel="User Already Registered Modal"
+                        style={modalCss}
+                    >
+                        <center><div classname="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style={{ background: 'white', boxShadow: "2px 2px 2px 2px rgba(0,0,0,0.3)", width: "100%", border: 'none', borderRadius: '10px', padding: '10px' }}  >
+                            <div className="modal-dialog modal-dialog-centered " >
+                                <div className="modal-content">
+                                    <div className="modal-header">
+                                        <h5 className="modal-title py-2" id="staticBackdropLabel">Modal title</h5>
+                                    </div>
+                                    <div className="modal-body text-capitalize py-2" >
+                                        you have already register please upadte your documents
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button onClick={() => setUserRegistered(false)} className="btn  mx-2 btn-danger text-white">Close Modal</button>
+                                        <button type="button" className="btn btn-danger text-white">Understood</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div className="accordion-item">
-                        <h2 className="accordion-header" id="headingOne">
-                            <button className="accordion-button"
-                                style={{ width: "100%", border: "0", backgroundColor: "#fff", borderBottom: "2px solid red" }}
-                                type="button" data-bs-toggle="collapse"
-                                data-bs-target={`${isFromOtp ? '#collapseTwo' : ''}`} aria-expanded="true" aria-controls="collapseTwo">
-                                <h3 style={{ color: "red", fontWeight: "600" }}>Documents Upload</h3>
-                            </button>
-                        </h2>
-                        <div id="collapseTwo" className={`accordion-collapse collapse ${isFromOtp ? 'show' : ''}`} aria-labelledby="headingOne"
-                            data-bs-parent="#accordionExample">
-                            <div className="accordion-body">
-                                <div id='secondaccordianform'>
-                                    <form onSubmit={PostData1} encType="multipart/form-data">
-                                        <div className="row">
-                                            <div className="mt-4 col-sm-12 col-md-12 col-lg-6 d-block align-items-center">
-                                                <img src={img8} className="mt-4" height="20vh" alt="user_icon"
-                                                    style={{ marginLeft: "19.2%" }} />
-                                                <input type="text" required id='income' className="input-enter p-3 text-start" name="income"
-                                                    onChange={(e) => checkIncome(e)}
-                                                    placeholder="Enter Family income" style={{ marginLeft: "4%" }} />
-                                                <br /><span id="incomSpan" style={{ marginLeft: '160px' }}></span>
-                                            </div>
-                                            <div className="mt-4 col-sm-12 col-md-12 col-lg-6 d-flex justify-content-center">
-                                                <img src={img8} className="mt-4" height="20vh"
-                                                    alt="user_icon" />
-                                                <input type="file" required id='aadharFile' className="custom-file-input" name="aadharFile"
-                                                    onChange={(e) => handleFileChange1(e, 'aadharFile', 1)} style={{ width: "20%" }} />
-                                                <label className=" custom-file-label m-4" htmlFor="username" id="fileLabel1"
-                                                    style={{ width: "50%" }}>Upload Aadhar Card
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="mt-4 col-lg-6 d-flex justify-content-center">
-                                                <img src={img8} className="mt-4" height="20vh"
-                                                    alt="user_icon" />
-                                                <input type="file" required className="custom-file-input" id='incomeCertificate' name="incomeCertificate"
-                                                    onChange={(e) => handleFileChange1(e, 'incomeCertificate', 2)} style={{ width: "20%" }} />
-                                                <label className="custom-file-label m-4" htmlFor="username" id="fileLabel2"
-                                                    style={{ width: "50%" }}>Upload Income Certoficate
-                                                </label>
-                                            </div>
-                                            <div className="mt-4 col-lg-6 d-flex justify-content-center">
-                                                <img src={img8} className="mt-4" height="20vh"
-                                                    alt="user_icon" />
-                                                <input type="file" required className="custom-file-input" id='fatherAadharcard' name="fatherAadharcard"
-                                                    onChange={(e) => handleFileChange1(e, 'fatherAadharcard', 3)} style={{ width: "20%" }} />
-                                                <label className="custom-file-label m-4" htmlFor="username" id="fileLabel3"
-                                                    style={{ width: "50%" }}>Upload Father's Aadhar Card
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="mt-4 col-lg-6 d-flex justify-content-center">
-                                                <img src={img8} className="mt-4" height="20vh"
-                                                    alt="user_icon" />
-                                                <input type="file" required className="custom-file-input" id='marksheet' name="marksheet"
-                                                    onChange={(e) => handleFileChange1(e, 'marksheet', 4)} style={{ width: "20%" }} />
-                                                <label className="custom-file-label m-4" id="fileLabel4"
-                                                    style={{ width: "50%" }}>Upload 12th class Marksheet
-                                                </label>
-                                            </div>
-                                            <div className="mt-4 col-lg-6 d-flex justify-content-center">
-                                                <img src={img8} className="mt-4" height="20vh"
-                                                    alt="user_icon" />
-                                                <input type="file" required className="custom-file-input" id='latestMarksheet' name="latestMarksheet"
-                                                    onChange={(e) => handleFileChange1(e, 'latestMarksheet', 5)} style={{ width: "20%" }} />
-                                                <label className="custom-file-label m-4" id="fileLabel5"
-                                                    style={{ width: "50%" }}>Upload latest year marksheet
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="mt-4 col-lg-6 d-flex justify-content-center">
-                                                <input type="reset" className="btn btn-danger w-50 mt-3" value="Reset"
-                                                    style={{ height: "2.5vw" }} />
-                                            </div>
-                                            <div className="mt-4 col-lg-6 d-flex justify-content-center">
-                                                <input type="submit" className="btn btn-outline-danger w-50 mt-3" value="submit" id="sub"
-                                                    style={{ height: "2.5vw" }} />
-                                            </div>
-                                        </div>
-                                    </form>
+                        </center>
+                    </Modal>
+                </div>
+                {/* ========================== modal-2 for documents succussfuly... */}
+                <div className="container my-5" style={{ padding: "1% 1% 0% 1%" }}>
+                    <Modal
+                        isOpen={isUserDocuments}
+                        contentLabel="User Already Registered Modal"
+                        style={modalCss}
+                    >
+                        <center><div classname="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style={{ background: 'white', boxShadow: "2px 2px 2px 2px rgba(0,0,0,0.3)", width: "100%", border: 'none', borderRadius: '10px', padding: '10px' }}  >
+                            <div className="modal-dialog modal-dialog-centered " >
+                                <div className="modal-content">
+                                    <div className="modal-header py-2">
+                                        <h5 className="modal-title" id="staticBackdropLabel">Modal title</h5>
+                                    </div>
+                                    <div className="modal-body py-2" >
+                                        Documents Uploaded Successfully......
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button onClick={() => setUserDocuments(false)} className="btn btn-danger mx-2 text-white">Close Modal</button>
+                                        <button type="button" className="btn btn-danger text-white">Understood</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="accordion-item">
-                        <h2 className="accordion-header" id="headingOne">
-                            <button className="accordion-button"
-                                style={{ width: "100%", border: "0", backgroundColor: "#fff", borderBottom: "2px solid red" }}
-                                type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true"
-                                aria-controls="collapseThree">
-                                <h3 style={{ color: "red", fontWeight: "600" }}>Payment Details</h3>
-                            </button>
-                        </h2>
-                        <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingOne"
-                            data-bs-parent="#accordionExample">
-                            <div className="accordion-body">
-                                <button className='btn btn-danger text-light' onClick={makePayment}>Pay Now</button>
+                        </center>
+                    </Modal>
+                </div>
+                {/* ========================== modal-3 */}
+                <div className="container my-5" style={{ padding: "1% 1% 0% 1%" }}>
+                    <Modal
+                        isOpen={registrationStatus}
+                        contentLabel="User validation Modal"
+                        style={modalCss}
+                    >
+                        <center><div classname="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style={{ background: 'white', boxShadow: "2px 2px 2px 2px green", width: "100%", border: 'none', borderRadius: '10px', padding: '10px' }}  >
+                            <div className="modal-dialog modal-dialog-centered " >
+                                <div className="modal-content">
+                                    <div className="modal-header">
+                                        <h5 className="modal-title py-2" id="staticBackdropLabel">Modal title</h5>
+                                    </div>
+                                    <div className="modal-body py-2" >
+                                        Something went wrong...... <br></br>Check the fields
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button onClick={() => setRegistrationStatus(false)} className="btn  mx-2 btn-danger text-white">Close Modal</button>
+                                        <button type="button" className="btn btn-danger text-white">Understood</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        </center>
+                    </Modal>
                 </div>
             </div>
-
-            {/* ========================== modal-1 for Already register... */}
-
-            <div className="container my-5" style={{ padding: "1% 1% 0% 1%" }}>
-                {/* Your form and other elements... */}
-                <Modal
-                    isOpen={isUserRegistered}
-                    contentLabel="User Already Registered Modal"
-                    style={modalCss}
-                // You can customize modal styles and content here
-                >
-                    {/* <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                            Launch static backdrop modal
-                            </button> */}
-                    <center><div classname="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style={{ background: 'white', boxShadow: "2px 2px 2px 2px rgba(0,0,0,0.3)", width: "100%", border: 'none', borderRadius: '10px', padding: '10px' }}  >
-                        <div className="modal-dialog modal-dialog-centered " >
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title py-2" id="staticBackdropLabel">Modal title</h5>
-                                    {/* <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> */}
-                                </div>
-                                <div className="modal-body text-capitalize py-2" >
-                                    you have already register please upadte your documents
-                                </div>
-                                <div className="modal-footer">
-                                    <button onClick={() => setUserRegistered(false)} className="btn  mx-2 btn-danger text-white">Close Modal</button>
-                                    <button type="button" className="btn btn-danger text-white">Understood</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </center>
-                    {/* <h2>User Already Registered</h2>
-                            <p>You can display a message or any content you want here.</p>
-                            <button onClick={() => setUserRegistered(false)}>Close Modal</button> */}
-                </Modal>
-            </div>
-
-            {/* ========================== modal-2 for documents succussfuly... */}
-            <div className="container my-5" style={{ padding: "1% 1% 0% 1%" }}>
-                {/* Your form and other elements... */}
-                <Modal
-                    isOpen={isUserDocuments}
-                    contentLabel="User Already Registered Modal"
-                    style={modalCss}
-                // You can customize modal styles and content here
-                >
-                    <center><div classname="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style={{ background: 'white', boxShadow: "2px 2px 2px 2px rgba(0,0,0,0.3)", width: "100%", border: 'none', borderRadius: '10px', padding: '10px' }}  >
-                        <div className="modal-dialog modal-dialog-centered " >
-                            <div className="modal-content">
-                                <div className="modal-header py-2">
-                                    <h5 className="modal-title" id="staticBackdropLabel">Modal title</h5>
-                                    {/* <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> */}
-                                </div>
-                                <div className="modal-body py-2" >
-                                    Documents Uploaded Successfully......
-                                </div>
-                                <div className="modal-footer">
-                                    <button onClick={() => setUserDocuments(false)} className="btn btn-danger mx-2 text-white">Close Modal</button>
-                                    <button type="button" className="btn btn-danger text-white">Understood</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </center>
-                </Modal>
-            </div>
-
-            {/* ========================== modal-3 */}
-
-            <div className="container my-5" style={{ padding: "1% 1% 0% 1%" }}>
-                {/* Your form and other elements... */}
-                <Modal
-                    isOpen={registrationStatus}
-                    contentLabel="User validation Modal"
-                    style={modalCss}
-                // You can customize modal styles and content here
-                >
-                    <center><div classname="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style={{ background: 'white', boxShadow: "2px 2px 2px 2px green", width: "100%", border: 'none', borderRadius: '10px', padding: '10px' }}  >
-                        <div className="modal-dialog modal-dialog-centered " >
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title py-2" id="staticBackdropLabel">Modal title</h5>
-                                    {/* <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> */}
-                                </div>
-                                <div className="modal-body py-2" >
-                                    Something went wrong...... <br></br>Check the fields
-                                </div>
-                                <div className="modal-footer">
-                                    <button onClick={() => setRegistrationStatus(false)} className="btn  mx-2 btn-danger text-white">Close Modal</button>
-                                    <button type="button" className="btn btn-danger text-white">Understood</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </center>
-                </Modal>
-            </div>
-        </div>
         </>
     );
 }

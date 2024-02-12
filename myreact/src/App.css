@@ -4,6 +4,12 @@
   font-family: 'Poppins', sans-serif;
 }
 
+.mainNavbar {
+  top: 0;
+  position: sticky !important;
+  z-index: 100;
+}
+
 li {
   font-size: 20px;
 }
@@ -33,7 +39,6 @@ li {
   background: rgb(255, 255, 255);
   background: linear-gradient(0deg, rgba(255, 255, 255, 1) 48%, rgba(233, 31, 63, 1) 48%);
 }
-
 
 /* -------------------------------------------------- */
 /* ========================Slider Effect Css====================== */
@@ -255,113 +260,6 @@ li {
   transition: 0.5s ease-in;
 }
 
-/* ========================Our Team Css=========================== */
-
-#ourTeam {
-  width: 100%;
-  padding: 30px 0;
-  position: relative;
-  height: 70vh;
-  background: #F9F5F4;
-}
-
-#ourTeam #myCarousel {
-  margin-top: 10px;
-}
-
-#ourTeam .controls {
-  width: 40px;
-  padding: 10px;
-  color: #000;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 5%;
-}
-
-#ourTeam .controls span i {
-  color: #000;
-  font-size: 25px;
-}
-
-.teamCarousel .team-carousel-inner .team-carousel-item .col-lg-4 .content {
-  position: relative;
-  width: 400px;
-  height: 250px;
-  border-radius: 12px;
-}
-
-.teamCarousel .team-carousel-inner .team-carousel-item .col-lg-4 .content img {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
-.teamCarousel .team-carousel-inner .team-carousel-item .col-lg-4 .content .content2 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-radius: 12px;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.teamCarousel .team-carousel-inner .team-carousel-item .col-lg-4 .content img {
-  width: 100%;
-  height: 100%;
-  border-radius: 12px;
-}
-
-@media (max-width: 768px) {
-  .team-carousel-inner .team-carousel-item>div {
-    display: none;
-  }
-
-  .team-carousel-inner .team-carousel-item>div:first-child {
-    display: block;
-  }
-}
-
-.team-carousel-inner .team-carousel-item.active,
-.team-carousel-inner .team-carousel-item-start,
-.team-carousel-inner .team-carousel-item-next,
-.team-carousel-inner .team-carousel-item-prev {
-  display: flex;
-}
-
-@media (min-width: 768px) {
-
-  .team-carousel-inner .team-carousel-item-right.active,
-  .team-carousel-inner .team-carousel-item-next,
-  .team-carousel-item-next:not(.team-carousel-item-start) {
-    transform: translateX(25%) !important;
-  }
-
-  .team-carousel-inner .team-carousel-item-left.active,
-  .team-carousel-item-prev:not(.team-carousel-item-end),
-  .active.team-carousel-item-start,
-  .team-carousel-item-prev:not(.team-carousel-item-end) {
-    transform: translateX(-25%) !important;
-  }
-
-  .team-carousel-item-next.team-carousel-item-start,
-  .active.team-carousel-item-end {
-    transform: translateX(0) !important;
-  }
-
-  .team-carousel-inner .team-carousel-item-prev,
-  .team-carousel-item-prev:not(.team-carousel-item-end) {
-    transform: translateX(-25%) !important;
-  }
-}
-
 /* ------------------OurBatches---------------------------------- */
 #carouselExampleControls {
   border-radius: 20px;
@@ -401,7 +299,7 @@ li {
 }
 
 .slider {
-  animation: slidein 30s linear infinite;
+  animation: slidein 40s linear infinite;
   white-space: nowrap;
 }
 
@@ -462,10 +360,7 @@ footer {
   font-size: 25px;
 }
 
-
-/* =============================================================== */
 /* ========================== Registration ======================= */
-
 input:focus {
   outline: none;
 }
@@ -508,348 +403,47 @@ input:focus {
 
 #state,
 #city {
-    outline: none;
-    padding: 10px !important;
+  outline: none;
+  padding: 10px !important;
 }
 
 .textarea {
-    outline: none;
-}
-/* =============================================================== */
-/* =======================Activities Slider ====================== */
-
-.fontFamily {
-  font-family: "Cormorant Garamond", serif;
-  font-weight: 300;
+  outline: none;
 }
 
-.color {
+/* ======================= Admin Login Css ======================= */
+#loginmainBox {
+  background-color: whitesmoke;
+  border-radius: 5px;
+}
+
+/* ======================= Admin Module Css ======================= */
+#driopArea {
+  width: 100%;
+  min-width: 300px;
+  height: 390px;
+  background-color: #872341;
+  border-radius: 20px;
+  text-align: center;
   color: white;
 }
 
-.c-header {
-  display: flex;
-  align-items: center;
-  padding: 2rem;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  width: 100%;
+#questionUplodInput,
+#uploadInterviewInput,
+#uploadHouseVisitInput {
+  width: 250px;
+  font-size: 1rem;
+  font-weight: 900;
 }
 
-.c-header__title {
-  text-transform: uppercase;
-  font-size: 1.5em;
-  margin: 0 2rem;
+.sheduleform {
+  background-color: whitesmoke;
+  border-radius: 15px;
+  border-top: 5px solid red;
+  border-bottom: 5px solid red;
+  max-width: 450px;
 }
 
-.c-navigation {
-  flex-basis: 70%;
-}
-
-.c-navigation__list {
-  padding: 0;
-}
-
-.c-navigation__list-item {
-  display: inline-block;
-  margin: 0 2rem;
-  position: relative;
-  text-transform: uppercase;
-  font-size: 0.9em;
-  opacity: 0.7;
-  font-weight: 500;
-}
-
-.c-navigation__list-item:after {
-  content: "";
-  width: 2px;
-  height: 100%;
-  background: white;
-  position: absolute;
-  display: inline-block;
-  right: -2rem;
-}
-
-.c-navigation__list-item:last-of-type:after {
-  background: transparent;
-}
-
-.c-navigation__list-item--active {
-  opacity: 1;
-}
-
-.c-navigation__list-item--active>a {
-  position: relative;
-}
-
-.c-navigation__list-item--active>a:after {
-  content: "";
-  width: 100%;
-  height: 1px;
-  background-color: #ff4c42;
-  position: absolute;
-  bottom: -0.4rem;
-  left: 0;
-}
-
-.c-cta {
-  display: flex;
-  align-items: center;
-}
-
-.c-cta>a {
-  font-size: 0.9em;
-  opacity: 0.7;
-  font-weight: 500;
-  text-transform: uppercase;
-  margin: 0 2rem;
-}
-
-.c-cta__button {
-  border: 0;
-  background-color: transparent;
-  display: inline-block;
-}
-
-.c-cta_button_search {
-  width: 15px;
-  height: 15px;
-  margin-right: 3rem;
-}
-
-.c-cta_button_search svg {
-  width: inherit;
-  height: inherit;
-  fill: white;
-}
-
-.c-cta_button_menu {
-  width: 20px;
-  height: 2px;
-  background-color: white;
-  position: relative;
-}
-
-.c-cta_button_menu:after,
-.c-cta_button_menu:before {
-  content: "";
-  width: inherit;
-  height: inherit;
-  background-color: inherit;
-  position: absolute;
-  left: 0;
-}
-
-.c-cta_button_menu:after {
-  bottom: -5px;
-}
-
-.c-cta_button_menu:before {
-  top: -5px;
-}
-
-.c-socials {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  background-color: white;
-  padding: 1.8rem 1.8rem 0.8rem 1.8rem;
-  z-index: 2;
-}
-
-.c-socials__list-item {
-  margin-bottom: 1rem;
-}
-
-.c-socials__list-item a svg {
-  width: 21px;
-  height: 21px;
-}
-
-.c-slide {
-  display: inline-flex !important;
-  align-items: center;
-  width: 100%;
-  height: 100vh;
-  background-position: center;
-  background-size: cover;
-  will-change: background-size;
-  position: relative;
-  transition: 1s ease;
-  transition-delay: 0.4s;
-}
-
-.c-slide:after {
-  content: "";
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.61) 76%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#00000000", endColorstr="#9c000000", GradientType=0);
-}
-
-.c-slide-content {
-  padding: 2rem;
-  margin: 0 auto;
-  width: 100%;
-  z-index: 2;
-  max-width: 1200px;
-}
-
-.c-slide__title {
-  font-size: 4em;
-  text-transform: uppercase;
-  letter-spacing: 20px;
-  transform: translateY(150px);
-  opacity: 0;
-  transition: 0.8s ease;
-  will-change: opacity, transform;
-}
-
-.c-slide__title--large,
-.c-slide__title--medium {
-  display: block;
-  font-size: 2.5em;
-  line-height: 110px;
-  transform: translateY(150px);
-  will-change: transform;
-  transition-delay: 0.4s;
-  position: relative;
-  transition: 1s ease;
-}
-
-.c-slide__title--medium {
-  font-size: 1.6em;
-  line-height: 100px;
-}
-
-.c-slide__subtitle {
-  text-transform: uppercase;
-  letter-spacing: 3px;
-}
-
-.c-slide__body {
-  margin-top: 0.7rem;
-  opacity: 0;
-  line-height: 27px;
-}
-
-.c-slide__info {
-  transform: translateY(-150px);
-  transition: 0.8s ease;
-}
-
-.c-wrap {
-  padding: 2rem 0;
-  overflow: hidden;
-}
-
-.c-wrap--small {
-  max-width: 30%;
-}
-
-.c-wrap--line {
-  position: relative;
-}
-
-.c-wrap--line:after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 1px;
-  background-color: white;
-  bottom: 0;
-  transition: 0.9s ease;
-  transition-delay: 0.4s;
-}
-
-.slick-list {
-  overflow: visible !important;
-}
-
-.animateIn .c-slide__title--large,
-.animateIn .c-slide__title--medium,
-.animateIn .c-slide__info,
-.animateIn .c-slide__title,
-.animateIn .c-slide__body,
-.initialAnimation .c-slide__title--large,
-.initialAnimation .c-slide__title--medium,
-.initialAnimation .c-slide__info,
-.initialAnimation .c-slide__title,
-.initialAnimation .c-slide__body {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-.animateIn .c-wrap--line:after,
-.initialAnimation .c-wrap--line:after {
-  left: 0;
-  transform: translateX(0);
-  width: 100%;
-}
-
-.slick-list {
-  transition: 0.5s ease;
-}
-
-.u-scale-out {
-  transform: scale(0.6) !important;
-  transition: 0.5s ease;
-}
-
-.u-scale-in {
-  transform: scale(1);
-}
-
-@media only screen and (max-width: 1300px) {
-  .c-slide__title {
-    font-size: 3em;
-  }
-
-  .c-slide__title--large {
-    font-size: 2em;
-  }
-
-  .c-wrap--small {
-    max-width: 50%;
-  }
-}
-
-@media only screen and (max-width: 1100px) {
-  .c-navigation {
-    display: none;
-  }
-
-  .c-header {
-    justify-content: space-between;
-  }
-}
-
-@media only screen and (max-width: 800px) {
-  .c-slide__title--medium {
-    font-size: 1.3em;
-  }
-
-  .c-slide__title {
-    font-size: 2.5em;
-  }
-
-  .c-slide__title--large {
-    font-size: 1.5em;
-  }
-
-  .c-wrap--small {
-    max-width: 80%;
-  }
-}
-
-/* ==============================Admin Css========================= */
 .rowId {
   --bs-gutter-x: "0"
 }
@@ -923,7 +517,6 @@ input:focus {
 }
 
 /* =================instruction page css */
-
 .bg-rgba {
   background-color: rgba(240, 240, 240, 1);
 }
@@ -952,7 +545,6 @@ dd {
 .instructions {
   width: 100%;
   height: auto;
-  /* overflow-y: scroll; */
 }
 
 ul {
@@ -1009,8 +601,13 @@ ul li {
 
 #check:hover {
   border: none;
-  background-color: #fff;
+  /* background-color: #fff; */
+  background-color: #0d5901dc;
   box-shadow: 0 0px 5px 2px #fff
+}
+
+#ourCompany {
+  
 }
 
 /* /===============Exam Portal CSS Start================/ */
@@ -1139,4 +736,53 @@ body #loader.loader {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.3);
   z-index: 100;
+}
+
+.navShadow {
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+/* Jquery Table */
+.dataTables_length {
+  position: absolute;
+  width: 70%;
+}
+
+.dataTables_filter {
+  margin-left: 76%;
+  width: 21.1%;
+
+}
+
+.dataTables_info {
+  text-align: center;
+}
+
+.dataTables_paginate {
+  text-align: center;
+  color: black;
+}
+
+.dataTables_paginate a {
+  text-align: center;
+  color: black;
+  margin: 5px;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#skillsLogo {
+  animation: rotate 10s linear infinite;
+  scale: 70%;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(-360deg);
+  }
 }

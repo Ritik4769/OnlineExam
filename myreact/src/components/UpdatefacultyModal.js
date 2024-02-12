@@ -8,19 +8,9 @@ function UpdateFacultyModal(props) {
     const { Faculty, getRemainingfaculty } = props
     const [messageObj, setMessageObj] = useState({ message: "", class: "", icon: <></> })
     const [modal, setModal] = useState(false);
-    const [nestedModal, setNestedModal] = useState(false);
-    const [closeAll, setCloseAll] = useState(false);
     const toggle = () => setModal(!modal);
     var Name = true, Email = true, Number = true, linkedid = true, joindate = true, department = true, facultyimg = true, skill = true;
-    const toggleNested = () => {
-        setNestedModal(!nestedModal);
-        setCloseAll(false);
-    };
-    const toggleAll = () => {
-        setNestedModal(!nestedModal);
-        setCloseAll(true);
-    };
-    const [messageBox, setMessageBox] = useState();
+
     const validateField = (name, value) => {
         let error = '';
 
@@ -151,7 +141,6 @@ function UpdateFacultyModal(props) {
                     return true;
                 }
                 break;
-            // Add validation rules for other fields here
             default:
                 break;
         }
@@ -160,7 +149,6 @@ function UpdateFacultyModal(props) {
     };
     var getFacultydata = (e) => {
         var { name, value } = e.target;
-        console.log(facultyObj);
         validateField(name, value);
         if (e.target.type === 'file') {
             const file = e.target.files[0];
@@ -168,22 +156,21 @@ function UpdateFacultyModal(props) {
         } else {
             facultyObj = { ...facultyObj, [name]: value }
         }
-        console.log('facultyObj ', facultyObj);
     }
+
     function updateFaculty() {
+        // const formData = new FormData();
+        // for (const key in facultyObj) {
+        //     console.log(key);
+        //     if (facultyObj[key]) {
+        //         formData.append(key, facultyObj[key]);
+        //     }
+        // }
         const formData = new FormData();
-        for (const key in facultyObj) {
-            console.log(key);
-            if (facultyObj[key]) {
-                formData.append(key, facultyObj[key]);
-            }
-        }
-
-        console.log("THIS IS HE ID " + Faculty._id + " OF " + Faculty.facultyname);
+        Object.entries(facultyObj).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
         formData.append("_id", Faculty._id);
-        console.log("This forn data ", formData);
-        console.log("This forn data ", facultyObj);
-
         try {
             if (Name && Email && Number && department && joindate && linkedid && facultyimg) {
                 axios.post(`http://localhost:3002/admin/updateFaculty`, formData).then((result) => {
@@ -221,7 +208,6 @@ function UpdateFacultyModal(props) {
             console.log('Error:', error);
             window.alert('Failed to register');
         }
-
     }
 
     return (
@@ -230,7 +216,6 @@ function UpdateFacultyModal(props) {
             <Modal isOpen={modal} toggle={toggle}>
                 <form enctype="multipart/form-data" >
                     <ModalHeader toggle={toggle}><h4><i className="bi bi-person-fill-add" style={{ fontSize: "40px", color: "blue" }}></i>&nbsp;Update Faculty</h4>
-                        {Faculty._id}
                     </ModalHeader>
                     <ModalBody>
                         <div className={messageObj.class} role="alert">
@@ -261,7 +246,8 @@ function UpdateFacultyModal(props) {
                                 <option className='option' value="">Select Department</option>
                                 {
                                     Faculty.department == "Trainer" ? <><option selected className='option' value="Trainer">Trainer</option><option className='option' value="Management">Management</option></> : <><option className='option' value="Trainer">Trainer</option><option selected className='option' value="Management">Management</option></>
-                                }  </select>
+                                }
+                            </select>
                         </div>
                         <p id='select'></p>
                         <div className="form-floating mb-3">
@@ -278,11 +264,10 @@ function UpdateFacultyModal(props) {
                             <textarea onChange={(e) => { getFacultydata(e) }} required name='Skills' className='form-control' rows="5" defaultValue={Faculty.Skills} ></textarea>
                             <label for="floatingInput"><i className="bi bi-calendar-date"></i>&nbsp;Add Technologiie Skills | Separate with commas  </label>
                         </div>
-                        {messageBox}
                     </ModalBody>
                     <ModalFooter>
                         <Button color="primary" type="button" onClick={updateFaculty} >Update Faculty
-                        </Button>{' '}
+                        </Button>
                         <Button color="secondary" onClick={toggle}>
                             Cancel
                         </Button>

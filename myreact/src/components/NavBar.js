@@ -5,8 +5,8 @@ import logo2 from '../Images/InfoBeans Foundation Logo - PNG (1) copy.png';
 
 export default function NavBar() {
     return (
-        <nav className="navbar navbar-expand-lg bg-white p-0">
-            <div className="container-fluid   p-0 infoBeansred">
+        <nav className="mainNavbar navbar navbar-expand-lg bg-white p-0">
+            <div className="container-fluid p-0 infoBeansred">
                 <div className="d-flex" id='logocontainer' >
                     <div className="bg-white m-0" id='logobox'>
                         <Link className="navbar-brand  " href="/"><img width="110px"
@@ -36,17 +36,17 @@ export default function NavBar() {
                                     </Link>
                                 </li>
                                 <li className="nav-item text-center">
-                                    <Link className="nav-link text-white" to="/">
+                                    <Link className="nav-link text-white" to="/gallery">
                                         Gallery
                                     </Link>
                                 </li>
                                 <li className="nav-item text-center">
-                                    <Link className="nav-link text-white" to="/admin">
-                                        Admin
+                                    <Link className="nav-link text-white" to="/admission">
+                                        Admission
                                     </Link>
                                 </li>
                                 <li className="nav-item text-center">
-                                    <Link className="nav-link text-white" to="/login">
+                                    <Link className="nav-link text-white" to="/career">
                                         Career
                                     </Link>
                                 </li>

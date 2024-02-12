@@ -1,8 +1,11 @@
 import React from 'react';
 import logo from '../Images/InfoBeans Foundation Logo - PNG (1).png'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
 export default function OurAchivements() {
 
+  const [achivemnts, setAchivemnts] = useState({})
   useEffect(() => {
 
     const parentElement = document?.getElementById('degree-icon-parent');
@@ -11,11 +14,9 @@ export default function OurAchivements() {
     parentElement?.addEventListener('mouseover', function () {
       childElement?.classList?.add('fa-bounce');
     });
-
     parentElement?.addEventListener('mouseout', function () {
       childElement?.classList?.remove('fa-bounce');
     });
-
 
     const parentElement1 = document?.getElementById('company-icon-parent');
     const childElement1 = document?.getElementById('company-icon');
@@ -23,25 +24,41 @@ export default function OurAchivements() {
     parentElement1?.addEventListener('mouseover', function () {
       childElement1?.classList?.add('fa-beat');
     });
-
     parentElement1?.addEventListener('mouseout', function () {
       childElement1?.classList?.remove('fa-beat');
     });
 
   }, [])
+
+  const [companies, setCompanies] = useState([]);
+  var counter = 0;
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const response = await axios.get("http://localhost:3002/admin/getCompanies")
+        const res = await axios.get("http://localhost:3002/admin/getAchivements")
+        setCompanies(response.data.companies)
+        setAchivemnts(res.data.achivments)
+      } catch (error) {
+        console.error("Error While Getting Companies", error);
+      }
+    }
+    fetchCompanies();
+  }, []);
+
   return (
     <div className="container-fluid p-0 " >
-      <svg width="100%" viewBox="0 0 1285 119" style={{"marginBottom": "-2px"}} fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="100%" viewBox="0 0 1285 119" style={{ "marginBottom": "-2px" }} fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M0 35.5256L80 42.4756C160 49.4256 320 63.3256 480 54.0734C640 44.6475 800 12.5037 960 3.07777C1120 -6.17442 1280 7.72558 1360 14.6756L1440 21.6256V118.926H1360C1280 118.926 1120 118.926 960 118.926C800 118.926 640 118.926 480 118.926C320 118.926 160 118.926 80 118.926H0V35.5256Z" fill="#E91F3F" />
       </svg>
       <div className='infoBeansred '>
         <div className='row w-100 m-0'>
           <h1 className='h1 text-center text-white'>Our Achivements</h1>
           <div className='col-12 offset-md-1 col-md-4  mt-4 sparks' id='degree-icon-parent' >
-            <h1 className='h1 text-white text-center' id='degree-icon' > <i className="fa-solid fa-graduation-cap " ></i> <br /> 100+ Placements</h1>
+            <h1 className='h1 text-white text-center' id='degree-icon' > <i className="fa-solid fa-graduation-cap " ></i> <br /> {achivemnts.placementnum}+ Placements</h1>
           </div>
           <div className='col-12 offset-md-2 col-md-4  mt-4 mb-4 sparks ' id='company-icon-parent' >
-            <h1 className='h1 text-white text-center' id='company-icon' > <i className="fa-solid fa-building"  ></i>  <br /> 50+ Companies</h1>
+            <h1 className='h1 text-white text-center' id='company-icon' > <i className="fa-solid fa-building"  ></i>  <br /> {achivemnts.compainesnum}+ Companies</h1>
           </div>
         </div>
       </div>
@@ -52,21 +69,16 @@ export default function OurAchivements() {
         <div className="container h-100">
           <div className="row align-items-center h-100">
             <div className="container rounded">
-              <h1 className="text-center text-black h1 ">Top Companies</h1>
+              <h1 className="text-center  h1" style={{ color: "#E91F3F" }}>Top Companies</h1>
               <div className="slider">
                 <div className="logos">
-                  <img src={logo} alt="" width='20%' />
-                  <img src={logo} alt="" width='20%' />
-                  <img src={logo} alt="" width='20%' />
-                  <img src={logo} alt="" width='20%' />
-                  <img src={logo} alt="" width='20%' />
-                </div>
-                <div className="logos">
-                  <img src={logo} alt="" width='20%' />
-                  <img src={logo} alt="" width='20%' />
-                  <img src={logo} alt="" width='20%' />
-                  <img src={logo} alt="" width='20%' />
-                  <img src={logo} alt="" width='20%' />
+                  {/* <img src={logo} alt="" width='20%' /> */}
+                  {
+                    companies.map(
+                      (comapny, index) => {
+                        return (<img key={index} id='ourCompany' src={`http://localhost:3002/${comapny.companyImg}`} alt="" width='20%' />)
+                      })
+                  }
                 </div>
               </div>
             </div>

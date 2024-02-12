@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 const placementRecord = new mongoose.Schema({
     studentname: {
         type: String,

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 const batchRecord = new mongoose.Schema({
     batchName: {
         type: String,
@@ -18,7 +19,6 @@ const batchRecord = new mongoose.Schema({
         trim: true,
         default: "Not Added"
     },
-
     startDate: {
         type: Date,
         required: true,

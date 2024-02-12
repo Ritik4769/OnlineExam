@@ -13,7 +13,7 @@ export default function Instructionpage() {
 
   const removeClass = () => {
     document.getElementById('check').classList.toggle('disabled');
-    document.getElementById('check').classList.toggle('btn-light');
+    document.getElementById('check').classList.toggle('btn-danger');
     if (document.getElementById('checkbox').checked)
       document.getElementById('containClass').style.color = 'rgb(59, 154, 57)';
     else
@@ -51,7 +51,7 @@ export default function Instructionpage() {
       <section className="w-100 h-100 bg-rgba p-2">
         <div className="container p-2 shadow bg-white rounded-2 my-2">
           <div className="row bg-light">
-            <div className="col-md-1 p-2">
+            <div className="col-md-2 p-2">
               <img
                 width="110px"
                 className="mx-auto d-block"
@@ -59,7 +59,7 @@ export default function Instructionpage() {
                 alt=""
               />
             </div>
-            <div className="col-md-11 py-2 px-2 border-left text-center">
+            <div className="col-md-10 py-2  border-left text-center">
               <h3>Information Technology Excellence Program</h3>
               <div
                 className="w-25 d-flex align-items-center justify-content-center px-2 mx-auto bg-light text-center"
@@ -153,12 +153,12 @@ export default function Instructionpage() {
                   </p>
                 </div>
               </div>
-              <div className="col-12 col-md-3 infoBeansred d-flex flex-direction-column">
+              <div className="col-12 col-md-3 d-flex flex-direction-column inner-shadow outer-shadow" style={{ backgroundColor: "whitesmoke" }}>
                 <div className="row m-0 w-100 ">
-                  <div className="col-md-12 col-sm-6 col-6 ">
+                  <div className="col-md-12 col-sm-6 col-6">
                     <img src={logo} className="w-100 rounded-circle " alt="" />
                   </div>
-                  <div className="col-md-12 col-sm-6 col-6 text-light align-items-center justify-content-center ">
+                  <div className="col-md-12 col-sm-6 col-6 align-items-center justify-content-center ">
                     <span>
                       <h5><b>Name:</b> {user.username} </h5>
                       <h5><b>Enroll Id:</b> {EnrollId}</h5>

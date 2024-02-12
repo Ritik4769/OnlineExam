@@ -1,4 +1,4 @@
-import { rsg, questionPaper, lastEnrollModel } from "../modules/Registratio1.js";
+import { rsg, questionPaper, lastEnrollModel } from "../modules/Registration.js";
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
@@ -20,9 +20,7 @@ var getaadhar;
 export const SECRET_KEY = crypto.randomBytes(32).toString('hex');
 
 class RegistrationController {
-
     static verifyemail = async (req, res) => {
-        console.log(req.body.aadharNo);
         const olduser = await rsg.findOne({ aadharNo: req.body.aadharNo })
         userdata = req.body;
         if (olduser == null) {
@@ -50,8 +48,6 @@ class RegistrationController {
             if (olduser.attempt > 0 && olduser.attempt < 4) {
                 getaadhar = olduser.aadharNo;
                 id = olduser._id
-                console.log("getaadhar : ", getaadhar);
-                console.log("you have already register please upadte your documents")
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(202).json({ message: 'you have already register please upadte your documents', aadharNo: getaadhar });
             } else {
@@ -61,18 +57,14 @@ class RegistrationController {
     }
 
     static verifyOtp = async (req, res) => {
-        console.log('hello');
         const userotp = req.body.userotp;
         if (otp == userotp) {
-            console.log('otp verified');
             try {
                 const year = new Date().getFullYear();
                 const month = new Date().getMonth() + 1;
                 const day = new Date().getDate();
                 const date = `${year}-${month}-${day}`;
                 const hashpassword = await bcrypt.hash(userdata.password, 10);
-                console.log("hashpassword :", hashpassword)
-                console.log(req.body.userotp);
                 const user = await rsg.create({
                     username: userdata.username,
                     phoneNo: userdata.phoneNo,
@@ -94,12 +86,11 @@ class RegistrationController {
                     registrationDate: date
                 });
                 if (user) {
-                    console.log("user id : ", user.id);
                     id = user._id;
                     return res.status(201).json({ message: 'Data saved', userID: user._id });
                 }
             } catch (error) {
-                console.log("error" + error);
+                console.log("error", error);
             }
         } else {
             return res.status(403).json({ message: "Wrong Otp" });
@@ -108,10 +99,8 @@ class RegistrationController {
 
     static setEnrollIdController = async (req, res) => {
         const enrollPrefix = req.params.enrollPrefix;
-        console.log("Enroll prefix :---->", enrollPrefix);
         const result = await lastEnrollModel.findOneAndUpdate({}, { lastEnrollId: enrollPrefix });
         if (!result) {
-            console.log(result);
             lastEnrollModel.create({
                 lastEnrollId: enrollPrefix
             })
@@ -120,35 +109,24 @@ class RegistrationController {
 
     static documentRegistration = async (req, res) => {
         let aadharCardNumber = req.params.aadharCardNumber;
-        console.log("in aadharCardNumber", aadharCardNumber);
-        console.log("in documentRegistration");
         var aadharFile = req.files['aadharFile'][0].originalname;
         var incomeCertificate = req.files['incomeCertificate'][0].originalname;
         var fatherAadharcard = req.files['fatherAadharcard'][0].originalname;
         var marksheet = req.files['marksheet'][0].originalname;
         var latestMarksheet = req.files['latestMarksheet'][0].originalname;
         const lastId = await lastEnrollModel.find();
-        console.log("lastEnrollModel :- ", lastId[0]);
 
         function generateNextEnrollmentID() {
             var lastEnrollId = lastId[0].lastEnrollId;
-            console.log("lastEnrollId", lastEnrollId);
             var lastDigits = parseInt(lastEnrollId.substring(6).toString());
-            console.log("lastDigits :===== ", lastDigits);
-            console.log("enrollCounter : ", lastDigits);
             lastDigits++;
-
             lastDigits = lastDigits.toString().padStart(4, '0');
-            console.log("lastdigit padstart : ", lastDigits);
             var enrollId = (lastEnrollId.substring(0, 6).toString()) + lastDigits;
-            console.log("enroll Id : ", enrollId);
             return enrollId;
         }
         var nextEnrollmentID = generateNextEnrollmentID();
         lastEnroll = nextEnrollmentID;
         await lastEnrollModel.findOneAndUpdate({}, { lastEnrollId: lastEnroll });
-        console.log("NewEnrollId : ", lastEnroll);
-
         try {
             if (id == "None") {
                 const user = await rsg.updateOne({ aadharNo: aadharCardNumber }, {
@@ -205,32 +183,37 @@ class RegistrationController {
     }
 
     static candidateLogin = async (request, response) => {
-        console.log("in candidate controller");
         try {
             const { EnrollID, Password } = request.body;
             const checkuser = await rsg.findOne({ 'EnrollID.enrollID': EnrollID });
-            console.log("in try", checkuser);
             if (checkuser == null) {
                 return response.status(202).json({ message: 'EnrollID is wrong' });
             }
             var pass = await bcrypt.compare(Password, checkuser.password);
             if ((pass)) {
-                checkuser.attempt = checkuser.attempt + 1;
-                for (const candidate of checkuser.EnrollID) {
-                    if (candidate.enrollID === EnrollID) {
-                        if (candidate.Attendance !== "Present") {
-                            candidate.Attendance = "Present";
-                            console.log("candidate  : ", candidate);
-                            await checkuser.save();
-                            break;
-                        } else if (candidate.Attendance === "Present" && candidate.RemainingTime !== 0) {
-                            break;
-                        } else {
-                            return response.status(204).json({ message: 'You Already Given the Exam' });
+                if (checkuser.EnrollID[checkuser.EnrollID.length - 1].Allowance === "Allowed") {
+
+                    for (const candidate of checkuser.EnrollID) {
+                        candidate.Allowance = "NotAllow"
+                        await checkuser.save();
+
+                        if (candidate.enrollID === EnrollID) {
+                            if (candidate.Attendance !== "Present") {
+                                checkuser.attempt = checkuser.attempt + 1;
+                                candidate.Attendance = "Present";
+                                await checkuser.save();
+                                break;
+                            } else if (candidate.Attendance === "Present" && candidate.RemainingTime !== 0) {
+                                break;
+                            } else {
+                                return response.status(204).json({ message: 'You Already Given the Exam' });
+                            }
                         }
                     }
+                    return response.status(201).json({ message: 'Login succussfully...', user: checkuser });
+                } else {
+                    return response.status(203).json({ message: 'You are not allowed for exam. Contact to admin' });
                 }
-                return response.status(201).json({ message: 'Login succussfully...', user: checkuser });
             } else if (!checkuser.EnrollID.enrollID == EnrollID) {
                 return response.status(202).json({ message: 'EnrollID is wrong 1' });
             } else if (!pass) {
@@ -239,19 +222,17 @@ class RegistrationController {
                 console.log("somthing went wrong.....");
             }
         } catch (err) {
-            console.log("error : " + err);
+            console.log("error : ", err);
         }
     }
 
     static checkAadharNumberController = async (request, response) => {
         var aadharNumber = request.params.aadharNumber;
-        console.log("Aadhar number in check aadhar card number controller : ", aadharNumber);
         try {
             var existinuseraadharnumber = await rsg.findOne({ aadharNo: aadharNumber });
-            console.log("existinuseraadharnumber : ", existinuseraadharnumber);
             if (existinuseraadharnumber == null) {
                 response.json(false);
-            } else if (existinuseraadharnumber.attempt > 3) {
+            } else if (existinuseraadharnumber.attempt >= 3) {
                 existinuseraadharnumber.examAllow = false;
                 await existinuseraadharnumber.save();
                 response.json(1);
@@ -264,9 +245,7 @@ class RegistrationController {
     }
 
     static updateQuestionWithAnswer = async (request, response) => {
-        console.log("In updateQuestionWithAnswer : ");
         var obj = request.body;
-        console.log("updateQuestionWithAnswer:  === = = = = : ", obj)
         var QuestionPaperObject = await questionPaper.findOne({ EnrollID: obj.EnrollID })
         QuestionPaperObject.paper[obj.currentSubjectIndex].questions[obj.currentQuestionIndex].answerStatus = obj.answerStatus;
         QuestionPaperObject.paper[obj.currentSubjectIndex].questions[obj.currentQuestionIndex].selectedAnswer = obj.userAnswer;
@@ -287,18 +266,16 @@ class RegistrationController {
         var enrollId = request.query.enrollId;
         try {
             const checkuser = await rsg.findOne({ 'EnrollID.enrollID': enrollId });
-            console.log("minutes : ", request.body.minutes);
             checkuser.EnrollID[checkuser.EnrollID.length - 1].RemainingTime = request.body.minutes;
             await checkuser.save();
             response.status(201).json({ msg: "time updated successfully" });
         } catch (err) {
-            console.log("error : " + err);
+            console.log("error : ", err);
             response.status(203).json({ msg: "error while updating time" });
         }
     }
 
     static endTest = async (request, response) => {
-        console.log("In endTest : ");
         var score = 0;
         var QuestionPaperObject = await questionPaper.findOne({ EnrollID: request.params.EnrollID })
         for (const subject of QuestionPaperObject.paper) {
@@ -325,8 +302,6 @@ class RegistrationController {
             amount: 10000,
             currency: 'inr'
         };
-        console.log('detail : ', detail);
-
         try {
             const session = await stripeInstance.checkout.sessions.create({
                 payment_method_types: ['card'],
