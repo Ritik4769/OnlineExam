@@ -303,17 +303,6 @@ li {
   white-space: nowrap;
 }
 
-.logos {
-  width: 100%;
-  display: inline-block;
-  margin: 0px 0;
-}
-
-.fab {
-  width: calc(100% / 5);
-  animation: fade-in 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards;
-}
-
 @keyframes slidein {
   from {
     transform: translate3d(0, 0, 0);
@@ -322,6 +311,25 @@ li {
   to {
     transform: translate3d(-100%, 0, 0);
   }
+}
+
+.logos {
+  width: 100%;
+  display: inline-block;
+  margin: 0px 0;
+  text-align: center;
+}
+
+.logos img {
+  width: 20%;
+  aspect-ratio: 3/2;
+  object-fit: contain;
+  mix-blend-mode: color-burn;
+}
+
+.fab {
+  width: calc(100% / 5);
+  animation: fade-in 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards;
 }
 
 @keyframes fade-in {

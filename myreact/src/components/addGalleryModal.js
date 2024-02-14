@@ -24,11 +24,7 @@ function AddGalleryModal() {
 
     function addBatch(e) {
         const formData = new FormData();
-        // for (const key in photoObj) {
-        //     if (photoObj[key]) {
-        //         formData.append(key, photoObj[key]);
-        //     }
-        // }
+
         Object.entries(photoObj).forEach(([key, value]) => {
             formData.append(key, value);
         });
@@ -77,10 +73,10 @@ function AddGalleryModal() {
 
     return (
         <div>
-            <Button className="btn-outline-info" color="" onClick={toggle}>
+            <Button className="btn-outline-dark" color="" onClick={toggle}>
                 {" "}
                 <i
-                    className="bi bi-image"
+                    className="bi bi-image text-dark"
                     onClick={toggle}
                     style={{ fontSize: "30px" }}
                 ></i>
@@ -154,32 +150,23 @@ function AddGalleryModal() {
                                 <i className="bi bi-image"></i> &nbsp; Photo Description
                             </label>
                         </div>
-                        
+
                         <div className="form-floating mb-3">
-
-
-                                <select className='form-control' id='floatingInput' name="category" onChange={(e) => {
-                                    getBannerdata(e);
-                                }}
+                            <select className='form-control' id='floatingInput' name="category" onChange={(e) => {
+                                getBannerdata(e);
+                            }}
                                 required>
-                                    <option className='text-black' value=" " >Select Category</option>
-                                    <option className='text-black' value="Celebration">Celebration Photos</option>
-                                    <option className='text-black' value="Centers">Center's</option>
-                                    <option className='text-black' value="Corporate">Corporate Visits</option>
-                                    <option className='text-black' value="Teaching">Teaching Facilities</option>
-                                </select>
-
-
-
-
-                            
+                                <option className='text-black' value=" " >Select Category</option>
+                                <option className='text-black' value="Celebration">Celebration Photos</option>
+                                <option className='text-black' value="Centers">Center's</option>
+                                <option className='text-black' value="Corporate">Corporate Visits</option>
+                                <option className='text-black' value="Teaching">Teaching Facilities</option>
+                            </select>
                             <label htmlFor="floatingInput">
                                 {" "}
                                 <i className="bi bi-image"></i> &nbsp; Photo Category
                             </label>
                         </div>
-
-
 
                         <div className=" mb-3">
                             <label htmlFor="floatingInput">

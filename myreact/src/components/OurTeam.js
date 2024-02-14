@@ -29,7 +29,7 @@ export default function OurTeam() {
         return <></>
     } else {
         return (
-            <div className='mt-3'>
+            <div className='mt-5'>
                 <h1 className='text-center teamHeading'>Our Team</h1>
                 <Swiper
                     slidesPerView={3}

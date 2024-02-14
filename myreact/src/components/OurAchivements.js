@@ -31,7 +31,6 @@ export default function OurAchivements() {
   }, [])
 
   const [companies, setCompanies] = useState([]);
-  var counter = 0;
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
@@ -70,7 +69,7 @@ export default function OurAchivements() {
           <div className="row align-items-center h-100">
             <div className="container rounded">
               <h1 className="text-center  h1" style={{ color: "#E91F3F" }}>Top Companies</h1>
-              <div className="slider">
+              <div className="slider mt-4">
                 <div className="logos">
                   {/* <img src={logo} alt="" width='20%' /> */}
                   {

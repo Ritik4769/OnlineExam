@@ -147,11 +147,6 @@ function AddBatchModal(props) {
 
     function addBatch(e) {
         const formData = new FormData();
-        // for (const key in batchObj) {
-        //     if (batchObj[key]) {
-        //         formData.append(key, batchObj[key]);
-        //     }
-        // }
         Object.entries(batchObj).forEach(([key, value]) => {
             formData.append(key, value);
         });

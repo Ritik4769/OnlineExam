@@ -1427,9 +1427,6 @@ export default function AdminModule() {
                                 <button className="nav-link adminNavbar bg-transparent text-danger" id="v-pills-profile-tab" data-bs-toggle="pill"
                                     data-bs-target="#v-pills-registrations" role="tab" aria-controls="v-pills-registrations"
                                     aria-selected="false">View Registration</button>
-                                <button className="nav-link adminNavbar bg-transparent text-danger" id="v-pills-totalplacements-tab" data-bs-toggle="pill"
-                                    data-bs-target="#v-pills-totalplacements" role="tab" aria-controls="v-pills-totalplacements"
-                                    aria-selected="false">Total Placements</button>
                                 <button className="nav-link adminNavbar bg-transparent text-danger" id="v-pills-addquestions-tab" data-bs-toggle="pill"
                                     data-bs-target="#v-pills-addquestions" role="tab" aria-controls="v-pills-addquestions"
                                     aria-selected="false">Add Questions</button>
@@ -1462,6 +1459,9 @@ export default function AdminModule() {
                                 <button className="section-tab nav-link adminNavbar  " id="v-pills-Interview-tab" data-bs-toggle="pill"
                                     data-bs-target="#v-pills-Faculty" role="tab" aria-controls="v-pills-Faculty"
                                     aria-selected="false"><i className="fa-solid fa-chalkboard-user"></i>&nbsp;Faculty</button>
+                                <button className="nav-link adminNavbar bg-transparent text-danger" id="v-pills-totalplacements-tab" data-bs-toggle="pill"
+                                    data-bs-target="#v-pills-totalplacements" role="tab" aria-controls="v-pills-totalplacements"
+                                    aria-selected="false">Total Placements</button>
                                 <button className="section-tab nav-link adminNavbar  " id="v-pills-Batches-tab" data-bs-toggle="pill"
                                     data-bs-target="#v-pills-Batches" role="tab" aria-controls="v-pills-Batches"
                                     aria-selected="false"><i className="fa-solid fa-user"></i>&nbsp;Batches</button>
@@ -1512,9 +1512,6 @@ export default function AdminModule() {
                                     <button className="section-tab nav-link adminNavbar  " id="v-pills-profile-tab" data-bs-toggle="pill"
                                         data-bs-target="#v-pills-registrations" role="tab" aria-controls="v-pills-registrations"
                                         aria-selected="false"><i className="bi bi-file-earmark-person-fill"></i>&nbsp;Registrations</button>
-                                    <button className="section-tab nav-link adminNavbar  " id="v-pills-totalplacements-tab" data-bs-toggle="pill"
-                                        data-bs-target="#v-pills-totalplacements" role="tab" aria-controls="v-pills-totalplacements"
-                                        aria-selected="false"><i className="bi bi-mortarboard"></i>&nbsp;Placements</button>
                                     <button className="section-tab nav-link adminNavbar  " id="v-pills-addquestions-tab" data-bs-toggle="pill"
                                         data-bs-target="#v-pills-addquestions" role="tab" aria-controls="v-pills-addquestions"
                                         aria-selected="false"><i className="bi bi-patch-question-fill"></i>&nbsp;Questions</button>
@@ -1544,6 +1541,9 @@ export default function AdminModule() {
                                     <button className="section-tab nav-link adminNavbar  " id="v-pills-Interview-tab" data-bs-toggle="pill"
                                         data-bs-target="#v-pills-Faculty" role="tab" aria-controls="v-pills-Faculty"
                                         aria-selected="false"><i className="fa-solid fa-chalkboard-user"></i>&nbsp;Faculty</button>
+                                    <button className="section-tab nav-link adminNavbar  " id="v-pills-totalplacements-tab" data-bs-toggle="pill"
+                                        data-bs-target="#v-pills-totalplacements" role="tab" aria-controls="v-pills-totalplacements"
+                                        aria-selected="false"><i className="bi bi-mortarboard"></i>&nbsp;Placements</button>
                                     <button className="section-tab nav-link adminNavbar  " id="v-pills-Batches-tab" data-bs-toggle="pill"
                                         data-bs-target="#v-pills-Batches" role="tab" aria-controls="v-pills-Batches"
                                         aria-selected="false"><i className="fa-solid fa-user"></i>&nbsp;Batches</button>
@@ -1591,7 +1591,7 @@ export default function AdminModule() {
                                         <div className='col-12 col-md-4  p-2' >
                                             <div className="alert alert-warning d-flex align-items-center justify-content-around m-0" role="alert">
                                                 <div className='text-center p-2'>
-                                                    <h4>  <i className="bi bi-people-fill" style={{ fontSize: "30px" }}></i>  &nbsp;&nbsp; 9 Batches</h4>
+                                                    <h4><i className="bi bi-people-fill" style={{ fontSize: "30px" }}></i>  &nbsp;&nbsp; 9 Batches</h4>
                                                 </div>
                                                 <AddBatchModal getRemainingBatch={getRemainingBatch} />
                                             </div>
@@ -1613,7 +1613,7 @@ export default function AdminModule() {
                                             </div>
                                         </div>
                                         <div className='col-12 col-md-4  p-2' >
-                                            <div className="alert alert-light d-flex align-items-center justify-content-around m-0" role="alert">
+                                            <div className="alert alert-secondary d-flex align-items-center justify-content-around m-0" role="alert">
                                                 <div className='text-center p-2'>
                                                     <h4>  <i className="bi bi-image text-secondary" style={{ fontSize: "30px" }}></i>&nbsp;&nbsp;Add Company </h4>
                                                 </div>
@@ -1621,11 +1621,19 @@ export default function AdminModule() {
                                             </div>
                                         </div>
                                         <div className='col-12 col-md-4  p-2' >
-                                            <div className="alert alert-light d-flex align-items-center justify-content-around m-0" role="alert">
+                                            <div className="alert alert-dark d-flex align-items-center justify-content-around m-0" role="alert">
                                                 <div className='text-center p-2'>
-                                                    <h4>  <i className="bi bi-image text-secondary" style={{ fontSize: "30px" }}></i>&nbsp;&nbsp;Add Gallery </h4>
+                                                    <h4><i className="bi bi-image text-dark" style={{ fontSize: "30px" }}></i>&nbsp;&nbsp;Add Gallery </h4>
                                                 </div>
                                                 <AddGalleryModal />
+                                            </div>
+                                        </div>
+                                        <div className='col-12 col-md-4 p-2' >
+                                            <div className="alert alert-danger d-flex align-items-center justify-content-around m-0" role="alert">
+                                                <div className='text-center p-2'>
+                                                    <h4><i className="bi bi-people-fill text-danger" style={{ fontSize: "30px" }}></i>  &nbsp;&nbsp;Add Placements</h4>
+                                                </div>
+                                                <button type="button" className="btn  btn-outline-danger " data-bs-toggle="modal" data-bs-target="#addplacementrecordmodal"><i className="bi bi-mortarboard"></i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -2512,6 +2520,23 @@ export default function AdminModule() {
                                 {/* ----------------------------------------------Facutlty Data Section  Ends------------------------------------------------------------ */}
                                 {/* ----------------------------------------------Gallery Data Section ------------------------------------------------------------ */}
                                 <div className="tab-pane fade show  m-0" id="v-pills-Gallery" role="tabpanel" aria-labelledby="#v-pills-Gallery">
+                                    <nav className="navbar navbar-expand-lg navbar-light bg-light disaaper-nav navShadow mb-2">
+                                        <div className="container-fluid">
+                                            <div className='row w-100 m-0 ' >
+                                                <div className=" col-12 col-lg-6  d-flex align-items-center">
+                                                    <a className="navbar-brand" href="#"><img width="100px"
+                                                        src={logo} alt="" /></a>
+                                                    <h2 className="h2 ms-2"><i className="fa-solid fa-user"></i>&nbsp;Gallery</h2>
+                                                </div>
+                                                <div className=" col-12 col-lg-6 d-flex align-items-center justify-content-end   ">
+                                                    <div className=''>
+                                                        <AddGalleryModal />
+                                                    </div>
+                                                    <button type="submit" className="btn btn-outline-danger btn-sm m-2">Log out</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </nav>
                                     <div className='row w-100 m-0' >
                                         {
                                             GalleryData.map((Data, index) => {
@@ -2627,7 +2652,7 @@ export default function AdminModule() {
                                         </div>
                                     </nav>
                                     {/* {console.log("companies ",companies )} */}
-                                    <div className="w-100 dashBorad-table-div ps-2 pe-2">   
+                                    <div className="w-100 dashBorad-table-div ps-2 pe-2">
                                         <table className="table table-bordered" id="myTable">
                                             <thead className="sticky-top">
                                                 <tr className="bg-danger text-white">
@@ -2749,15 +2774,9 @@ export default function AdminModule() {
                                                     <h2 className="h2 ms-2"><i className="fa-solid fa-chalkboard-user"></i>&nbsp;Centers</h2>
                                                 </div>
                                                 <div className=" col-12 col-lg-6 d-flex align-items-center justify-content-end   ">
-                                                    <form className='w-50' onSubmit={searchFaculty} >
-                                                        <div className="input-group w-100">
-                                                            <div>
-                                                                <AddCenterModal />
-                                                            </div>
-                                                            <input type="search" className="form-control form-control-sm" placeholder="Search here" id='searchFacultuyField' />
-                                                            <button className="btn btn-outline-primary btn-sm" type="submit" id="button-addon2"><i className="bi bi-search"></i></button>
-                                                        </div>
-                                                    </form>
+                                                    <div>
+                                                        <AddCenterModal />
+                                                    </div>
                                                     <button type="submit" className="btn btn-outline-danger btn-sm m-2">Log out</button>
                                                 </div>
                                             </div>

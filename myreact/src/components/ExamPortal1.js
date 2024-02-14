@@ -220,6 +220,7 @@ export default function ExamPortal() {
         if (visitedQuestion.includes(question.QuestionID)) {
             setVisitedQuestion(visitedQuestion.filter(q => q !== question.QuestionID));
         }
+
         var obj = {
             EnrollID: QuestionPaperObject.EnrollID,
             currentSubjectIndex,
